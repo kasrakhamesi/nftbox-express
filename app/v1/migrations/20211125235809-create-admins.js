@@ -19,21 +19,6 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: false
                 },
-                username: {
-                    type: Sequelize.STRING,
-                    unique: {
-                        args: true,
-                        msg: 'This username is already registered.'
-                    },
-                    allowNull: false
-                },
-                password: {
-                    type: Sequelize.STRING,
-                    allowNull: false
-                },
-                last_login: {
-                    type: Sequelize.STRING
-                },
                 email: {
                     type: Sequelize.STRING,
                     unique: {
@@ -48,16 +33,12 @@ module.exports = {
                     },
                     allowNull: false
                 },
-                phone: {
+                password: {
                     type: Sequelize.STRING,
-                    unique: {
-                        args: true,
-                        msg: 'This phone is already registered.'
-                    },
-                    validate: {
-                        is: /^(\+98|0098|98|0)?9\d{9}$/
-                    },
                     allowNull: false
+                },
+                last_login: {
+                    type: Sequelize.STRING
                 },
                 activated: {
                     type: Sequelize.BOOLEAN,
@@ -71,9 +52,8 @@ module.exports = {
                     allowNull: true,
                     type: Sequelize.DATE
                 }
-            }).then(() => queryInterface.addIndex('admins', ['phone'], { unique: true }))
-            .then(() => queryInterface.addIndex('admins', ['email'], { unique: true }))
-            .then(() => queryInterface.addIndex('admins', ['username'], { unique: true }));
+            }).then(() => queryInterface.addIndex('admins', ['email'], { unique: true }))
+           
     },
     down: async(queryInterface, Sequelize) => {
         await queryInterface.dropTable('admins');

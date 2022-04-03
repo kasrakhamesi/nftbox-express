@@ -22,12 +22,12 @@ admins.register = async(req, res) => {
 
 admins.login = async(req, res) => {
     try {
-        const { username, password } = req.body
+        const { email, password } = req.body
 
-        if (username && password) {
+        if (email && password) {
             const loginCheck = await Model.models.admins.findAll({
                 where: {
-                    username: username,
+                    email: email,
                     password: password
                 },
                 include: { model: Model.models.admins_roles, as: 'role' }
@@ -52,15 +52,13 @@ admins.login = async(req, res) => {
                             updatedAt: item.role.updatedAt
                         },
                         name: item.name,
-                        username: item.username,
+                        email: item.email,
                         password: item.password,
                         last_login: item.last_login,
-                        email: item.email,
-                        phone: item.phone,
                         activated: item.activated,
                         createdAt: item.createdAt,
                         updatedAt: item.updatedAt,
-                        token: auth.jwt(loginCheck[0])
+                        token: authurize.jwt(loginCheck[0])
                     }
                 })
                 return res.status(200).send(reqAdmins)

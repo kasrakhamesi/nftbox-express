@@ -26,21 +26,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        username: {
-            type: DataTypes.STRING,
-            unique: {
-                args: true,
-                msg: 'This username is already registered.'
-            },
-            allowNull: false
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        last_login: {
-            type: DataTypes.STRING
-        },
         email: {
             type: DataTypes.STRING,
             unique: {
@@ -55,16 +40,12 @@ module.exports = (sequelize, DataTypes) => {
             },
             allowNull: false
         },
-        phone: {
+        password: {
             type: DataTypes.STRING,
-            unique: {
-                args: true,
-                msg: 'This phone is already registered.'
-            },
-            validate: {
-                is: /^(\+98|0098|98|0)?9\d{9}$/
-            },
             allowNull: false
+        },
+        last_login: {
+            type: DataTypes.STRING
         },
         activated: {
             type: DataTypes.BOOLEAN,

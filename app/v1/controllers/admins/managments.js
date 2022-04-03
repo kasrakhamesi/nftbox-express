@@ -173,7 +173,6 @@ managments.adminsRolesPermissions = async(req, res) => {
         delete body['created_at']
         delete body['updated_at']
 
-        console.log('raf')
         if (req.isAuthenticated(req, res)) {
             const resCheckPermission = await permissions.check(req.user[0].role.id, ['admins_roles'])
             if (resCheckPermission != true)
