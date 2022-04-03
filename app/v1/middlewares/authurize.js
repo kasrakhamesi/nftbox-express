@@ -6,13 +6,11 @@ auth.jwt =
     ({
         id: id,
         roleId: roleId,
-        username: username,
         email: email,
-        phone: phone,
         password: password
     }) => {
 
-        if (username != null || username != '')
+        if (email != null || email != '')
             return jsonwebtoken.sign({
                 id: id,
                 roleId: roleId,

@@ -34,14 +34,8 @@ admins.login = async(req, res) => {
             })
 
             if (loginCheck[0] != null) {
+                const jwtToken= authurize.jwt(loginCheck[0])
                 const reqAdmins = (loginCheck).map(item => {
-                    try {
-                        Model.models.activitylogs.create({
-                            adminId: item.id,
-                            description: "new login from admin",
-                            created_date: String(Date.now)
-                        }).then(console.log)
-                    } catch (e) { console.log(e) }
                     return {
                         id: item.id,
                         role: {
@@ -58,13 +52,18 @@ admins.login = async(req, res) => {
                         activated: item.activated,
                         createdAt: item.createdAt,
                         updatedAt: item.updatedAt,
-                        token: authurize.jwt(loginCheck[0])
+                        token : {
+                            access_token: jwtToken,
+                            expire: authurize.managerDecodeJwt(jwtToken).exp
+                        }
+                        
+                        
                     }
                 })
                 return res.status(200).send(reqAdmins)
             }
         }
-        res.status(400).send({ login: false, redirect: '/v1/admins/login', message: "invalid input" })
+        res.status(400).send({ login: false,  message: "invalid input" })
     } catch (e) {
         res.status(400).send({ message: String(e.message) })
     }
