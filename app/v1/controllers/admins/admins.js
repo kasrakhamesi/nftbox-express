@@ -4,14 +4,14 @@ const admins = {}
 
 admins.register = async(req, res) => {
     try {
-        const bodys = req.body
-        delete bodys['id']
+        const body = req.body
+        delete body['id']
         if (req.isAuthenticated(req, res)) {
             const resCheckPermission = await permissions.check(req.user[0].role.id, ['admins'])
             if (resCheckPermission != true)
                 return res.status(resCheckPermission.status).send(resCheckPermission.content)
 
-            const resRegisterAdmin = await Model.models.admins.create(bodys)
+            const resRegisterAdmin = await Model.models.admins.create(body)
             return res.status(201).send(resRegisterAdmin)
         }
         res.status(401).send('Unauthorized')
@@ -19,6 +19,7 @@ admins.register = async(req, res) => {
         res.status(400).send({ message: String(e.message) })
     }
 }
+
 
 admins.login = async(req, res) => {
     try {
@@ -56,8 +57,6 @@ admins.login = async(req, res) => {
                             access_token: jwtToken,
                             expire: authurize.managerDecodeJwt(jwtToken).exp
                         }
-                        
-                        
                     }
                 })
                 return res.status(200).send(reqAdmins)
@@ -80,5 +79,59 @@ admins.dashboard = async(req, res) => {
     }
 }
 
+admins.edit = async(req, res) => {
+    try {
+
+        const { id } = req.params
+        const body = req.body
+        delete body['id']
+
+        if (req.isAuthenticated(req, res)) {
+
+            const resCheckPermission = await permissions.check(req.user[0].role.id, ['admins'])
+            if (resCheckPermission != true)
+                return res.status(resCheckPermission.status).send(resCheckPermission.content)
+          
+            const resUpdateAdmin = await Model.models.admins.update(body, {
+                where: {
+                    id: id
+                }
+            })
+            if (resUpdateAdmin == 1) {
+                const resGetAdminData = await Model.models.admins.findAll({
+                    where: {
+                        id: id,
+                    },
+                    include: { model: Model.models.admins_roles, as: 'role' }
+                })
+                const adminsInfo = (resGetAdminData).map(item => {
+                    return {
+                        id: item.id,
+                        role: {
+                            id: item.role.id,
+                            role_name: item.role.role_name,
+                            color: item.role.color,
+                            createdAt: item.role.createdAt,
+                            updatedAt: item.role.updatedAt
+                        },
+                        name: item.name,
+                        email: item.email,
+                        password: item.password,
+                        last_login: item.last_login,
+                        activated: item.activated,
+                        createdAt: item.createdAt,
+                        updatedAt: item.updatedAt,
+                    }
+                })
+                return res.status(200).send(adminsInfo)
+            } else
+                return res.status(400).send({ message: 'invalid id or something else' })
+            }
+
+        res.status(401).send('Unauthorized')
+    } catch (e) {
+        res.status(400).send({ message: e.message })
+    }
+}
 
 module.exports = admins

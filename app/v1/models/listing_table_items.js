@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   listing_table_items.init({
+    contract_address: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
     collection_image: {
       type: DataTypes.STRING,
       allowNull : true
@@ -26,11 +30,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
     },
-    presale: {
+    presale_price: {
       type: DataTypes.STRING,
       allowNull : true,
     },
-    publicsale:{
+    publicsale_price:{
       type: DataTypes.STRING,
       allowNull : true,
     },
@@ -38,15 +42,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
     },
-    presale_mint:{
+    publicsale_mint_timestamp:{
       type: DataTypes.STRING,
       allowNull : true,
     },
-    publicsale:{
-      type: DataTypes.STRING,
-      allowNull : true,
-    },
-    presale_mint:{
+    presale_mint_timestamp:{
       type: DataTypes.STRING,
       allowNull : true,
     },
@@ -82,10 +82,6 @@ module.exports = (sequelize, DataTypes) => {
       type : DataTypes.STRING,
       allowNull : true
     },
-    mint_price : {
-      type : DataTypes.STRING,
-      allowNull : false
-    },
     nft_royalty : {
       type : DataTypes.STRING,
       allowNull : true
@@ -105,7 +101,7 @@ module.exports = (sequelize, DataTypes) => {
     enable_access_key: {
       type: DataTypes.BOOLEAN,
       defaultValue : false,
-    },
+    }
   }, {
     sequelize,
     modelName: 'listing_table_items',

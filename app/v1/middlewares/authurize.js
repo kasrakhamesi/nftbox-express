@@ -5,23 +5,12 @@ const auth = {}
 auth.jwt =
     ({
         id: id,
-        roleId: roleId,
-        email: email,
-        password: password
     }) => {
-
-        if (email != null || email != '')
-            return jsonwebtoken.sign({
-                id: id,
-                roleId: roleId,
-                email: email,
-                password: password,
-                isAdmin: true
-            }, managerAccess, { expiresIn: '36000s' })
-
-        return null
+        return jsonwebtoken.sign({
+            id: id,
+            isAdmin: true
+        }, managerAccess, { expiresIn: '36000s' })
     }
-
 
 auth.managerDecodeJwt = encodedString => {
     return jsonwebtoken.decode(encodedString, managerAccess)

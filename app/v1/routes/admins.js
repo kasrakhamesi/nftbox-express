@@ -12,7 +12,7 @@ const adminsPassport = passport.adminsPassport.authenticate('jwt', { session: fa
 router.post('/admins/login', admins.admins.login)
 router.post('/admins/register', adminsPassport, admins.admins.register)
 router.get('/admins', adminsPassport, admins.admins.dashboard)
-
+router.put('/admins/id/:id', adminsPassport, admins.admins.edit)
 
 //Admins Managments Routes
 router.all('/admins/managments/admins/:id', adminsPassport, admins.managments.admins)

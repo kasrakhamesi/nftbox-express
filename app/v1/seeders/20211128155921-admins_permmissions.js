@@ -16,7 +16,7 @@ module.exports = {
             perm_description: 'Full Access',
         },  {
             role: 'listing_table',
-            perm_description: 'Admins Roles',
+            perm_description: 'Listing Tables Access',
         },{
             role: 'admins',
             perm_description: 'Admins Managment'

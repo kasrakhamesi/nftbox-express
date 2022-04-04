@@ -8,6 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      contract_address: {
+        type: Sequelize.STRING,
+        allowNull : false
+      },
       collection_image: {
         type: Sequelize.STRING,
         allowNull : true
@@ -20,27 +24,23 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull : true,
       },
-      presale: {
+      presale_price: {
         type: Sequelize.STRING,
         allowNull : true,
       },
-      publicsale:{
+      publicsale_price:{
         type: Sequelize.STRING,
         allowNull : true,
       },
-      maxmint:{
+      max_mint:{
         type: Sequelize.STRING,
         allowNull : true,
       },
-      presalemint:{
+      publicsale_mint_timestamp:{
         type: Sequelize.STRING,
         allowNull : true,
       },
-      publicsale_timestamp:{
-        type: Sequelize.STRING,
-        allowNull : true,
-      },
-      presalemint_timestamp:{
+      presale_mint_timestamp:{
         type: Sequelize.STRING,
         allowNull : true,
       },
@@ -75,10 +75,6 @@ module.exports = {
       floor : {
         type : Sequelize.STRING,
         allowNull : true
-      },
-      mint_price : {
-        type : Sequelize.STRING,
-        allowNull : false
       },
       nft_royalty : {
         type : Sequelize.STRING,

@@ -15,9 +15,7 @@ adminsPassport.use(
         (jwtPayLoad, done) => {
             return Model.models.admins.findAll({
                     where: {
-                        id: jwtPayLoad.id,
-                        roleId: jwtPayLoad.roleId,
-                        email: jwtPayLoad.email,
+                        id: jwtPayLoad.id
                     },
                     include: { model: Model.models.admins_roles, as: 'role' }
                 })

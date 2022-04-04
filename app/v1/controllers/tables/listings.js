@@ -1,7 +1,7 @@
 const Model = require('../../models').sequelize
 const { permissions } = require('../../middlewares')
 
-module.exports.getTableData = async(req, res) => {
+module.exports.handler = async(req, res) => {
     try {
 
         const METHOD = req.method
@@ -17,37 +17,41 @@ module.exports.getTableData = async(req, res) => {
                 return res.status(resCheckPermission.status).send(resCheckPermission.content)
 
             switch (METHOD) {
+                case 'POST' : 
+                     const resCreateItem = await Model.models.listing_table_items.create(body)
+                     return res.status(201).send(resCreateItem)
+
                 case 'GET':
-                    const resGetAdmins = await Model.models.admins.findAndCountAll({
+                    const resGetTableItems = await Model.models.listing_table_items.findAndCountAll({
                         order: [
                             ['id', 'DESC']
                         ]
                     })
-                    return res.status(200).send(resGetAdmins)
+                    return res.status(200).send(resGetTableItems)
 
                 case 'PUT':
-                    const resUpdateAdmin = await Model.models.admins.update(body, {
+                    const resUpdateTableItem = await Model.models.listing_table_items.update(body, {
                         where: {
                             id: id
                         }
                     })
-                    if (resUpdateAdmin == 1) {
-                        const resGetAdmin = await Model.models.admins.findAll({
+                    if (resUpdateTableItem == 1) {
+                        const resGetTableItems = await Model.models.listing_table_items.findAll({
                             where: {
                                 id: id,
                             }
                         })
-                        return res.status(200).send(resGetAdmin)
+                        return res.status(200).send(resGetTableItems)
                     } else
                         return res.status(400).send({ message: 'invalid id or something else' })
 
                 case 'DELETE':
-                    const resDeleteAdmin = await Model.models.admins.destroy({
+                    const resDeleteTableItem = await Model.models.listing_table_items.destroy({
                         where: {
                             id: id
                         }
                     })
-                    if (resDeleteAdmin == 1)
+                    if (resDeleteTableItem == 1)
                         return res.status(200).send({ result: true })
                     else
                         return res.status(400).send({ message: 'invalid id or something else' })
@@ -55,6 +59,6 @@ module.exports.getTableData = async(req, res) => {
         }
         res.status(401).send('Unauthorized')
     } catch (e) {
-        res.status(400).send({ message: String(e.message) })
+        res.status(400).send({ message: e.message })
     }
 }
