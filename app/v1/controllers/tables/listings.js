@@ -1,5 +1,6 @@
 const Model = require('../../models').sequelize
-const { permissions } = require('../../middlewares')
+const { restful,response } = require('../../libs')
+const api = new restful(Model.models.listing_table_items,['listing_table'])
 
 module.exports.handler = async(req, res) => {
     try {
@@ -11,54 +12,45 @@ module.exports.handler = async(req, res) => {
         delete body['created_at']
         delete body['updated_at']
 
-        if (req.isAuthenticated(req, res)) {
-            const resCheckPermission = await permissions.check(req.user[0].role.id, ['listing_table'])
-            if (resCheckPermission != true)
-                return res.status(resCheckPermission.status).send(resCheckPermission.content)
+        switch (METHOD) {
+            case 'POST' : 
+                return response(await api.Post({body : body , res:res , req : req }),res)
 
-            switch (METHOD) {
-                case 'POST' : 
-                     const resCreateItem = await Model.models.listing_table_items.create(body)
-                     return res.status(201).send(resCreateItem)
+            case 'GET':
+                return response(await api.Get({filter : 'id' , params : id , req: req, res:res }), res)
 
-                case 'GET':
-                    const resGetTableItems = await Model.models.listing_table_items.findAndCountAll({
-                        order: [
-                            ['id', 'DESC']
-                        ]
-                    })
-                    return res.status(200).send(resGetTableItems)
+            case 'PUT':
+                return response(await api.Put({body : body, filter : 'id', params : id , req : req , res:res }), res)
 
-                case 'PUT':
-                    const resUpdateTableItem = await Model.models.listing_table_items.update(body, {
-                        where: {
-                            id: id
-                        }
-                    })
-                    if (resUpdateTableItem == 1) {
-                        const resGetTableItems = await Model.models.listing_table_items.findAll({
-                            where: {
-                                id: id,
-                            }
-                        })
-                        return res.status(200).send(resGetTableItems)
-                    } else
-                        return res.status(400).send({ message: 'invalid id or something else' })
+            case 'DELETE':
+                return response(await api.Delete({ filter : 'id', params : id , req: req , res: res }), res)
 
-                case 'DELETE':
-                    const resDeleteTableItem = await Model.models.listing_table_items.destroy({
-                        where: {
-                            id: id
-                        }
-                    })
-                    if (resDeleteTableItem == 1)
-                        return res.status(200).send({ result: true })
-                    else
-                        return res.status(400).send({ message: 'invalid id or something else' })
-            }
+            default :
+                return res.status(400).send({ message : "Method not support." })
         }
-        res.status(401).send('Unauthorized')
+
     } catch (e) {
         res.status(400).send({ message: e.message })
     }
+}
+
+module.exports.userGetTable = async(req,res) => {
+    const { id } = req.params
+
+    let resItems = await api.GET('id',id, null, false)
+    if (resItems.status !== 200) return response(resItems,res)
+
+    
+
+    
+    const serializeItems = (resItems.content.rows).map(item =>  { 
+        return {
+            ...resItems.content.rows,
+            createdAt : undefined
+        }
+    })
+    
+
+    return res.status(resItems.status).send(userWithoutGroup)
+
 }

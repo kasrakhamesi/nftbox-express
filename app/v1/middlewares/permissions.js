@@ -36,10 +36,10 @@ adminsPermissions.check = async(roleId, permissionName) => {
             }
         }
 
-        return { status: 401, content: 'Unauthorized' }
+        return { status: 401, content: { message : "You Don't have permisssion for thid endpoint"} }
 
     } catch {
-        return { status: 401, content: 'Unauthorized' }
+        return { status: 401, content: { message : "You Don't have permisssion for thid endpoint"} }
     }
 }
 

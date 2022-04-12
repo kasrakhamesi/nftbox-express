@@ -12,7 +12,7 @@ adminsPassport.use(
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: adminAccess
         },
-        (jwtPayLoad, done) => {
+        (jwtPayLoad,done) => {
             return Model.models.admins.findAll({
                     where: {
                         id: jwtPayLoad.id

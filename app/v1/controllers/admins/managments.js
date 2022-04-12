@@ -125,7 +125,6 @@ managments.adminsRoles = async(req, res) => {
 
 managments.adminsPermissions = async(req, res) => {
     try {
-
         const METHOD = req.method
         const { id } = req.params
         const { perm_description } = req.body
