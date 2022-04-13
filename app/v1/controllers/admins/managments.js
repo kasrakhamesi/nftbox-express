@@ -9,8 +9,8 @@ managments.admins = async(req, res) => {
         const { id } = req.params
         const body = req.body
         delete body['id']
-        delete body['created_at']
-        delete body['updated_at']
+        delete body['createdAt']
+        delete body['updatedAt']
 
         if (req.isAuthenticated(req, res)) {
             const resCheckPermission = await permissions.check(req.user[0].role.id, ['admins'])
@@ -67,8 +67,8 @@ managments.adminsRoles = async(req, res) => {
         const { id } = req.params
         const body = req.body
         delete body['id']
-        delete body['created_at']
-        delete body['updated_at']
+        delete body['createdAt']
+        delete body['updatedAt']
 
         if (req.isAuthenticated(req, res)) {
             const resCheckPermission = await permissions.check(req.user[0].role.id, ['admins_roles'])
@@ -169,8 +169,8 @@ managments.adminsRolesPermissions = async(req, res) => {
         const { id } = req.params
         const body = req.body
         delete body['id']
-        delete body['created_at']
-        delete body['updated_at']
+        delete body['createdAt']
+        delete body['updatedAt']
 
         if (req.isAuthenticated(req, res)) {
             const resCheckPermission = await permissions.check(req.user[0].role.id, ['admins_roles'])

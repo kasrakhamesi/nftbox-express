@@ -11,9 +11,13 @@ router.use(bodyParser.json())
 const adminsPassport = passport.adminsPassport.authenticate('jwt', { session: false ,failureRedirect : "/v1/unauthurized" })
 
 //Admins Managments Routes
-router.all('/admins/tables/listings/id/:id', adminsPassport, tables.listings.handler)
-router.all('/admins/tables/listings', adminsPassport, tables.listings.handler)
-router.get('/tables/listings/id/:id',tables.listings.userGetTable)
-router.get('/tables/listings',tables.listings.userGetTable)
+router.put('/admins/tables/listings/id/:id', adminsPassport, tables.listings.update)
+router.get('/admins/tables/listings/id/:id', adminsPassport, tables.listings.findOne)
+router.get('/admins/tables/listings', adminsPassport, tables.listings.findAll)
+router.delete('/admins/tables/listings/id/:id', adminsPassport, tables.listings.delete)
+router.post('/admins/tables/listings', adminsPassport, tables.listings.create)
+
+router.get('/tables/listings/id/:id',tables.listings.Users.findOne)
+router.get('/tables/listings',tables.listings.Users.findAll)
 
 module.exports = router

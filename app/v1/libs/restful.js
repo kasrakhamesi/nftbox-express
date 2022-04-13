@@ -55,70 +55,47 @@ class Restful {
     */
 
     Get = async ({
-            filter : filter = null,
-            params : params = null,
             checkJwt : checkJwt = true,
             roleId : roleId = null,
             checkRole : checkRole = true,
             req : req,
             res : res,
             include : include = null,
-            where : where = null
+            where : where = null,
+            order : order = null,
+            limit : limit = null
         }) => {
 
-        if (checkJwt && roleId == null)
-        {
-            const resCheckJwt = this.#checkJwtToken(req,res)
-            if (resCheckJwt.status !== 200) return res.status(resCheckJwt.status).send(resCheckJwt.content)
-            roleId = resCheckJwt?.roleId
-        }
+        try {
+            if (checkJwt && roleId == null)
+            {
+                const resCheckJwt = this.#checkJwtToken(req,res)
+                if (resCheckJwt.status !== 200) return res.status(resCheckJwt.status).send(resCheckJwt.content)
+                roleId = resCheckJwt?.roleId
+            }
 
-        if (checkRole) {
-            const resPermissions = await this.#checkPermissions(roleId)
-            if (resPermissions != true) return res.status(resPermissions.status).send(resPermissions.content)
-        }
+            if (checkRole) {
+                const resPermissions = await this.#checkPermissions(roleId)
+                if (resPermissions != true) return res.status(resPermissions.status).send(resPermissions.content)
+            }
+            
+            const resGet = where?.id ? (await this.#model.findByPk(parseInt(where?.id))) : (await this.#model.findAndCountAll({
+                where: where,
+                order : order,
+                include : include,
+                limit : limit
+            }))
 
-        if (where !== null) {
-            const resGet = await this.#model.findAndCountAll({
-                order: [
-                    ['id', 'DESC']
-                ],
-                where : where
-            })
             return {
-                status : 200,
-                content : resGet
+                status : _.isEmpty(resGet) ? 404 : 200,
+                content : resGet || { message : `Can't find this data.` }
             }
         }
-
-        else if (filter === undefined || filter === null || filter === "" || params === undefined || params === null || params === "") {
-
-            const resGetAll = await this.#model.findAndCountAll({
-                order: [
-                    ['id', 'DESC']
-                ]
-            })
+        catch (e) { 
             return {
-                status : 200,
-                content : resGetAll
+                status : 500,
+                content : { message : e.message }
             }
-        }
-        else if (String(filter).toLowerCase() === "id")
-        {
-            const resGetById = await this.#model.findByPk(parseInt(params))
-            return { 
-                status : _.isEmpty(resGetById) ? 404 : 200 ,
-                content : resGetById || { message : `Can't find this data.` }
-            }
-        }
-        const resGet = await this.#model.findAndCountAll({
-            where: {
-                [filter]: params
-            }
-        })
-        return {
-            status : _.isEmpty(resGet) ? 404 : 200,
-            content : resGet
         }
     }
 
@@ -134,23 +111,32 @@ class Restful {
         req : req,
         res: res
         }) => {
+        
+        try {
 
-        if (checkJwt && roleId == null)
-        {
-            const resCheckJwt = this.#checkJwtToken(req,res)
-            if (resCheckJwt.status !== 200) return res.status(resCheckJwt.status).send(resCheckJwt.content)
-            roleId = resCheckJwt?.roleId
+            if (checkJwt && roleId == null)
+            {
+                const resCheckJwt = this.#checkJwtToken(req,res)
+                if (resCheckJwt.status !== 200) return res.status(resCheckJwt.status).send(resCheckJwt.content)
+                roleId = resCheckJwt?.roleId
+            }
+
+            if (checkRole) {
+                const resPermissions = await this.#checkPermissions(roleId)
+                if (resPermissions != true) return res.status(resPermissions.status).send(resPermissions.content)
+            }
+
+            const resCreate = await this.#model.create(body)
+            return {
+                status : 201,
+                content : resCreate
+            }
         }
-
-        if (checkRole) {
-            const resPermissions = await this.#checkPermissions(roleId)
-            if (resPermissions != true) return res.status(resPermissions.status).send(resPermissions.content)
-        }
-
-        const resCreate = await this.#model.create(body)
-        return {
-            status : 201,
-            content : resCreate
+        catch (e) { 
+            return {
+                status : 500,
+                content : { message : e.message }
+            }
         }
     }
 
@@ -160,48 +146,54 @@ class Restful {
 
     Put = async ({
         body : body ,
-        filter : filter = null,
-        params : params = null,
         roleId : roleId = null ,
         checkJwt : checkJwt = true,
         checkRole : checkRole = true,
         req : req,
-        res : res
+        res : res,
+        where : where = null
         }) => {
 
-        if (checkJwt && roleId == null)
-        {
-            const resCheckJwt = this.#checkJwtToken(req,res)
-            if (resCheckJwt.status !== 200) return res.status(resCheckJwt.status).send(resCheckJwt.content)
-            roleId = resCheckJwt?.roleId
-        }
+        try {
 
-        if (filter === undefined || filter === null || filter === "" || params === undefined || params === null || params === "") return res.status(400).send({message : "Please set item id to update row."})
-
-        if (checkRole) {
-            const resPermissions = await this.#checkPermissions(roleId)
-            if (resPermissions != true) return res.status(resPermissions.status).send(resPermissions.content)
-        }
-
-        const resUpdate = await this.#model.update(body, {
-            where: {
-                [filter]: params
+            if (checkJwt && roleId == null)
+            {
+                const resCheckJwt = this.#checkJwtToken(req,res)
+                if (resCheckJwt.status !== 200) return res.status(resCheckJwt.status).send(resCheckJwt.content)
+                roleId = resCheckJwt?.roleId
             }
-        })
-        if (resUpdate === 1) {
-            const resGet = (await this.#model.findAll({
-                where: {
-                    [filter]: params
-                }
-            }))[0]
-            return { 
-                status : 200,
-                content : resGet
+
+            if (where === undefined || where === null || where === "" ) return res.status(400).send({message : "Please select item to update row."})
+
+            if (checkRole) {
+                const resPermissions = await this.#checkPermissions(roleId)
+                if (resPermissions != true) return res.status(resPermissions.status).send(resPermissions.content)
             }
-        }
-        return {
-            status : 404, 
-            content : { message : `Can't find this data.`}
+
+            const resUpdate = await this.#model.update(body, {
+                where: where
+            })
+
+            if (resUpdate[0] || resUpdate >= 1) {
+                return { 
+                    status : 200,
+                    content : 
+                        {
+                            result: true ,
+                            message : "successfully updated." 
+                        }
+                    }
+            }
+            return {
+                status : 404, 
+                content : { message : `Can't find this data.`}
+            }
+         }
+        catch (e) { 
+            return {
+                status : 500,
+                content : { message : e.message }
+            }
         }
     }
 
@@ -210,47 +202,54 @@ class Restful {
     */
 
     Delete = async ({
-        filter : filter = null,
-        params : params = null,
         roleId : roleId = null ,
         checkJwt : checkJwt = true,
         checkRole : checkRole = true ,
         req : req ,
-        res : res
+        res : res,
+        where: where = null
         }) => {
 
-        if (checkJwt && roleId == null)
-        {
-            const resCheckJwt = this.#checkJwtToken(req,res)
-            if (resCheckJwt.status !== 200) return res.status(resCheckJwt.status).send(resCheckJwt.content)
-            roleId = resCheckJwt?.roleId
-        }
+        try {
 
-        if (filter === undefined || filter === null || filter === "" || params === undefined || params === null || params === "") return res.status(400).send({message : "Please set item id to delete row."})
-
-        if (checkRole) {
-            const resPermissions = await this.#checkPermissions(roleId)
-            if (resPermissions != true) return res.status(resPermissions.status).send(resPermissions.content)
-        }
-
-        const resDelete = await this.#model.destroy({
-            where: {
-                [filter]: params
+            if (checkJwt && roleId == null)
+            {
+                const resCheckJwt = this.#checkJwtToken(req,res)
+                if (resCheckJwt.status !== 200) return res.status(resCheckJwt.status).send(resCheckJwt.content)
+                roleId = resCheckJwt?.roleId
             }
-        })
-        if (resDelete === 1)
-            return { 
-                status : 200,
-                content : 
-                    {
-                        result: true ,
-                        message : "successfully deleted." 
-                    }
-                }
 
-        return {
-            status : 404, 
-            content : { message : `Can't find this data.`}
+            if (where === undefined || where === null || where === "" ) return res.status(400).send({message : "Please select item to update row."})
+
+            if (checkRole) {
+                const resPermissions = await this.#checkPermissions(roleId)
+                if (resPermissions != true) return res.status(resPermissions.status).send(resPermissions.content)
+            }
+
+            const resDelete = await this.#model.destroy({
+                where: where
+            })
+
+            if (resDelete[0] || resDelete >= 1)
+                return { 
+                    status : 200,
+                    content : 
+                        {
+                            result: true ,
+                            message : "successfully deleted." 
+                        }
+                    }
+
+            return {
+                status : 404, 
+                content : { message : `Can't find this data.`}
+            }
+        }
+        catch (e) { 
+            return {
+                status : 500,
+                content : { message : e.message }
+            }
         }
     }
 }

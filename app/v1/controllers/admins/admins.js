@@ -24,10 +24,9 @@ admins.register = async(req, res) => {
 admins.login = async(req, res) => {
     try {
         const { email, password } = req.body
-        
         if (email && password) {
             const loginCheck = await Model.models.admins.findAll({
-                where: {
+                where:  {
                     email: email,
                     password: password
                 },
@@ -71,10 +70,11 @@ admins.login = async(req, res) => {
 
 admins.dashboard = async(req, res) => {
     try {
+
         if (req.isAuthenticated(req, res))
             return res.status(200).send(req.user)
 
-        res.status(401).send('Unauthorized')
+        res.redirect('/v1/unauthurized')
     } catch {
         res.status(400).send({ message: 'something is wrong' })
     }
