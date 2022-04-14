@@ -1,10 +1,8 @@
-'use strict'
-
 const Model = require('../../models').sequelize
-const { restful,response } = require('../../libs')
+const { restful } = require('../../libs')
 const { authurize } = require('../../middlewares')
 const api = new restful(Model.models.admins,['admnis'])
-const _ = require('lodash')
+
 module.exports = {
     login : async(req,res) => {
         const { email, password } = req.body
