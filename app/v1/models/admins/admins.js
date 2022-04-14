@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'roleId',
                 as: 'role'
             })
+            admins.hasMany(models.activitylogs, { foreignKey: 'id' })
         }
     };
     admins.init({

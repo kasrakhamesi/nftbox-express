@@ -1,1 +1,1 @@
-module.exports.listings = require('./listings')
+module.exports.upcoming = require('./upcoming')

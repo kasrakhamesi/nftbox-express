@@ -6,7 +6,7 @@ module.exports = {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER.UNSIGNED
             },
             adminId: {
                 type: Sequelize.INTEGER.UNSIGNED,
@@ -19,22 +19,19 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: true
             },
-            ip: {
-                type: Sequelize.STRING,
-                defaultValue: "0",
-                allowNull: true
-            },
             created_date: {
                 type: Sequelize.STRING,
                 allowNull: true
             },
             createdAt: {
-                allowNull: false,
-                type: Sequelize.DATE
+                allowNull: true,
+                type: 'TIMESTAMP',
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             },
             updatedAt: {
-                allowNull: false,
-                type: Sequelize.DATE
+                allowNull: true,
+                type: 'TIMESTAMP',
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             }
         });
     },

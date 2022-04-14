@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class listing_table_items extends Model {
+  class upcoming_table extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  listing_table_items.init({
+  upcoming_table.init({
     contract_address: {
       type: DataTypes.STRING,
       allowNull : false
@@ -104,7 +104,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'listing_table_items',
+    modelName: 'upcoming_table',
   });
-  return listing_table_items;
+  return upcoming_table;
 };

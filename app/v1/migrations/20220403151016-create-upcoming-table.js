@@ -1,12 +1,12 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('listing_table_items', {
+    await queryInterface.createTable('upcoming_table', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       contract_address: {
         type: Sequelize.STRING,
@@ -96,17 +96,23 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue : false,
       },
+      error_log : {
+        type: Sequelize.STRING,
+        allowNull : true,
+      },
       createdAt: {
         allowNull: true,
-        type: Sequelize.DATE
+        type: 'TIMESTAMP',
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
-        allowNull: true,
-        type: Sequelize.DATE
+          allowNull: true,
+          type: 'TIMESTAMP',
+          defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('listing_table_items');
+    await queryInterface.dropTable('upcoming_table');
   }
 };

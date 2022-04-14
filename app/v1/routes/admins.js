@@ -9,10 +9,10 @@ router.use(bodyParser.json())
 const adminsPassport = passport.adminsPassport.authenticate('jwt', { session: false ,failureRedirect : "/v1/unauthurized" })
 
 //Admin Login && Register && Dashboard Routes
-router.post('/admins/login', admins.admins.login)
+router.post('/admins/login', admins.authentications.login)
 router.post('/admins/register', adminsPassport, admins.admins.register)
-router.get('/admins', adminsPassport, admins.admins.dashboard)
-router.put('/admins/id/:id', adminsPassport, admins.admins.edit)
+router.get('/admins', adminsPassport, admins.authentications.dashboard)
+router.put('/admins/id/:id', adminsPassport, admins.admins.update)
 
 //Admins Managments Routes
 router.all('/admins/managments/admins/:id', adminsPassport, admins.managments.admins)

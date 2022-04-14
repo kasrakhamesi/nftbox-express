@@ -11,12 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      activitylogs.belongsTo(models.admins, {
+        foreignKey: 'adminId',
+        as: 'admin'
+    })
     }
   };
   activitylogs.init({
-    adminId: DataTypes.STRING,
+    adminId: DataTypes.INTEGER.UNSIGNED,
     description: DataTypes.STRING,
-    ip: DataTypes.STRING,
     created_date: DataTypes.STRING
   }, {
     sequelize,

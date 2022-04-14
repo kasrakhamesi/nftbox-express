@@ -15,11 +15,14 @@ module.exports = {
             role: 'GOD',
             perm_description: 'Full Access',
         },  {
-            role: 'listing_table',
-            perm_description: 'Listing Tables Access',
+            role: 'upcoming_table',
+            perm_description: 'Upcoming Tables Access',
         },{
             role: 'admins',
             perm_description: 'Admins Managment'
+        }, {
+            role: 'admins_roles',
+            perm_description: 'Admins Roles',
         }, {
             role: 'admins_roles',
             perm_description: 'Admins Roles',
@@ -38,7 +41,7 @@ module.exports = {
             role: 'GOD'
         })
         await queryInterface.bulkDelete('admins_permissions', {
-            role: 'listing_table'
+            role: 'upcoming_table'
         })
         await queryInterface.bulkDelete('admins_permissions', {
             role: 'admins'

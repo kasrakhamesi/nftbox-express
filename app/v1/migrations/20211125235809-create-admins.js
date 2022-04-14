@@ -42,18 +42,19 @@ module.exports = {
                 },
                 activated: {
                     type: Sequelize.BOOLEAN,
-                    defaultValue: 1
+                    defaultValue: true
                 },
                 createdAt: {
                     allowNull: true,
-                    type: Sequelize.DATE
+                    type: 'TIMESTAMP',
+                    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
                 },
                 updatedAt: {
                     allowNull: true,
-                    type: Sequelize.DATE
+                    type: 'TIMESTAMP',
+                    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
                 }
             }).then(() => queryInterface.addIndex('admins', ['email'], { unique: true }))
-           
     },
     down: async(queryInterface, Sequelize) => {
         await queryInterface.dropTable('admins');

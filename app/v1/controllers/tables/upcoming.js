@@ -1,6 +1,6 @@
 const Model = require('../../models').sequelize
 const { restful,response } = require('../../libs')
-const api = new restful(Model.models.listing_table_items,['listing_table'])
+const api = new restful(Model.models.upcoming_table,['upcoming_table'])
 
 module.exports.create = async(req, res) => {
      return response(await api.Post({body : req.body , res : res , req : req }),res)
@@ -38,10 +38,10 @@ module.exports.deleteAll = async(req, res) => {
 module.exports.Users = {
     findAll : async(req,res) => {
         let data = await api.Get({ res : res , req : req , checkJwt : false , checkRole : false })
-        res.status(data?.status).send(data)
+        res.status(data?.status).send(data?.content)
     },
     findOne : async(req,res) => {
         const { id } = req.params
-        return response(await api.Get({where : { id : id } , res : res , req : req ,checkJwt : false, checkRole : false}),res)
+        return response(await api.Get({where : { id : id } , res : res , req : req ,checkJwt : false, checkRole : false }),res)
     }
 }

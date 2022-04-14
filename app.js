@@ -4,6 +4,9 @@ const app = express()
 const routes = {}
 routes.v1 = require('./app/v1/routes')
 
+const q  = require('./app/v1/services/opensea/floor')
+q().then(console.log).catch(console.log)
+
 app.use('/v1', routes.v1)
 
 app.use('*', (req, res) => {

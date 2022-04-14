@@ -12,16 +12,15 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            color: {
-                type: Sequelize.STRING
-            },
             createdAt: {
                 allowNull: true,
-                type: Sequelize.DATE
+                type: 'TIMESTAMP',
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             },
             updatedAt: {
                 allowNull: true,
-                type: Sequelize.DATE
+                type: 'TIMESTAMP',
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             }
         }).then(() => queryInterface.addIndex('admins_roles', ['role_name'], { unique: true }))
     },

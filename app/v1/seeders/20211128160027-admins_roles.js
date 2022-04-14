@@ -12,8 +12,7 @@ module.exports = {
          * }], {});
          */
         await queryInterface.bulkInsert('admins_roles', [{
-            role_name: 'Founder',
-            color: null,
+            role_name: 'Founder'
         }])
     },
 
@@ -25,8 +24,7 @@ module.exports = {
          * await queryInterface.bulkDelete('People', null, {});
          */
         await queryInterface.bulkDelete('admins_roles', {
-            role_name: 'Founder',
-            color: null,
+            role_name: 'Founder'
         })
     }
 };

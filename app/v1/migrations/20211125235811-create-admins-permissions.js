@@ -18,11 +18,13 @@ module.exports = {
             },
             createdAt: {
                 allowNull: true,
-                type: Sequelize.DATE
+                type: 'TIMESTAMP',
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             },
             updatedAt: {
                 allowNull: true,
-                type: Sequelize.DATE
+                type: 'TIMESTAMP',
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             }
         });
     },

@@ -63,10 +63,12 @@ class Restful {
             include : include = null,
             where : where = null,
             order : order = null,
-            limit : limit = null
+            limit : limit = null,
+            attributes : attributes = null
         }) => {
 
         try {
+            
             if (checkJwt && roleId == null)
             {
                 const resCheckJwt = this.#checkJwtToken(req,res)
@@ -80,20 +82,21 @@ class Restful {
             }
             
             const resGet = where?.id ? (await this.#model.findByPk(parseInt(where?.id))) : (await this.#model.findAndCountAll({
-                where: where,
-                order : order,
+                where : where,
+                attributes : attributes,
                 include : include,
+                order : order,
                 limit : limit
             }))
 
             return {
                 status : _.isEmpty(resGet) ? 404 : 200,
-                content : resGet || { message : `Can't find this data.` }
+                content : resGet || { message : `Can't find data.` }
             }
         }
         catch (e) { 
             return {
-                status : 500,
+                status : 400,
                 content : { message : e.message }
             }
         }
@@ -134,8 +137,8 @@ class Restful {
         }
         catch (e) { 
             return {
-                status : 500,
-                content : { message : e.message }
+                status : 400,
+                content : { message : e?.errors[0]?.message || e.message }
             }
         }
     }
@@ -186,13 +189,13 @@ class Restful {
             }
             return {
                 status : 404, 
-                content : { message : `Can't find this data.`}
+                content : { message : `Can't find data.`}
             }
          }
         catch (e) { 
             return {
-                status : 500,
-                content : { message : e.message }
+                status : 400,
+                content : { message : e?.errors[0]?.message || e.message }
             }
         }
     }
@@ -242,12 +245,12 @@ class Restful {
 
             return {
                 status : 404, 
-                content : { message : `Can't find this data.`}
+                content : { message : `Can't find data.`}
             }
         }
         catch (e) { 
             return {
-                status : 500,
+                status : 400,
                 content : { message : e.message }
             }
         }
