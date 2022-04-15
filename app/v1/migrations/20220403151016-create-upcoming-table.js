@@ -12,6 +12,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull : false
       },
+      collection_background_image:{
+        type: DataTypes.STRING,
+        allowNull : true
+      },
       collection_image: {
         type: Sequelize.STRING,
         allowNull : true
