@@ -13,7 +13,7 @@ module.exports = {
         allowNull : false
       },
       collection_background_image:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull : true
       },
       collection_image: {

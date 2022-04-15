@@ -95,16 +95,16 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : true
     },
     category : {
-      type : Sequelize.STRING,
+      type : DataTypes.STRING,
       allowNull : true
     },
     is_upcoming : {
-      type : Sequelize.BOOLEAN,
+      type : DataTypes.BOOLEAN,
       defaultValue : true,
       allowNull : true
     },
     is_automatic_check : {
-      type : Sequelize.BOOLEAN,
+      type : DataTypes.BOOLEAN,
       defaultValue : true,
       allowNull : true
     },
