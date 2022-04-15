@@ -24,8 +24,8 @@ module.exports = {
             role: 'admins_roles',
             perm_description: 'Admins Roles',
         }, {
-            role: 'admins_roles',
-            perm_description: 'Admins Roles',
+            role: 'activitylogs',
+            perm_description: 'Activity Logs',
         }])
     },
 
@@ -48,6 +48,9 @@ module.exports = {
         })
         await queryInterface.bulkDelete('admins_permissions', {
             role: 'admins_roles'
+        })
+        await queryInterface.bulkDelete('admins_permissions', {
+            role: 'activitylogs'
         })
     
     }

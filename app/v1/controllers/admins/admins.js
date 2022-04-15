@@ -22,12 +22,14 @@ module.exports = {
         return response(await api.Put({body : body , req : req , res : res , where : condition }))
     },
     findAll : async(req,res) => {
-
+        return response(await api.Get({ res : res , req : req }),res)
     },
     findOne : async(req,res) => { 
-
+        const { id } = req.params
+        return response(await api.Get({where : { id : id } , res : res , req : req }),res)
     },
     delete : async(req,res) => {
-
+        const { id } = req.params
+        return response(await api.Delete({where : { id : id } , req : req , res:res }), res)
     }
 }

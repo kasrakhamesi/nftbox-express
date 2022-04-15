@@ -70,6 +70,10 @@ module.exports = (sequelize, DataTypes) => {
       type : DataTypes.STRING,
       allowNull : true
     },
+    website_link : {
+      type : Sequelize.STRING,
+      allowNull : true
+    },
     os_royalty : {
       type : DataTypes.STRING,
       allowNull : false
@@ -84,6 +88,20 @@ module.exports = (sequelize, DataTypes) => {
     },
     nft_royalty : {
       type : DataTypes.STRING,
+      allowNull : true
+    },
+    category : {
+      type : Sequelize.STRING,
+      allowNull : true
+    },
+    is_upcoming : {
+      type : Sequelize.BOOLEAN,
+      defaultValue : true,
+      allowNull : true
+    },
+    is_automatic_check : {
+      type : Sequelize.BOOLEAN,
+      defaultValue : true,
       allowNull : true
     },
     hidden: {

@@ -64,6 +64,10 @@ module.exports = {
         type : Sequelize.STRING,
         allowNull : true
       },
+      website_link : {
+        type : Sequelize.STRING,
+        allowNull : true
+      },
       os_royalty : {
         type : Sequelize.STRING,
         allowNull : false
@@ -78,6 +82,20 @@ module.exports = {
       },
       nft_royalty : {
         type : Sequelize.STRING,
+        allowNull : true
+      },
+      category : {
+        type : Sequelize.STRING,
+        allowNull : true
+      },
+      is_upcoming : {
+        type : Sequelize.BOOLEAN,
+        defaultValue : true,
+        allowNull : true
+      },
+      is_automatic_check : {
+        type : Sequelize.BOOLEAN,
+        defaultValue : true,
         allowNull : true
       },
       hidden: {
