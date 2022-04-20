@@ -1,4 +1,6 @@
 module.exports.admins = require('./admins')
-module.exports.managments = require('./managments')
+module.exports.managements = require('./managements')
 module.exports.activityLogs = require('./activityLogs')
 module.exports.authentications = require('./authentications')
+module.exports.whitelistAddresses = require('./whitelistAddresses')
+module.exports.configurations = require('./configurations')

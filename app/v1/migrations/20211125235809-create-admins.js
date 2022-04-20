@@ -40,10 +40,6 @@ module.exports = {
                 last_login: {
                     type: Sequelize.STRING
                 },
-                activated: {
-                    type: Sequelize.BOOLEAN,
-                    defaultValue: true
-                },
                 createdAt: {
                     allowNull: true,
                     type: 'TIMESTAMP',

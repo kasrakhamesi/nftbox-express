@@ -8,5 +8,7 @@ router.use(require('./tables'))
 router.use(require('./failures'))
 router.use(require('./activitylogs'))
 router.use(require('./categories'))
+router.use(require('./whitelistAddresses'))
+router.use(require('./configurations'))
 
 module.exports = router

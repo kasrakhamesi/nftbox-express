@@ -1,22 +1,16 @@
 'use strict';
 module.exports = {
     up: async(queryInterface, Sequelize) => {
-        await queryInterface.createTable('configurations', {
-            title : {
+        await queryInterface.createTable('whitelist_addresses', {
+            id: {
+                allowNull: false,
+                autoIncrement: true,
+                primaryKey: true,
+                type: Sequelize.INTEGER.UNSIGNED
+            },
+            public_address: {
                 type: Sequelize.STRING,
                 allowNull: false
-            },
-            key: {
-                type: Sequelize.STRING,
-                allowNull: false
-            },
-            value: {
-                type: Sequelize.STRING,
-                allowNull: false
-            },
-            description: {
-                type: Sequelize.STRING,
-                allowNull: true
             },
             createdAt: {
                 allowNull: true,
@@ -28,9 +22,9 @@ module.exports = {
                 type: 'TIMESTAMP',
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             }
-        }).then(() => queryInterface.addIndex('configurations', ['key'], { unique: true }));
+        }).then(() => queryInterface.addIndex('whitelist_addresses', ['public_address'], { unique: true }));
     },
     down: async(queryInterface, Sequelize) => {
-        await queryInterface.dropTable('configurations');
+        await queryInterface.dropTable('whitelist_addresses');
     }
 };

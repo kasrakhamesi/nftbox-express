@@ -16,14 +16,16 @@ const getData = async() => {
 
 const checkUsername = async(twitterLink) => {
     try {
-        const resConfigurations = Model.models.configurations.findAll({
+        const resTwitterBearerToken = Model.models.configurations.findAll({
             where : {
-                key : "Twitter_Api_BearerToken"
+                key : "TwitterApiBearerToken"
             },
             limit : 1
         })
-        if (resConfigurations === null) throw new APIError("invalid config or config not found,try again")
-        client.loginWithBearerToken()
+        if (resTwitterBearerToken === null) throw new APIError("invalid config or config not found,try again")
+
+        await client.loginWithBearerToken(resTwitterBearerToken)
+        
     }
     catch (e) { 
         return {

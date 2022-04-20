@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class configurations extends Model {
+  class whitelist_addresses extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,15 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  configurations.init({
-    title : DataTypes.STRING,
-    key: DataTypes.STRING,
-    value: DataTypes.STRING,
-    description: DataTypes.STRING,
-    is_global : DataTypes.BOOLEAN
+  whitelist_addresses.init({
+    public_address : DataTypes.STRING,
   }, {
     sequelize,
-    modelName: 'configurations',
+    modelName: 'whitelist_addresses',
   });
-  return configurations;
+  return whitelist_addresses;
 };

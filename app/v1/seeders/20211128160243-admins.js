@@ -16,15 +16,13 @@ module.exports = {
             name: 'god',
             email: 'god@god.com',
             password: 'god',
-            last_login: '',
-            activated: true,
+            last_login: ''
         },{
             roleId: 2,
             name: 'admin',
             email: 'admin@admin.com',
             password: 'admin',
-            last_login: '',
-            activated: true,
+            last_login: ''
         }])
     },
 

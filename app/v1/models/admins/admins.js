@@ -47,10 +47,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         last_login: {
             type: DataTypes.STRING
-        },
-        activated: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true
         }
     }, {
         sequelize,

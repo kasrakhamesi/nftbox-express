@@ -28,7 +28,6 @@ adminsPassport.use(
                             email: item.email,
                             password: item.password,
                             last_login: item.last_login,
-                            activated: item.activated,
                             createdAt: item.createdAt,
                             updatedAt: item.updatedAt,
                         }

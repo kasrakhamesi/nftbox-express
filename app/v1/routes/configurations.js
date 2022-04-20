@@ -8,9 +8,8 @@ router.use(bodyParser.json())
 
 const adminsPassport = passport.adminsPassport.authenticate('jwt', { session: false ,failureRedirect : "/v1/unauthurized" })
 
-//Admin Login && Register && Dashboard Routes
-router.get('/admins/activitylogs/id/:id' , adminsPassport, admins.activityLogs.delete)
-router.get('/admins/activitylogs' , adminsPassport, admins.activityLogs.findAll)
-router.delete('/admins/activitylogs' ,adminsPassport, admins.activityLogs.deleteAll)
+router.put('/admins/configurations/key/:key', adminsPassport, admins.configurations.update)
+router.get('/admins/configurations',adminsPassport, admins.configurations.findAll)
+
 
 module.exports = router

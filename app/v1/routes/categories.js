@@ -14,4 +14,8 @@ router.get('/admins/tables/categories', adminsPassport, tables.categories.findAl
 router.delete('/admins/tables/categories/id/:id', adminsPassport, tables.categories.delete)
 router.post('/admins/tables/categories', adminsPassport, tables.categories.create)
 
+router.get('/tables/categories/id/:id',tables.categories.Users.findOne)
+router.get('/tables/categories',tables.categories.Users.findAll)
+
+
 module.exports = router

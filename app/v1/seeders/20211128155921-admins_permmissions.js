@@ -29,6 +29,12 @@ module.exports = {
         }, {
             role: 'categories',
             perm_description: 'Categories',
+        }, {
+            role: 'whitelist_addresses',
+            perm_description: 'WhiteList for Addresses Can Use App',
+        },, {
+            role: 'configurations',
+            perm_description: 'configurations setting',
         }])
     },
 
@@ -57,6 +63,12 @@ module.exports = {
         })
         await queryInterface.bulkDelete('admins_permissions', {
             role: 'categories'
+        })
+        await queryInterface.bulkDelete('admins_permissions', {
+            role: 'whitelist_addresses'
+        })
+        await queryInterface.bulkDelete('admins_permissions', {
+            role: 'configurations'
         })
     
     }
