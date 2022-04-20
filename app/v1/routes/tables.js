@@ -20,4 +20,13 @@ router.post('/admins/tables/upcoming', adminsPassport, tables.upcoming.create)
 router.get('/tables/upcoming/id/:id',tables.upcoming.Users.findOne)
 router.get('/tables/upcoming',tables.upcoming.Users.findAll)
 
+
+
+//router.get('/tables/upcoming' , tables.upcomingCategories.Users.findAll)
+
+router.get('/tables/upcoming/filters/categories', (req,res) => {
+    let categories = ['salam','khobi','are']
+    res.status(200).send({categories : categories})
+})
+
 module.exports = router

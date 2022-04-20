@@ -23,13 +23,7 @@ adminsPassport.use(
                     const adminsInfo = (admins).map(item => {
                         return {
                             id: item.id,
-                            role: {
-                                id: item.role.id,
-                                role_name: item.role.role_name,
-                                color: item.role.color,
-                                createdAt: item.role.createdAt,
-                                updatedAt: item.role.updatedAt
-                            },
+                            role: item.role,
                             name: item.name,
                             email: item.email,
                             password: item.password,

@@ -1,11 +1,9 @@
 const Model = require('../../models').sequelize
-const { permissions,authurize } = require('../../middlewares')
-const admins = {}
 const { restful,response } = require('../../libs')
 const api = new restful(Model.models.admins,['admnis'])
 
 module.exports = {
-    register : async(req,res) =>
+    create : async(req,res) =>
     {
         const body = req.body
         delete body['id']

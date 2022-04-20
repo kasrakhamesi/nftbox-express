@@ -13,6 +13,13 @@ module.exports = {
          */
         await queryInterface.bulkInsert('admins', [{
             roleId: 1,
+            name: 'god',
+            email: 'god@god.com',
+            password: 'god',
+            last_login: '',
+            activated: true,
+        },{
+            roleId: 2,
             name: 'admin',
             email: 'admin@admin.com',
             password: 'admin',
@@ -30,11 +37,13 @@ module.exports = {
          */
         await queryInterface.bulkDelete('admins', {
             roleId: 1,
+            name: 'god',
+            email: 'god@god.com',
+        })
+        await queryInterface.bulkDelete('admins', {
+            roleId: 2,
             name: 'admin',
             email: 'admin@admin.com',
-            password: 'admin',
-            last_login: '',
-            activated: true,
         })
     }
 };

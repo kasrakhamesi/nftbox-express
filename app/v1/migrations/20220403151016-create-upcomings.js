@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('upcoming_table', {
+    await queryInterface.createTable('upcomings', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,7 +10,7 @@ module.exports = {
       },
       contract_address: {
         type: Sequelize.STRING,
-        allowNull : false
+        allowNull : true
       },
       collection_background_image:{
         type: Sequelize.STRING,
@@ -48,6 +48,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull : true,
       },
+      reveal_timestamp : {
+        type: Sequelize.STRING,
+        allowNull : true,
+      },
       discord_link : {
         type : Sequelize.STRING,
         allowNull : true
@@ -74,7 +78,8 @@ module.exports = {
       },
       os_royalty : {
         type : Sequelize.STRING,
-        allowNull : false
+        defaultValue : "2.5 %",
+        allowNull : true
       },
       listing_fee : {
         type : Sequelize.STRING,
@@ -85,10 +90,6 @@ module.exports = {
         allowNull : true
       },
       nft_royalty : {
-        type : Sequelize.STRING,
-        allowNull : true
-      },
-      category : {
         type : Sequelize.STRING,
         allowNull : true
       },
@@ -118,6 +119,14 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue : false,
       },
+      twitter_description : {
+        type: Sequelize.STRING,
+        allowNull : true
+      },
+      admin_description : {
+        type: Sequelize.STRING,
+        allowNull : true
+      },
       error_log : {
         type: Sequelize.STRING,
         allowNull : true,
@@ -135,6 +144,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('upcoming_table');
+    await queryInterface.dropTable('upcomings');
   }
 };

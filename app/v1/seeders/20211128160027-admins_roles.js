@@ -13,6 +13,8 @@ module.exports = {
          */
         await queryInterface.bulkInsert('admins_roles', [{
             role_name: 'Founder'
+        },{
+            role_name: 'Admin'
         }])
     },
 
@@ -25,6 +27,9 @@ module.exports = {
          */
         await queryInterface.bulkDelete('admins_roles', {
             role_name: 'Founder'
+        })
+        await queryInterface.bulkDelete('admins_roles', {
+            role_name: 'Admin'
         })
     }
 };

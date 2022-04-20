@@ -11,9 +11,16 @@ module.exports = {
          *   isBetaMember: false
          * }], {});
          */
+
         await queryInterface.bulkInsert('admins_role_perms', [{
             roleId: 1,
             permId: 1
+        },{
+            roleId: 2,
+            permId: 2
+        },{
+            roleId: 2,
+            permId: 6
         }])
     },
 
@@ -27,6 +34,14 @@ module.exports = {
         await queryInterface.bulkDelete('admins_role_perms', {
             roleId: 1,
             permId: 1
+        })
+        await queryInterface.bulkDelete('admins_role_perms', {
+            roleId: 2,
+            permId: 2
+        })
+        await queryInterface.bulkDelete('admins_role_perms', {
+            roleId: 2,
+            permId: 6
         })
     }
 };

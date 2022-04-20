@@ -1,227 +1,86 @@
 const Model = require('../../models').sequelize
-const { permissions } = require('../../middlewares')
-const managments = {}
+const { restful,response } = require('../../libs')
+const rolesApi = new restful(Model.models.admins_roles,['admins_roles'])
+const permissionsApi = new restful(Model.models.admins_permissions,['admins_roles'])
+const rolePermissionsApi = new restful(Model.models.admins_role_perm,['admins_roles'])
 
-managments.admins = async(req, res) => {
-    try {
-
-        const METHOD = req.method
+module.exports.adminsRoles = {
+    create : async(req,res) => {
+        return response(await rolesApi.Post({body : req.body , res : res , req : req }),res)
+    },
+    findAll : async(req,res) => {
+        return response(await rolesApi.Get({ res : res , req : req }),res)
+    },
+    findOne : async(req,res) => { 
+        const { id } = req.params
+        return response(await rolesApi.Get({where : { id : id } , res : res , req : req }),res)
+    },
+    delete : async(req,res) => {
+        const { id } = req.params
+        return response(await rolesApi.Delete({where : { id : id } , req : req , res:res }), res)
+    },
+    update : async(req,res) => {
         const { id } = req.params
         const body = req.body
         delete body['id']
         delete body['createdAt']
         delete body['updatedAt']
-
-        if (req.isAuthenticated(req, res)) {
-            const resCheckPermission = await permissions.check(req.user[0].role.id, ['admins'])
-            if (resCheckPermission != true)
-                return res.status(resCheckPermission.status).send(resCheckPermission.content)
-
-            switch (METHOD) {
-                case 'GET':
-                    const resGetAdmins = await Model.models.admins.findAndCountAll({
-                        order: [
-                            ['id', 'DESC']
-                        ]
-                    })
-                    return res.status(200).send(resGetAdmins)
-
-                case 'PUT':
-                    const resUpdateAdmin = await Model.models.admins.update(body, {
-                        where: {
-                            id: id
-                        }
-                    })
-                    if (resUpdateAdmin == 1) {
-                        const resGetAdmin = await Model.models.admins.findAll({
-                            where: {
-                                id: id,
-                            }
-                        })
-                        return res.status(200).send(resGetAdmin)
-                    } else
-                        return res.status(400).send({ message: 'invalid id or something else' })
-
-                case 'DELETE':
-                    const resDeleteAdmin = await Model.models.admins.destroy({
-                        where: {
-                            id: id
-                        }
-                    })
-                    if (resDeleteAdmin == 1)
-                        return res.status(200).send({ result: true })
-                    else
-                        return res.status(400).send({ message: 'invalid id or something else' })
-            }
-        }
-        res.status(401).send('Unauthorized')
-    } catch (e) {
-        res.status(400).send({ message: String(e.message) })
-    }
-}
-
-managments.adminsRoles = async(req, res) => {
-    try {
-
-        const METHOD = req.method
+     
+        return response(await rolesApi.Put({body : body, where : { id : id } , req : req , res:res }), res)
+    },
+    delete : async(req,res) => {
         const { id } = req.params
-        const body = req.body
-        delete body['id']
-        delete body['createdAt']
-        delete body['updatedAt']
-
-        if (req.isAuthenticated(req, res)) {
-            const resCheckPermission = await permissions.check(req.user[0].role.id, ['admins_roles'])
-            if (resCheckPermission != true)
-                return res.status(resCheckPermission.status).send(resCheckPermission.content)
-
-            switch (METHOD) {
-                case 'POST':
-                    const resCreate = await Model.models.admins_roles.create(body)
-                    return res.status(201).send(resCreate)
-
-                case 'GET':
-                    const resGetAdmins = await Model.models.admins_roles.findAndCountAll({
-                        order: [
-                            ['id', 'DESC']
-                        ]
-                    })
-                    return res.status(200).send(resGetAdmins)
-
-                case 'PUT':
-                    const resUpdateAdmin = await Model.models.admins_roles.update(body, {
-                        where: {
-                            id: id
-                        }
-                    })
-                    if (resUpdateAdmin == 1) {
-                        const resGetAdmin = await Model.models.admins_roles.findAll({
-                            where: {
-                                id: id,
-                            }
-                        })
-                        return res.status(200).send(resGetAdmin)
-                    } else
-                        return res.status(400).send({ message: 'invalid id or something else' })
-
-                case 'DELETE':
-                    const resDeleteAdmin = await Model.models.admins_roles.destroy({
-                        where: {
-                            id: id
-                        }
-                    })
-                    if (resDeleteAdmin == 1)
-                        return res.status(200).send({ result: true })
-                    else
-                        return res.status(400).send({ message: 'invalid id or something else' })
-            }
-        }
-        res.status(401).send('Unauthorized')
-    } catch (e) {
-        res.status(400).send({ message: String(e.message) })
+        return response(await rolesApi.Delete({where : { id : id } , req : req , res:res }), res)
     }
 }
 
 
-managments.adminsPermissions = async(req, res) => {
-    try {
-        const METHOD = req.method
+module.exports.adminsPermissions = {
+    findAll : async(req,res) => {
+        return response(await permissionsApi.Get({ res : res , req : req }),res)
+    },
+    findOne : async(req,res) => { 
+        const { id } = req.params
+        return response(await permissionsApi.Get({where : { id : id } , res : res , req : req }),res)
+    },
+    update : async(req,res) => {
         const { id } = req.params
         const { perm_description } = req.body
-
-        if (req.isAuthenticated(req, res)) {
-            const resCheckPermission = await permissions.check(req.user[0].role.id, ['admins_roles'])
-            if (resCheckPermission != true)
-                return res.status(resCheckPermission.status).send(resCheckPermission.content)
-
-            switch (METHOD) {
-                case 'GET':
-                    const resGetAdmins = await Model.models.admins_permissions.findAndCountAll()
-                    return res.status(200).send(resGetAdmins)
-
-                case 'PUT':
-                    const resUpdateAdmin = await Model.models.admins_permissions.update({ perm_description: perm_description }, {
-                        where: {
-                            id: id
-                        }
-                    })
-                    if (resUpdateAdmin == 1) {
-                        const resGetAdmin = await Model.models.admins_permissions.findAll({
-                            where: {
-                                id: id,
-                            }
-                        })
-                        return res.status(200).send(resGetAdmin)
-                    } else
-                        return res.status(400).send({ message: 'invalid id or something else' })
-            }
-        }
-        res.status(401).send('Unauthorized')
-    } catch (e) {
-        res.status(400).send({ message: String(e.message) })
+        delete body['id']
+        delete body['createdAt']
+        delete body['updatedAt']
+     
+        return response(await permissionsApi.Put({body : { perm_description : perm_description }, where : { id : id } , req : req , res:res }), res)
     }
 }
 
-managments.adminsRolesPermissions = async(req, res) => {
-    try {
 
-        const METHOD = req.method
+module.exports.adminsRolesPermissions = {
+    create : async(req,res) => {
+        return response(await rolePermissionsApi.Post({body : req.body , res : res , req : req }),res)
+    },
+    findAll : async(req,res) => {
+        return response(await rolePermissionsApi.Get({ res : res , req : req }),res)
+    },
+    findOne : async(req,res) => { 
+        const { id } = req.params
+        return response(await rolePermissionsApi.Get({where : { id : id } , res : res , req : req }),res)
+    },
+    delete : async(req,res) => {
+        const { id } = req.params
+        return response(await rolePermissionsApi.Delete({where : { id : id } , req : req , res:res }), res)
+    },
+    update : async(req,res) => {
         const { id } = req.params
         const body = req.body
         delete body['id']
         delete body['createdAt']
         delete body['updatedAt']
-
-        if (req.isAuthenticated(req, res)) {
-            const resCheckPermission = await permissions.check(req.user[0].role.id, ['admins_roles'])
-            if (resCheckPermission != true)
-                return res.status(resCheckPermission.status).send(resCheckPermission.content)
-
-            switch (METHOD) {
-                case 'POST':
-                    const resCreate = await Model.models.admins_role_perm.create(body)
-                    return res.status(201).send(resCreate)
-
-                case 'GET':
-                    const resGetAdmins = await Model.models.admins_role_perm.findAndCountAll({
-                        order: [
-                            ['id', 'DESC']
-                        ]
-                    })
-                    return res.status(200).send(resGetAdmins)
-
-                case 'PUT':
-                    const resUpdateAdmin = await Model.models.admins_role_perm.update(body, {
-                        where: {
-                            id: id
-                        }
-                    })
-                    if (resUpdateAdmin == 1) {
-                        const resGetAdmin = await Model.models.admins_role_perm.findAll({
-                            where: {
-                                id: id,
-                            }
-                        })
-                        return res.status(200).send(resGetAdmin)
-                    } else
-                        return res.status(400).send({ message: 'invalid id or something else' })
-
-                case 'DELETE':
-                    const resDeleteAdmin = await Model.models.admins_role_perm.destroy({
-                        where: {
-                            id: id
-                        }
-                    })
-                    if (resDeleteAdmin == 1)
-                        return res.status(200).send({ result: true })
-                    else
-                        return res.status(400).send({ message: 'invalid id or something else' })
-            }
-        }
-        res.status(401).send('Unauthorized')
-    } catch (e) {
-        res.status(400).send({ message: String(e.message) })
+     
+        return response(await rolePermissionsApi.Put({body : body, where : { id : id } , req : req , res:res }), res)
+    },
+    delete : async(req,res) => {
+        const { id } = req.params
+        return response(await rolePermissionsApi.Delete({where : { id : id } , req : req , res:res }), res)
     }
 }
-
-module.exports = managments

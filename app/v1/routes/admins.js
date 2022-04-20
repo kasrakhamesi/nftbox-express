@@ -10,19 +10,23 @@ const adminsPassport = passport.adminsPassport.authenticate('jwt', { session: fa
 
 //Admin Login && Register && Dashboard Routes
 router.post('/admins/login', admins.authentications.login)
-router.post('/admins/register', adminsPassport, admins.admins.register)
+router.post('/admins', adminsPassport, admins.admins.create)
 router.get('/admins', adminsPassport, admins.authentications.dashboard)
 router.put('/admins/id/:id', adminsPassport, admins.admins.update)
+router.delete('/admins/id/:id', adminsPassport, admins.admins.delete)
 
 //Admins Managments Routes
-router.all('/admins/managments/admins/:id', adminsPassport, admins.managments.admins)
-router.all('/admins/managments/admins', adminsPassport, admins.managments.admins)
-router.all('/admins/managments/roles/id/:id', adminsPassport, admins.managments.adminsRoles)
-router.all('/admins/managments/roles', adminsPassport, admins.managments.adminsRoles)
-router.all('/admins/managments/permissions/id/:id', adminsPassport, admins.managments.adminsPermissions)
-router.all('/admins/managments/permissions', adminsPassport, admins.managments.adminsPermissions)
-router.all('/admins/managments/roles_permissions/id/:id', adminsPassport, admins.managments.adminsRolesPermissions)
-router.all('/admins/managments/roles_permissions', adminsPassport, admins.managments.adminsRolesPermissions)
+router.get('/admins/managments/admins/id/:id', adminsPassport, admins.admins.findOne)
+router.get('/admins/managments/admins', adminsPassport, admins.admins.findAll)
+
+router.get('/admins/managments/roles/id/:id', adminsPassport, admins.managments.adminsRoles.findOne)
+router.get('/admins/managments/roles', adminsPassport, admins.managments.adminsRoles.findAll)
+
+router.get('/admins/managments/permissions/id/:id', adminsPassport, admins.managments.adminsPermissions.findOne)
+router.get('/admins/managments/permissions', adminsPassport, admins.managments.adminsPermissions.findAll)
+
+router.get('/admins/managments/roles-permissions/id/:id', adminsPassport, admins.managments.adminsRolesPermissions.findOne)
+router.get('/admins/managments/roles-permissions', adminsPassport, admins.managments.adminsRolesPermissions.findAll)
 
 
 module.exports = router

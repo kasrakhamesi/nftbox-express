@@ -1,6 +1,6 @@
-'use strict'
 const { permissions } = require('../middlewares')
 const _ = require('lodash')
+const { logger } = require('../utils')
 
 class Restful {
     #model
@@ -81,7 +81,13 @@ class Restful {
                 if (resPermissions != true) return res.status(resPermissions.status).send(resPermissions.content)
             }
             
-            const resGet = where?.id ? (await this.#model.findByPk(parseInt(where?.id))) : (await this.#model.findAndCountAll({
+            const resGet = where?.id ? (await this.#model.findByPk(parseInt(where?.id), {
+                where : where,
+                attributes : attributes,
+                include : include,
+                order : order,
+                limit : limit
+            })) : (await this.#model.findAndCountAll({
                 where : where,
                 attributes : attributes,
                 include : include,
@@ -112,7 +118,9 @@ class Restful {
         checkJwt : checkJwt = true,
         checkRole : checkRole = true,
         req : req,
-        res: res
+        res: res,
+        haveLog : haveLog = false,
+        logDescription : description,
         }) => {
         
         try {
@@ -130,6 +138,13 @@ class Restful {
             }
 
             const resCreate = await this.#model.create(body)
+            if (haveLog)
+                {
+                    try {
+                        logger(req.user[0].id,description).then(console.log).catch(console.log)
+                    }
+                    catch (e) { console.log(e) }
+                }
             return {
                 status : 201,
                 content : resCreate
@@ -154,7 +169,9 @@ class Restful {
         checkRole : checkRole = true,
         req : req,
         res : res,
-        where : where = null
+        where : where = null,
+        haveLog : haveLog = false,
+        logDescription : description,
         }) => {
 
         try {
@@ -178,6 +195,13 @@ class Restful {
             })
 
             if (resUpdate[0] || resUpdate >= 1) {
+                if (haveLog)
+                {
+                    try {
+                        logger(req.user[0].id,description).then(console.log).catch(console.log)
+                    }
+                    catch (e) { console.log(e) }
+                }
                 return { 
                     status : 200,
                     content : 
@@ -210,7 +234,9 @@ class Restful {
         checkRole : checkRole = true ,
         req : req ,
         res : res,
-        where: where = null
+        where: where = null,
+        haveLog : haveLog = false,
+        logDescription : description,
         }) => {
 
         try {
@@ -234,6 +260,14 @@ class Restful {
             })
 
             if (resDelete[0] || resDelete >= 1)
+            { 
+                if (haveLog)
+                {
+                    try {
+                        logger(req.user[0].id,description).then(console.log).catch(console.log)
+                    }
+                    catch (e) { console.log(e) }
+                }
                 return { 
                     status : 200,
                     content : 
@@ -242,6 +276,7 @@ class Restful {
                             message : "successfully deleted." 
                         }
                     }
+            }
 
             return {
                 status : 404, 

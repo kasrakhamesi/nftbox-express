@@ -7,5 +7,6 @@ router.use(require('./admins'))
 router.use(require('./tables'))
 router.use(require('./failures'))
 router.use(require('./activitylogs'))
+router.use(require('./categories'))
 
 module.exports = router

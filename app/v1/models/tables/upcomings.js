@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class upcoming_table extends Model {
+  class upcomings extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,12 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      upcomings.belongsToMany(models.categories, {  through: 'upcoming_categories' , as : 'categories', foreignKey : 'upcomingId' })
     }
   }
-  upcoming_table.init({
+  upcomings.init({
     contract_address: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : true
     },
     collection_background_image:{
       type: DataTypes.STRING,
@@ -28,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     collection_name : {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : true
     },
     quantity: {
       type: DataTypes.STRING,
@@ -54,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
     },
+    reveal_timestamp : {
+      type: DataTypes.STRING,
+      allowNull : true,
+    },
     discord_link : {
       type : DataTypes.STRING,
       allowNull : true
@@ -75,12 +80,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : true
     },
     website_link : {
-      type : Sequelize.STRING,
+      type : DataTypes.STRING,
       allowNull : true
     },
     os_royalty : {
       type : DataTypes.STRING,
-      allowNull : false
+      allowNull : true
     },
     listing_fee : {
       type : DataTypes.STRING,
@@ -91,10 +96,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : true
     },
     nft_royalty : {
-      type : DataTypes.STRING,
-      allowNull : true
-    },
-    category : {
       type : DataTypes.STRING,
       allowNull : true
     },
@@ -123,10 +124,18 @@ module.exports = (sequelize, DataTypes) => {
     enable_access_key: {
       type: DataTypes.BOOLEAN,
       defaultValue : false,
-    }
+    },
+    twitter_description : {
+      type: DataTypes.STRING,
+      allowNull : true
+    },
+    admin_description : {
+      type: DataTypes.STRING,
+      allowNull : true
+    },
   }, {
     sequelize,
-    modelName: 'upcoming_table',
+    modelName: 'upcomings',
   });
-  return upcoming_table;
+  return upcomings;
 };
