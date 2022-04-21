@@ -18,6 +18,11 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: true
             },
+            is_global : {
+                type: Sequelize.BOOLEAN,
+                defaultValue : false,
+                allowNull: false
+            },
             createdAt: {
                 allowNull: true,
                 type: 'TIMESTAMP',

@@ -19,7 +19,7 @@ module.exports = {
 
             if (resLogin?.count === 0) return res.status(400).send({ message : "invalid username or password" })
 
-            const jwtToken = authurize.jwt(resLogin?.rows["0"])
+            const jwtToken = authurize.jwt(resLogin?.rows[0])
 
             resLogin = resLogin.rows
 
@@ -40,7 +40,7 @@ module.exports = {
                 }
             })
 
-         Model.models.admins.update({last_login : String(Date.now())},{
+         Model.models.admins.update({last_login : String(Date.now())}, {
             where: {
                 id : parseInt(resLogin[0].id)
             }
