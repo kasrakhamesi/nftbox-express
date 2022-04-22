@@ -8,7 +8,7 @@ router.use(bodyParser.json())
 
 const adminsPassport = passport.adminsPassport.authenticate('jwt', { session: false ,failureRedirect : "/v1/unauthurized" })
 
-router.put('/admins/configurations/key/:key', adminsPassport, admins.configurations.update)
+router.put('/admins/configurations/id/:id', adminsPassport, admins.configurations.update)
 router.get('/admins/configurations',adminsPassport, admins.configurations.findAll)
 
 

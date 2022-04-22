@@ -8,7 +8,7 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER.UNSIGNED
             },
-            public_address: {
+            address: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
@@ -22,7 +22,7 @@ module.exports = {
                 type: 'TIMESTAMP',
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             }
-        }).then(() => queryInterface.addIndex('whitelist_addresses', ['public_address'], { unique: true }));
+        }).then(() => queryInterface.addIndex('whitelist_addresses', ['address'], { unique: true }));
     },
     down: async(queryInterface, Sequelize) => {
         await queryInterface.dropTable('whitelist_addresses');

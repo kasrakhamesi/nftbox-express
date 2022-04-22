@@ -5,12 +5,15 @@ const categoriesApi = new restful(Model.models.categories,['upcoming_table'])
 const upcomingCategoriesApi = new restful(Model.models.upcoming_categories,['upcoming_table'])
 const Op = require('sequelize').Op
 const _ = require('lodash')
+const { sequelize } = require('../../models')
 
 module.exports.create = async(req, res) => {
 
     try {
     
     const { categories } = req.body
+
+    if (!categories) return res.status(400).send({ message : "please select categories for this item." })
 
     for (let i = 0; i < categories.length; i++) {
         try {
@@ -88,73 +91,46 @@ module.exports.findOne = async(req, res) => {
 
 module.exports.update = async(req, res) => {
 
-    const { id } = req.params
-    const body = req.body
-    delete body['id']
-    delete body['createdAt']
-    delete body['updatedAt']
+    try {
+        const { id } = req.params
+        let body = req.body
+        delete body['id']
+        delete body['createdAt']
+        delete body['updatedAt']
 
-
-    const r1 = await Model.models.upcomings.findByPk(id)
-    if (r1  === null || r1 === "") return res.status(400).send({ message : `Can't find data.`})
-
-    for (let k = 0; k < body.categories.length; k++) {
-        try{
-            const r2 = await Model.models.categories.findAll({
-                where : {
-                    id : body.categories[k].id
+        return Model.models.upcomings
+            .findByPk(id,{ 
+                include : [ {
+                    model: Model.models.categories,
+                    as: "categories" } ]
+                })
+            .then(async(result) => {
+                if(!result) {
+                    throw new Error({ message : `Can't find Upcoming data.` });
                 }
-            })
 
-            if (_.isEmpty(r2)) {
-                return res.status(400).send({ message : `Can't find category data.`})
-            }
-        }
-        catch (e) { return res.status(400).send({ message : e.message }) }
-    }
-
-    for (let i = 0; i < body.categories.length; i++) {
+                let categoryIds = []
+                await req.body.categories.forEach(item => {
+                    categoryIds.push(item.id)
+                })
+                await result.setCategories(categoryIds)
+                delete req.body.categories
+                await result.set(req.body)
         
-        try {
-            const r2 = await Model.models.upcoming_categories.update(body, {
-                where : {
-                    [Op.and]: [
-                        { categoryId: body.categories[i].id },
-                        { upcomingId : id }
-                    ]
-                }
+                return await sequelize
+                    .transaction((t) => {
+                        return result
+                            .save({transaction: t})
+                            .then((updatedresult) =>  {  updatedresult.save() })
+                    })
             })
-            
-            if (!r2[0] || r2 < 1) {
-                return res.status(400).send({ message : `Can't find data.`})
-            }
-        }
-            catch (e) { return res.status(400).send({ message : e.message }) }
+            .then(() => { return res.status(200).send({ 
+                result: true ,
+                message : "successfully updated." })
+            })
+            .catch( () => { return res.status(400).send({ message : `Can't find category data.` }) } )
     }
-
-
-
-    const r = await Model.models.upcomings.update(body,{
-        where : {
-            id : id
-        }
-    })
-
-    if (r[0] || r >= 1)
-    {
-        return res.status(200).send({
-            result: true ,
-            message : "successfully updated." 
-        })
-    }
-
-    console.log(r)
-
-    return res.status(400).send({ message : `Can't find data.`})
-
-  
-
-    //return response(await api.Put({body : body, where : { id : id } , req : req , res:res , haveLog :true , logDescription : `a Admin try to Edit category with id : ${id}`}), res)
+    catch (e) { res.status(400).send({ message : e.message }) }
 }
 
 module.exports.delete = async(req, res) => {

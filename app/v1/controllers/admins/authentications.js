@@ -6,6 +6,7 @@ const api = new restful(Model.models.admins,['admnis'])
 
 module.exports = {
     login : async(req,res) => {
+        
         const { email, password } = req.body
 
         if (!email && !password) return res.status(400).send({message : "invalid inputs"})
@@ -15,7 +16,20 @@ module.exports = {
                 password : password
             }
             
-            let resLogin = (await api.Get({ where : condition, include : { model: Model.models.admins_roles, as: 'role' } , checkJwt : false , checkRole : false , req : req, res: res})).content
+
+            const include = [{
+                 model: Model.models.admins_roles, as : 'role',
+                 include : {
+                     model : Model.models.admins_permissions , as : 'permissions',
+                     through : {
+                        attributes : {
+                            exclude : ['createdAt','updatedAt','permId','roleId']
+                        }
+                     }
+                 }
+            }]
+
+            let resLogin = (await api.Get({ where : condition, include : include , checkJwt : false , checkRole : false , req : req, res: res})).content
 
             if (resLogin?.count === 0) return res.status(400).send({ message : "invalid username or password" })
 

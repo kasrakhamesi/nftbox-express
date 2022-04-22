@@ -21,7 +21,7 @@ module.exports.adminsRoles = {
     },
     update : async(req,res) => {
         const { id } = req.params
-        const body = req.body
+        let body = req.body
         delete body['id']
         delete body['createdAt']
         delete body['updatedAt']
@@ -46,9 +46,6 @@ module.exports.adminsPermissions = {
     update : async(req,res) => {
         const { id } = req.params
         const { perm_description } = req.body
-        delete body['id']
-        delete body['createdAt']
-        delete body['updatedAt']
      
         return response(await permissionsApi.Put({body : { perm_description : perm_description }, where : { id : id } , req : req , res:res }), res)
     }
@@ -72,7 +69,7 @@ module.exports.adminsRolesPermissions = {
     },
     update : async(req,res) => {
         const { id } = req.params
-        const body = req.body
+        let body = req.body
         delete body['id']
         delete body['createdAt']
         delete body['updatedAt']

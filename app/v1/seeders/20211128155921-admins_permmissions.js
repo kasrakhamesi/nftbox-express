@@ -32,7 +32,7 @@ module.exports = {
         }, {
             role: 'whitelist_addresses',
             perm_description: 'WhiteList for Addresses Can Use App',
-        },, {
+        }, {
             role: 'configurations',
             perm_description: 'configurations setting',
         }])

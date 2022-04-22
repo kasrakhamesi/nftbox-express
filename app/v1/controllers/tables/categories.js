@@ -20,7 +20,7 @@ module.exports.findOne = async(req, res) => {
 module.exports.update = async(req, res) => {
 
     const { id } = req.params
-    const body = req.body
+    let body = req.body
     delete body['id']
     delete body['createdAt']
     delete body['updatedAt']

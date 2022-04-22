@@ -17,9 +17,20 @@ adminsPassport.use(
                     where: {
                         id: jwtPayLoad.id
                     },
-                    include: { model: Model.models.admins_roles, as: 'role' }
+                    include: {  
+                        model: Model.models.admins_roles, as : 'role',
+                        include : {
+                            model : Model.models.admins_permissions , as : 'permissions',
+                            through : {
+                            attributes : {
+                                exclude : ['createdAt','updatedAt','permId','roleId']
+                              }
+                            }
+                       }
+                   }
                 })
                 .then(admins => {
+                    console.log(admins)
                     const adminsInfo = (admins).map(item => {
                         return {
                             id: item.id,

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   whitelist_addresses.init({
-    public_address : DataTypes.STRING,
+    address : DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'whitelist_addresses',

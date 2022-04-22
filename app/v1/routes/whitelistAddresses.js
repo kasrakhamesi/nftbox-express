@@ -12,6 +12,7 @@ const adminsPassport = passport.adminsPassport.authenticate('jwt', { session: fa
 
 router.put('/admins/whitelist-addresses/id/:id', adminsPassport, admins.whitelistAddresses.update)
 router.get('/admins/whitelist-addresses/id/:id', adminsPassport, admins.whitelistAddresses.findOne)
+router.get('/whitelist-addresses/address/:address', admins.whitelistAddresses.findOne)
 router.get('/admins/whitelist-addresses', adminsPassport, admins.whitelistAddresses.findAll)
 router.delete('/admins/whitelist-addresses/id/:id', adminsPassport, admins.whitelistAddresses.delete)
 router.post('/admins/whitelist-addresses', adminsPassport, admins.whitelistAddresses.create)

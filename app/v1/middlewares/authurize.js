@@ -9,7 +9,7 @@ auth.jwt =
         return jsonwebtoken.sign({
             id: id,
             isAdmin: true
-        }, managerAccess, { expiresIn: '36000s' })
+        }, managerAccess, { expiresIn: '128000s' })
     }
 
 auth.managerDecodeJwt = encodedString => {
