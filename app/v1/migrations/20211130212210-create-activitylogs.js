@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 module.exports = {
-    up: async(queryInterface, Sequelize) => {
+    up: async (queryInterface, Sequelize) => {
         await queryInterface.createTable('activitylogs', {
             id: {
                 allowNull: false,
@@ -33,9 +33,9 @@ module.exports = {
                 type: 'TIMESTAMP',
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             }
-        });
+        })
     },
-    down: async(queryInterface, Sequelize) => {
-        await queryInterface.dropTable('activitylogs');
+    down: async (queryInterface, Sequelize) => {
+        await queryInterface.dropTable('activitylogs')
     }
-};
+}

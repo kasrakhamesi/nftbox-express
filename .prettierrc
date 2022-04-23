@@ -1,0 +1,10 @@
+{
+  "bracketSameLine": true,
+  "endOfLine": "auto",
+  "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "tabWidth": 4
+}

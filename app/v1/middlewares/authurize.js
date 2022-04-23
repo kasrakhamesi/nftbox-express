@@ -2,17 +2,18 @@ const jsonwebtoken = require('jsonwebtoken')
 const managerAccess = 'qqqqq'
 const auth = {}
 
-auth.jwt =
-    ({
-        id: id,
-    }) => {
-        return jsonwebtoken.sign({
+auth.jwt = ({ id: id }) => {
+    return jsonwebtoken.sign(
+        {
             id: id,
             isAdmin: true
-        }, managerAccess, { expiresIn: '128000s' })
-    }
+        },
+        managerAccess,
+        { expiresIn: '128000s' }
+    )
+}
 
-auth.managerDecodeJwt = encodedString => {
+auth.managerDecodeJwt = (encodedString) => {
     return jsonwebtoken.decode(encodedString, managerAccess)
 }
 

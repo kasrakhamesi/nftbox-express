@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
 module.exports = {
-    up: async(queryInterface, Sequelize) => {
+    up: async (queryInterface, Sequelize) => {
         /**
          * Add seed commands here.
          *
@@ -11,14 +11,17 @@ module.exports = {
          *   isBetaMember: false
          * }], {});
          */
-        await queryInterface.bulkInsert('admins_roles', [{
-            role_name: 'Founder'
-        },{
-            role_name: 'Admin'
-        }])
+        await queryInterface.bulkInsert('admins_roles', [
+            {
+                role_name: 'Founder'
+            },
+            {
+                role_name: 'Admin'
+            }
+        ])
     },
 
-    down: async(queryInterface, Sequelize) => {
+    down: async (queryInterface, Sequelize) => {
         /**
          * Add commands to revert seed here.
          *
@@ -32,4 +35,4 @@ module.exports = {
             role_name: 'Admin'
         })
     }
-};
+}

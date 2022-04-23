@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const env = process.env.NODE_ENV || "development"
-const envConfigs = require("../config/config.json")
+const fs = require('fs')
+const path = require('path')
+const Sequelize = require('sequelize')
+const env = process.env.NODE_ENV || 'development'
+const envConfigs = require('../config/config.json')
 const config = envConfigs[env]
 const db = {}
 
@@ -26,7 +26,7 @@ const sortDir = (maniDir) => {
     const CheckFile = (filePath) => fs.statSync(filePath).isFile()
     const sortPath = (dir) => {
         fs.readdirSync(dir)
-            .filter((file) => file.indexOf(".") !== 0 && file !== "index.js")
+            .filter((file) => file.indexOf('.') !== 0 && file !== 'index.js')
             .forEach((res) => {
                 const filePath = path.join(dir, res)
                 if (CheckFile(filePath)) {

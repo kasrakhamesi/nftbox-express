@@ -3,7 +3,6 @@ const cors = require('cors')
 require('dotenv').config()
 const app = express()
 const routes = {}
-
 app.use(cors())
 
 routes.v1 = require('./app/v1/routes')
@@ -13,7 +12,6 @@ const { Client }  = require('twitter.js')
 
 const client = new Client()
 */
-
 
 app.use('/v1', routes.v1)
 
@@ -25,6 +23,7 @@ await client.loginWithBearerToken(`AAAAAAAAAAAAAAAAAAAAAERkbgEAAAAAwteJU20DinzI5
 const q= await client.users.fetchByUsername('oddstronauts')
 res.send(q)
 */
+
     res.status(404).send('<h1>404 Not Found</h1>')
 })
 

@@ -1,7 +1,8 @@
-'use strict';
+'use strict'
 module.exports = {
-    up: async(queryInterface, Sequelize) => {
-        await queryInterface.createTable('admins', {
+    up: async (queryInterface, Sequelize) => {
+        await queryInterface
+            .createTable('admins', {
                 id: {
                     allowNull: false,
                     autoIncrement: true,
@@ -28,7 +29,7 @@ module.exports = {
                     validate: {
                         isEmail: {
                             args: true,
-                            msg: "invalid email"
+                            msg: 'invalid email'
                         }
                     },
                     allowNull: false
@@ -50,9 +51,12 @@ module.exports = {
                     type: 'TIMESTAMP',
                     defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
                 }
-            }).then(() => queryInterface.addIndex('admins', ['email'], { unique: true }))
+            })
+            .then(() =>
+                queryInterface.addIndex('admins', ['email'], { unique: true })
+            )
     },
-    down: async(queryInterface, Sequelize) => {
-        await queryInterface.dropTable('admins');
+    down: async (queryInterface, Sequelize) => {
+        await queryInterface.dropTable('admins')
     }
-};
+}

@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
 module.exports = {
-    up: async(queryInterface, Sequelize) => {
+    up: async (queryInterface, Sequelize) => {
         /**
          * Add seed commands here.
          *
@@ -11,22 +11,25 @@ module.exports = {
          *   isBetaMember: false
          * }], {});
          */
-        await queryInterface.bulkInsert('admins', [{
-            roleId: 1,
-            name: 'god',
-            email: 'god@god.com',
-            password: 'god',
-            last_login: ''
-        },{
-            roleId: 2,
-            name: 'admin',
-            email: 'admin@admin.com',
-            password: 'admin',
-            last_login: ''
-        }])
+        await queryInterface.bulkInsert('admins', [
+            {
+                roleId: 1,
+                name: 'god',
+                email: 'god@god.com',
+                password: 'god',
+                last_login: ''
+            },
+            {
+                roleId: 2,
+                name: 'admin',
+                email: 'admin@admin.com',
+                password: 'admin',
+                last_login: ''
+            }
+        ])
     },
 
-    down: async(queryInterface, Sequelize) => {
+    down: async (queryInterface, Sequelize) => {
         /**
          * Add commands to revert seed here.
          *
@@ -36,12 +39,12 @@ module.exports = {
         await queryInterface.bulkDelete('admins', {
             roleId: 1,
             name: 'god',
-            email: 'god@god.com',
+            email: 'god@god.com'
         })
         await queryInterface.bulkDelete('admins', {
             roleId: 2,
             name: 'admin',
-            email: 'admin@admin.com',
+            email: 'admin@admin.com'
         })
     }
-};
+}

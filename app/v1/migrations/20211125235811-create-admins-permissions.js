@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 module.exports = {
-    up: async(queryInterface, Sequelize) => {
+    up: async (queryInterface, Sequelize) => {
         await queryInterface.createTable('admins_permissions', {
             id: {
                 allowNull: false,
@@ -26,9 +26,9 @@ module.exports = {
                 type: 'TIMESTAMP',
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             }
-        });
+        })
     },
-    down: async(queryInterface, Sequelize) => {
-        await queryInterface.dropTable('admins_permissions');
+    down: async (queryInterface, Sequelize) => {
+        await queryInterface.dropTable('admins_permissions')
     }
-};
+}

@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
 module.exports = {
-    up: async(queryInterface, Sequelize) => {
+    up: async (queryInterface, Sequelize) => {
         /**
          * Add seed commands here.
          *
@@ -12,19 +12,23 @@ module.exports = {
          * }], {});
          */
 
-        await queryInterface.bulkInsert('admins_role_perms', [{
-            roleId: 1,
-            permId: 1
-        },{
-            roleId: 2,
-            permId: 2
-        },{
-            roleId: 2,
-            permId: 6
-        }])
+        await queryInterface.bulkInsert('admins_role_perms', [
+            {
+                roleId: 1,
+                permId: 1
+            },
+            {
+                roleId: 2,
+                permId: 2
+            },
+            {
+                roleId: 2,
+                permId: 6
+            }
+        ])
     },
 
-    down: async(queryInterface, Sequelize) => {
+    down: async (queryInterface, Sequelize) => {
         /**
          * Add commands to revert seed here.
          *
@@ -44,4 +48,4 @@ module.exports = {
             permId: 6
         })
     }
-};
+}

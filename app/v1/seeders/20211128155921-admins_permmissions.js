@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
 module.exports = {
-    up: async(queryInterface, Sequelize) => {
+    up: async (queryInterface, Sequelize) => {
         /**
          * Add seed commands here.
          *
@@ -11,34 +11,43 @@ module.exports = {
          *   isBetaMember: false
          * }], {});
          */
-        await queryInterface.bulkInsert('admins_permissions', [{
-            role: 'GOD',
-            perm_description: 'Full Access',
-        },  {
-            role: 'upcoming_table',
-            perm_description: 'Upcoming Tables Access',
-        },{
-            role: 'admins',
-            perm_description: 'Admins Managment'
-        }, {
-            role: 'admins_roles',
-            perm_description: 'Admins Roles',
-        }, {
-            role: 'activitylogs',
-            perm_description: 'Activity Logs',
-        }, {
-            role: 'categories',
-            perm_description: 'Categories',
-        }, {
-            role: 'whitelist_addresses',
-            perm_description: 'WhiteList for Addresses Can Use App',
-        }, {
-            role: 'configurations',
-            perm_description: 'configurations setting',
-        }])
+        await queryInterface.bulkInsert('admins_permissions', [
+            {
+                role: 'GOD',
+                perm_description: 'Full Access'
+            },
+            {
+                role: 'upcoming_table',
+                perm_description: 'Upcoming Tables Access'
+            },
+            {
+                role: 'admins',
+                perm_description: 'Admins Managment'
+            },
+            {
+                role: 'admins_roles',
+                perm_description: 'Admins Roles'
+            },
+            {
+                role: 'activitylogs',
+                perm_description: 'Activity Logs'
+            },
+            {
+                role: 'categories',
+                perm_description: 'Categories'
+            },
+            {
+                role: 'whitelist_addresses',
+                perm_description: 'WhiteList for Addresses Can Use App'
+            },
+            {
+                role: 'configurations',
+                perm_description: 'configurations setting'
+            }
+        ])
     },
 
-    down: async(queryInterface, Sequelize) => {
+    down: async (queryInterface, Sequelize) => {
         /**
          * Add commands to revert seed here.
          *
@@ -70,6 +79,5 @@ module.exports = {
         await queryInterface.bulkDelete('admins_permissions', {
             role: 'configurations'
         })
-    
     }
-};
+}

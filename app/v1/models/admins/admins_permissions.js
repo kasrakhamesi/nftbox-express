@@ -1,7 +1,5 @@
-'use strict';
-const {
-    Model
-} = require('sequelize');
+'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
     class admins_permissions extends Model {
         /**
@@ -11,21 +9,27 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-             admins_permissions.belongsToMany(models.admins_roles, {  through: 'admins_role_perms' , foreignKey : 'permId' })
+            admins_permissions.belongsToMany(models.admins_roles, {
+                through: 'admins_role_perms',
+                foreignKey: 'permId'
+            })
         }
-    };
-    admins_permissions.init({
-        role: {
-            type: DataTypes.STRING,
-            allowNull: false,
+    }
+    admins_permissions.init(
+        {
+            role: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            perm_description: {
+                type: DataTypes.STRING,
+                allowNull: false
+            }
         },
-        perm_description: {
-            type: DataTypes.STRING,
-            allowNull: false
+        {
+            sequelize,
+            modelName: 'admins_permissions'
         }
-    }, {
-        sequelize,
-        modelName: 'admins_permissions',
-    });
-    return admins_permissions;
-};
+    )
+    return admins_permissions
+}
