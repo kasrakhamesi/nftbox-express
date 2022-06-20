@@ -39,7 +39,7 @@ module.exports = {
             {
                 title: 'Module NFT API Key',
                 key: 'ModuleNftApiKey',
-                value: '%',
+                value: '591572cc-c78d-4a3a-ae00-ae8d53849fb2',
                 description: 'API Key for Authentication to ModuleNFT API'
             },
             {

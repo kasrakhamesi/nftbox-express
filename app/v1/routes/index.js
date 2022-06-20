@@ -10,5 +10,6 @@ router.use(require('./activitylogs'))
 router.use(require('./categories'))
 router.use(require('./whitelistAddresses'))
 router.use(require('./configurations'))
+router.use(require('./collections'))
 
 module.exports = router

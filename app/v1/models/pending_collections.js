@@ -1,7 +1,7 @@
 'use strict'
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-    class whitelist_addresses extends Model {
+    class pending_collections extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,21 +11,21 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
         }
     }
-    whitelist_addresses.init(
+    pending_collections.init(
         {
-            title: {
+            slug: {
                 type: DataTypes.STRING,
                 allowNull: true
             },
-            address: {
+            contract_address: {
                 type: DataTypes.STRING,
-                allowNull: false
+                allowNull: true
             }
         },
         {
             sequelize,
-            modelName: 'whitelist_addresses'
+            modelName: 'pending_collections'
         }
     )
-    return whitelist_addresses
+    return pending_collections
 }

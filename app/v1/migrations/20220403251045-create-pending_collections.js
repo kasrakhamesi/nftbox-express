@@ -2,20 +2,20 @@
 module.exports = {
     up: async (queryInterface, Sequelize) => {
         await queryInterface
-            .createTable('whitelist_addresses', {
+            .createTable('pending_collections', {
                 id: {
                     allowNull: false,
                     autoIncrement: true,
                     primaryKey: true,
-                    type: Sequelize.INTEGER.UNSIGNED
+                    type: Sequelize.BIGINT.UNSIGNED
                 },
-                title: {
+                slug: {
                     type: Sequelize.STRING,
                     allowNull: true
                 },
-                address: {
+                contract_address: {
                     type: Sequelize.STRING,
-                    allowNull: false
+                    allowNull: true
                 },
                 createdAt: {
                     allowNull: true,
@@ -29,12 +29,21 @@ module.exports = {
                 }
             })
             .then(() =>
-                queryInterface.addIndex('whitelist_addresses', ['address'], {
+                queryInterface.addIndex(
+                    'pending_collections',
+                    ['contract_address'],
+                    {
+                        unique: true
+                    }
+                )
+            )
+            .then(() =>
+                queryInterface.addIndex('pending_collections', ['slug'], {
                     unique: true
                 })
             )
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('whitelist_addresses')
+        await queryInterface.dropTable('pending_collections')
     }
 }

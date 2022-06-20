@@ -43,6 +43,10 @@ module.exports = {
             {
                 role: 'configurations',
                 perm_description: 'configurations setting'
+            },
+            {
+                role: 'collections_traits',
+                perm_description: 'Collection Traits Access'
             }
         ])
     },
@@ -78,6 +82,9 @@ module.exports = {
         })
         await queryInterface.bulkDelete('admins_permissions', {
             role: 'configurations'
+        })
+        await queryInterface.bulkDelete('admins_permissions', {
+            role: 'collections_traits'
         })
     }
 }

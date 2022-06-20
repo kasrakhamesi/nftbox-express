@@ -1,1 +1,1 @@
-module.exports.floor = require('./floor')
+module.exports.stats = require('./stats')

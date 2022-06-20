@@ -1,0 +1,5 @@
+module.exports.traits = require('./traits')
+module.exports.info = require('./info')
+module.exports.orders = require('./orders')
+module.exports.listings = require('./listings')
+//module.exports.trendings = require('../tables/trendings')

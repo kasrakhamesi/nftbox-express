@@ -33,4 +33,7 @@ router.post('/admins/tables/upcoming', adminsPassport, tables.upcoming.create)
 router.get('/tables/upcoming/id/:id', tables.upcoming.Users.findOne)
 router.get('/tables/upcoming', tables.upcoming.Users.findAll)
 
+router.get('/tables/trending/id/:id', tables.trending.findOne)
+router.get('/tables/trending/ticker/:ticker', tables.trending.findAll)
+
 module.exports = router

@@ -24,7 +24,7 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            quantity: {
+            supply: {
                 type: Sequelize.STRING,
                 allowNull: true
             },
@@ -36,7 +36,11 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: true
             },
-            max_mint: {
+            presale_max_mint: {
+                type: Sequelize.STRING,
+                allowNull: true
+            },
+            publicsale_max_mint: {
                 type: Sequelize.STRING,
                 allowNull: true
             },
