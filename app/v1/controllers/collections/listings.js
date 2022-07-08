@@ -5,13 +5,13 @@ module.exports.findAll = async (req, res) => {
         const { collection } = req.params
         const condition =
             collection.substring(0, 2) !== '0x'
-                ? { slug: collection }
+                ? { collection_slug: collection }
                 : { contract_address: collection }
-        const orders = await sequelize.models.listings.findAndCountAll({
+        const listings = await sequelize.models.listings.findAndCountAll({
             where: { collectionId: 1 }
         })
 
-        res.status(200).send(orders)
+        res.status(200).send(listings)
     } catch (e) {
         res.status(400).send({ message: e.message })
     }

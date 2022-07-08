@@ -1,6 +1,6 @@
-const Model = require('../../models').sequelize
+const { sequelize } = require('../../models')
 const { restful, response } = require('../../libs')
-const api = new restful(Model.models.whitelist_addresses, [
+const api = new restful(sequelize.models.whitelist_addresses, [
     'whitelist_addresses'
 ])
 const _ = require('lodash')

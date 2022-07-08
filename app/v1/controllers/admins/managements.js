@@ -1,10 +1,10 @@
-const Model = require('../../models').sequelize
+const { sequelize } = require('../../models')
 const { restful, response } = require('../../libs')
-const rolesApi = new restful(Model.models.admins_roles, ['admins_roles'])
-const permissionsApi = new restful(Model.models.admins_permissions, [
+const rolesApi = new restful(sequelize.models.admins_roles, ['admins_roles'])
+const permissionsApi = new restful(sequelize.models.admins_permissions, [
     'admins_roles'
 ])
-const rolePermissionsApi = new restful(Model.models.admins_role_perm, [
+const rolePermissionsApi = new restful(sequelize.models.admins_role_perm, [
     'admins_roles'
 ])
 

@@ -1,6 +1,6 @@
-const Model = require('../../models').sequelize
+const { sequelize } = require('../../models')
 const { restful, response } = require('../../libs')
-const api = new restful(Model.models.configurations, ['configurations'])
+const api = new restful(sequelize.models.configurations, ['configurations'])
 
 module.exports = {
     update: async (req, res) => {

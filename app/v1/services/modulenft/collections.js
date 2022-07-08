@@ -1,5 +1,6 @@
 const axios = require('axios')
 const { sequelize } = require('../../models')
+const { Op } = require('sequelize')
 const _ = require('lodash')
 require('dotenv').config()
 
@@ -12,9 +13,13 @@ module.exports.getTraits = async () => {
 
     apiKey = _.isEmpty(apiKey) ? null : apiKey?.value
 
-    const resAllCollections = sequelize.models.collections.findAll({
+    const resAllCollections = await sequelize.models.collections.findAll({
         where: {
-            traits: null
+            [Op.and]: [
+                { string_traits: null },
+                { numeric_traits: null },
+                { checked_tarits: false }
+            ]
         }
     })
 
@@ -32,16 +37,34 @@ module.exports.getTraits = async () => {
 
             if (resAxios.data.error !== null) continue
 
-            await sequelize.models.collections.update(
-                {
-                    traits: resAxios.data.info.stringTraits
-                },
-                {
-                    where: {
-                        contract_address: resAllCollections[k].contract_address
+            if (resAxios.data.info?.numericTraits.length === 0) {
+                await sequelize.models.collections.update(
+                    {
+                        string_traits: resAxios.data.info.stringTraits,
+                        checked_tarits: true
+                    },
+                    {
+                        where: {
+                            contract_address:
+                                resAllCollections[k].contract_address
+                        }
                     }
-                }
-            )
+                )
+            } else {
+                await sequelize.models.collections.update(
+                    {
+                        string_traits: resAxios.data.info.stringTraits,
+                        numeric_traits: resAxios.data.info.numeric_traits,
+                        checked_tarits: true
+                    },
+                    {
+                        where: {
+                            contract_address:
+                                resAllCollections[k].contract_address
+                        }
+                    }
+                )
+            }
         } catch {
             continue
         }

@@ -316,9 +316,25 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true
             },
 
-            traits: {
+            numeric_traits: {
                 type: DataTypes.JSON,
                 allowNull: true
+            },
+
+            string_traits: {
+                type: DataTypes.JSON,
+                allowNull: true
+            },
+
+            checked_tarits: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false,
+                allowNull: true
+            },
+
+            collection_type: {
+                type: DataTypes.ENUM('erc1155', 'erc721'),
+                defaultValue: 'erc721'
             },
 
             is_trending: {

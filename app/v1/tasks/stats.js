@@ -1,6 +1,6 @@
 const openSea = require('../services/opensea')
 
-const getCollectionsStats = async () => {
+const getCollectionsStats = () => {
     setInterval(openSea.stats.getStats, 1500)
 }
 

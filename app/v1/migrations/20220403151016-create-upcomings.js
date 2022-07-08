@@ -24,7 +24,7 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            supply: {
+            total_supply: {
                 type: Sequelize.STRING,
                 allowNull: true
             },

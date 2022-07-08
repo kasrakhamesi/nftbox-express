@@ -806,8 +806,8 @@ console.log(result)
 
 const ay = async () => {
     const query = new URLSearchParams({
-        pageSize: '10',
-        offset: '0'
+        pageSize: '50',
+        offset: '1000'
     }).toString()
 
     const chain = 'ETH'
@@ -831,10 +831,16 @@ const ay = async () => {
 // replace with your Alchemy api key
 
 const tasks = require('./app/v1/tasks')
+const { sequelize } = require('./app/v1/models')
+//tasks.listings()
 //tasks.stats()
-tasks.trending()
+//tasks.trending()
+//tasks.traits()
+tasks.tokenIds()
 
 const yyy = async () => {
+    await areDgAziz.trending.SaveTopCollections.init()
+
     const q = new areDgAziz.listings.GetListings(
         '0x1792a96e5668ad7c167ab804a100ce42395ce54d'
     )
@@ -846,9 +852,13 @@ const yyy = async () => {
     const o2 = await o.save()
 }
 
-yyy().then(console.log).catch(console.log)
+//yyy().then(console.log).catch(console.log)
 
 app.use('*', async (req, res) => {
+    /*
+    const arr = await sequelize.models.collections.findAll()
+    return res.send(arr)
+    */
     /*
     retriveOrders('0x3035bb5fdd9597903776da28e41614e1b2ca39bc')
         .then((r) => {
@@ -858,14 +868,11 @@ app.use('*', async (req, res) => {
             return res.send(e)
         })
         */
-
-    //const q = await ay()
-    //res.json(q)
-
+    const qC = await ay()
+    res.json(qC)
     //const ye = await areDgAziz.trending.SaveTopCollections.init()
-
     //res.status(ye.status).send(ye.content)
-    res.status(404).send('<h1>404 Not Found</h1>')
+    //  res.status(404).send('<h1>404 Not Found</h1>')
 })
 
 app.listen(process.env.PORT)

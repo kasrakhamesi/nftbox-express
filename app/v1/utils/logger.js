@@ -1,7 +1,7 @@
-const Model = require('../models').sequelize
+const { sequelize } = require('../models')
 
 const logger = (adminId, description) => {
-    Model.models.activitylogs
+    sequelize.models.activitylogs
         .create({
             adminId: adminId,
             description: description,

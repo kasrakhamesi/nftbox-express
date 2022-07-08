@@ -1,10 +1,10 @@
 const { restful, response } = require('../../libs')
-const Model = require('../../models').sequelize
-const api = new restful(Model.models.activitylogs, ['activitylogs'])
+const { sequelize } = require('../../models')
+const api = new restful(sequelize.models.activitylogs, ['activitylogs'])
 
 module.exports.findAll = async (req, res) => {
     const include = {
-        model: Model.models.admins,
+        model: sequelize.models.admins,
         as: 'admin',
         attributes: { exclude: ['roleId'] }
     }
@@ -23,7 +23,7 @@ module.exports.findAll = async (req, res) => {
 module.exports.findOne = async (req, res) => {
     const { id } = req.params
     const include = {
-        model: Model.models.admins,
+        model: sequelize.models.admins,
         as: 'admin',
         attributes: { exclude: ['roleId'] }
     }

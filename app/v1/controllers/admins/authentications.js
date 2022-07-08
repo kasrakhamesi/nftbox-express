@@ -1,8 +1,8 @@
-const Model = require('../../models').sequelize
+const { sequelize } = require('../../models')
 const { restful } = require('../../libs')
 const { authurize } = require('../../middlewares')
 const { logger } = require('../../utils')
-const api = new restful(Model.models.admins, ['admnis'])
+const api = new restful(sequelize.models.admins, ['admnis'])
 
 module.exports = {
     login: async (req, res) => {
@@ -18,10 +18,10 @@ module.exports = {
 
         const include = [
             {
-                model: Model.models.admins_roles,
+                model: sequelize.models.admins_roles,
                 as: 'role',
                 include: {
-                    model: Model.models.admins_permissions,
+                    model: sequelize.models.admins_permissions,
                     as: 'permissions',
                     through: {
                         attributes: {
@@ -74,7 +74,7 @@ module.exports = {
             }
         })
 
-        Model.models.admins
+        sequelize.models.admins
             .update(
                 { last_login: String(Date.now()) },
                 {
@@ -107,7 +107,7 @@ module.exports = {
             const { new_password } = req.body
             if (req.isAuthenticated(req, res)) {
                 const adminId = req.user[0].id
-                const resUpdate = await Model.models.admins.update(
+                const resUpdate = await sequelize.models.admins.update(
                     {
                         password: new_password
                     },

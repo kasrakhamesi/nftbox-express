@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true
             },
-            quantity: {
+            total_supply: {
                 type: DataTypes.STRING,
                 allowNull: true
             },

@@ -10,6 +10,6 @@ router.get('/collections/traits', collections.traits.Users.findAll)
 router.get('/collections/:collection', collections.info.getInfo)
 
 router.get('/collections/:collection/orders', collections.orders.findAll)
-router.get('/collections/:collection/listings', collections.orders.findAll)
+router.get('/collections/:collection/listings', collections.listings.findAll)
 
 module.exports = router

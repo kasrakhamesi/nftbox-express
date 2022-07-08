@@ -20,7 +20,23 @@ module.exports = {
                     type: Sequelize.INTEGER.UNSIGNED,
                     allowNull: false
                 },
-                token_traits: {
+                token_name: {
+                    type: Sequelize.STRING,
+                    allowNull: false
+                },
+                token_url: {
+                    type: Sequelize.STRING,
+                    allowNull: false
+                },
+                token_description: {
+                    type: Sequelize.STRING,
+                    allowNull: false
+                },
+                token_string_traits: {
+                    type: Sequelize.JSON,
+                    allowNull: true
+                },
+                token_numeric_traits: {
                     type: Sequelize.JSON,
                     allowNull: true
                 },

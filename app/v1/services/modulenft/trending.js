@@ -186,7 +186,12 @@ module.exports.SaveTopCollections = class {
                                                           )
                                                   )
                                               ),
-                                    is_trending: true
+                                    is_trending: true,
+                                    collection_type:
+                                        serializeCollection[j]?.total_supply <
+                                        serializeCollection[j]?.owners_count
+                                            ? 'erc1155'
+                                            : 'erc721'
                                 })
                             }
                         } catch {
@@ -199,8 +204,6 @@ module.exports.SaveTopCollections = class {
             }
 
             finalCollectionData = await Promise.all(finalCollectionData)
-
-            console.log(finalCollectionData)
 
             finalCollectionData.map((item) => {
                 Upsert(item, {

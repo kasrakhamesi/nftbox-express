@@ -1,6 +1,6 @@
-const Model = require('../../models').sequelize
+const { sequelize } = require('../../models')
 const { restful, response } = require('../../libs')
-const api = new restful(Model.models.admins, ['admins'])
+const api = new restful(sequelize.models.admins, ['admins'])
 
 module.exports = {
     create: async (req, res) => {
@@ -25,10 +25,10 @@ module.exports = {
     findAll: async (req, res) => {
         const include = [
             {
-                model: Model.models.admins_roles,
+                model: sequelize.models.admins_roles,
                 as: 'role',
                 include: {
-                    model: Model.models.admins_permissions,
+                    model: sequelize.models.admins_permissions,
                     as: 'permissions',
                     through: {
                         attributes: {
@@ -57,10 +57,10 @@ module.exports = {
         const { id } = req.params
         const include = [
             {
-                model: Model.models.admins_roles,
+                model: sequelize.models.admins_roles,
                 as: 'role',
                 include: {
-                    model: Model.models.admins_permissions,
+                    model: sequelize.models.admins_permissions,
                     as: 'permissions',
                     through: {
                         attributes: {

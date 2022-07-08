@@ -1,7 +1,7 @@
 const moduleNFT = require('../services/modulenft')
 
-const getTraitsOfCollections = async () => {
+const getTraits = () => {
     setInterval(moduleNFT.collections.getTraits, 6000)
 }
 
-module.exports = getTraitsOfCollections
+module.exports = getTraits
