@@ -22,37 +22,57 @@ module.exports = {
                 },
                 token_name: {
                     type: Sequelize.STRING,
-                    allowNull: false
+                    allowNull: true
                 },
                 token_url: {
                     type: Sequelize.STRING,
-                    allowNull: false
+                    allowNull: true
                 },
                 token_description: {
+                    type: Sequelize.TEXT,
+                    allowNull: true
+                },
+                string_traits: {
+                    type: Sequelize.JSON,
+                    allowNull: true
+                },
+                numeric_traits: {
+                    type: Sequelize.JSON,
+                    allowNull: true
+                },
+
+                color: {
                     type: Sequelize.STRING,
-                    allowNull: false
-                },
-                token_string_traits: {
-                    type: Sequelize.JSON,
                     allowNull: true
                 },
-                token_numeric_traits: {
-                    type: Sequelize.JSON,
+
+                type: {
+                    type: Sequelize.STRING,
+                    defaultValue: 'Common',
                     allowNull: true
                 },
-                token_rank: {
+
+                basic_rank: {
                     type: Sequelize.INTEGER.UNSIGNED,
                     allowNull: true
                 },
-                token_basicscore: {
+                norm_rank: {
+                    type: Sequelize.INTEGER.UNSIGNED,
+                    allowNull: true
+                },
+                weight_rank: {
+                    type: Sequelize.INTEGER.UNSIGNED,
+                    allowNull: true
+                },
+                basic_score: {
                     type: Sequelize.FLOAT,
                     allowNull: true
                 },
-                token_normscore: {
+                norm_score: {
                     type: Sequelize.FLOAT,
                     allowNull: true
                 },
-                token_weightscore: {
+                weight_score: {
                     type: Sequelize.FLOAT,
                     allowNull: true
                 },

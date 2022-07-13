@@ -42,7 +42,7 @@ module.exports.getInfo = async (req, res) => {
                 .status(404)
                 .send({ message: "Can't find your collection" })
 
-        const are = getCollection.map((item) => {
+        const are = Array(getCollection).map((item) => {
             return {
                 id: item.id,
                 logo_url: item.logo_url,
@@ -66,10 +66,11 @@ module.exports.getInfo = async (req, res) => {
                 collection_name: item.collection_name,
                 contract_address: item.contract_address,
                 average_price: item.average_price,
+                collection_creation_date: Date.now(),
                 opensea_url: 'https://google.com'
             }
         })
-        res.status(200).send(are)
+        res.status(200).send(are[0])
     } catch (e) {
         res.status(400).send({ message: e.message })
     }

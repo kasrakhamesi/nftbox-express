@@ -22,6 +22,11 @@ module.exports = {
                     allowNull: true
                 },
 
+                collection_creation_date: {
+                    type: Sequelize.STRING,
+                    allowNull: true
+                },
+
                 total_supply: {
                     type: Sequelize.STRING,
                     allowNull: false
@@ -274,7 +279,7 @@ module.exports = {
                 },
 
                 description: {
-                    type: Sequelize.STRING,
+                    type: Sequelize.TEXT,
                     allowNull: true
                 },
 
@@ -322,6 +327,11 @@ module.exports = {
                 checked_tarits: {
                     type: Sequelize.BOOLEAN,
                     defaultValue: false,
+                    allowNull: true
+                },
+
+                opensea_url: {
+                    type: Sequelize.STRING,
                     allowNull: true
                 },
 

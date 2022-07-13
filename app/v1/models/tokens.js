@@ -21,23 +21,57 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER.UNSIGNED,
                 allowNull: false
             },
-            token_traits: {
+            token_name: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
+            token_url: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
+            token_description: {
+                type: DataTypes.TEXT,
+                allowNull: true
+            },
+            color: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
+
+            type: {
+                type: DataTypes.STRING,
+                defaultValue: 'Common',
+                allowNull: true
+            },
+            string_traits: {
                 type: DataTypes.JSON,
                 allowNull: true
             },
-            token_rank: {
+            numeric_traits: {
+                type: DataTypes.JSON,
+                allowNull: true
+            },
+            basic_rank: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 allowNull: true
             },
-            token_basicscore: {
+            norm_rank: {
+                type: DataTypes.INTEGER.UNSIGNED,
+                allowNull: true
+            },
+            weight_rank: {
+                type: DataTypes.INTEGER.UNSIGNED,
+                allowNull: true
+            },
+            basic_score: {
                 type: DataTypes.FLOAT,
                 allowNull: true
             },
-            token_normscore: {
+            norm_score: {
                 type: DataTypes.FLOAT,
                 allowNull: true
             },
-            token_weightscore: {
+            weight_score: {
                 type: DataTypes.FLOAT,
                 allowNull: true
             },

@@ -8,7 +8,7 @@ module.exports.findAll = async (req, res) => {
                 ? { collection_slug: collection }
                 : { contract_address: collection }
         const orders = await sequelize.models.orders.findAndCountAll({
-            where: { collectionId: 1 }
+            where: condition
         })
 
         res.status(200).send(orders)

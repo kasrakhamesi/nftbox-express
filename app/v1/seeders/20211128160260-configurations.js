@@ -47,6 +47,20 @@ module.exports = {
                 key: 'GetBlockApiKey',
                 value: '%',
                 description: 'API Key for Authentication to GetBlock API'
+            },
+            {
+                title: 'Tatum API Key',
+                key: 'TatumApiKey',
+                value: 'a97b84c3-a37b-4c3f-85b7-d8b4f69efaa3',
+                description:
+                    'API Key for Authentication to Tatum.io for get NFTs TokensId'
+            },
+            {
+                title: 'Alchemy API Key',
+                key: 'AlchemyApiKey',
+                value: 'c8XCRD_56zo2QvYijbbPfaw6AgZ9X-e0',
+                description:
+                    'API Key for Authentication to Alchemy for get NFTs TokensId'
             }
         ])
     },
@@ -75,6 +89,9 @@ module.exports = {
         })
         await queryInterface.bulkDelete('configurations', {
             key: 'GetBlockApiKey'
+        })
+        await queryInterface.bulkDelete('configurations', {
+            key: 'TatumApiKey'
         })
     }
 }

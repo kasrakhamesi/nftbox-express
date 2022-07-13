@@ -4,18 +4,9 @@ const _ = require('lodash')
 const axios = require('axios')
 require('dotenv').config()
 
-const Upsert = (values, condition) => {
-    return sequelize.models.tokens
-        .findOne({ where: condition })
-        .then(async (obj) => {
-            if (obj) return await obj.update(values)
-            return await sequelize.models.tokens.create(values)
-        })
-}
-
 module.exports.getTokensTraits = async () => {}
 
-module.exports.getTokenIds = async () => {
+module.exports.getTokensId = async () => {
     try {
         let apiKey = await sequelize.models.configurations.findOne({
             where: {
@@ -41,10 +32,9 @@ module.exports.getTokenIds = async () => {
                     resAllCollections[k].total_supply <
                     resAllCollections[k].owners_count
                 ) {
-                    continue
                     const resGetTokenIds = await axios({
                         method: 'get',
-                        url: `${process.env.MODULE_NFT_BASEURL}/opensea/collection/tokens?type=${resAllCollections[k].contract_address}&count=100&offset=0`,
+                        url: `${process.env.MODULE_NFT_BASEURL}/opensea/collection/tokens?type=${resAllCollections[k].contract_address}&count=25&offset=0`,
                         headers: {
                             'X-API-KEY': apiKey,
                             'x-bypass-cache': true
@@ -66,13 +56,15 @@ module.exports.getTokenIds = async () => {
                             await sequelize.models.tokens.create({
                                 collectionId: resAllCollections[k].id,
                                 token_id: tokens[i].tokenId,
-                                token_image: tokens[i].image_url
+                                token_image: tokens[i].image_url,
+                                token_description: '',
+                                token_name: '',
+                                token_url: ''
                             })
                         } catch (e) {
                             console.log(e)
                         }
                     }
-                } else {
                 }
             } catch (e) {
                 console.log(e)

@@ -25,7 +25,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true
             },
-
+            collection_creation_date: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
             total_supply: {
                 type: DataTypes.STRING,
                 allowNull: false
@@ -281,7 +284,7 @@ module.exports = (sequelize, DataTypes) => {
             },
 
             description: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true
             },
 
@@ -329,6 +332,11 @@ module.exports = (sequelize, DataTypes) => {
             checked_tarits: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false,
+                allowNull: true
+            },
+
+            opensea_url: {
+                type: DataTypes.STRING,
                 allowNull: true
             },
 
