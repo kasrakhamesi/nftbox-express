@@ -147,6 +147,7 @@ module.exports.findAll = async (req, res) => {
                           image_url: item.image_url,
                           verified: item.verified,
                           created_date: String(Date.now()),
+                          collection_creation_date: String(Date.now()),
                           floor_price: '0.05',
                           /*
                       ticker == '1m'

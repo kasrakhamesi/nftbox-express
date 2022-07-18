@@ -131,8 +131,6 @@ module.exports.GetListings = class {
 
             const allListings = [...resNewListings, ...resListingsV1]
 
-            console.log(allListings)
-
             const _4hourListings = allListings
                 .filter(
                     (item) =>
@@ -223,10 +221,6 @@ module.exports.GetListings = class {
                 )
                     timeframe._14day++
             })
-
-            console.log(timeframe)
-
-            console.log('---------------------------------')
 
             const changePercent = {
                 _1min: String((timeframe._1min / timeframe._2min) * 100) + ' %',

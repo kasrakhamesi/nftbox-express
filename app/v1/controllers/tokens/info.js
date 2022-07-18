@@ -23,6 +23,8 @@ module.exports.getTokens = async (req, res) => {
             }
         })
 
+        if (_.isEmpty(tokens)) return res.status(200).send({})
+
         tokens.string_traits = JSON.parse(tokens.string_traits)
         tokens.numeric_traits = JSON.parse(tokens.numeric_traits)
 

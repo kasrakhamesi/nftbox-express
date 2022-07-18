@@ -39,7 +39,6 @@ adminsPassport.use(
                     }
                 })
                 .then((admins) => {
-                    console.log(admins)
                     const adminsInfo = admins.map((item) => {
                         return {
                             id: item.id,
