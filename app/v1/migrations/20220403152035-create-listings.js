@@ -20,11 +20,6 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: true
                 },
-
-                token_rank: {
-                    type: Sequelize.INTEGER.UNSIGNED,
-                    allowNull: true
-                },
                 token_id: {
                     type: Sequelize.INTEGER.UNSIGNED,
                     allowNull: true
@@ -32,6 +27,10 @@ module.exports = {
                 image_url: {
                     type: Sequelize.STRING,
                     allowNull: true
+                },
+                is_delist: {
+                    type: Sequelize.BOOLEAN,
+                    defaultValue: false
                 },
                 opensea_url: {
                     type: Sequelize.STRING,

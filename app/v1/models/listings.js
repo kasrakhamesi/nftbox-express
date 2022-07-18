@@ -21,14 +21,13 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true
             },
-
-            token_rank: {
-                type: DataTypes.INTEGER.UNSIGNED,
-                allowNull: true
-            },
             token_id: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 allowNull: true
+            },
+            is_delist: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false
             },
             image_url: {
                 type: DataTypes.STRING,
