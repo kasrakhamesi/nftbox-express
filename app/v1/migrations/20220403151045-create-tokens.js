@@ -40,18 +40,15 @@ module.exports = {
                     type: Sequelize.JSON,
                     allowNull: true
                 },
-
                 color: {
                     type: Sequelize.STRING,
                     allowNull: true
                 },
-
                 type: {
                     type: Sequelize.STRING,
                     defaultValue: 'Common',
                     allowNull: true
                 },
-
                 basic_rank: {
                     type: Sequelize.INTEGER.UNSIGNED,
                     allowNull: true

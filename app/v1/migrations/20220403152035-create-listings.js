@@ -52,9 +52,13 @@ module.exports = {
                 }
             })
             .then(() =>
-                queryInterface.addIndex('listings', ['token_id'], {
-                    unique: true
-                })
+                queryInterface.addIndex(
+                    'listings',
+                    ['token_id', 'collectionId'],
+                    {
+                        unique: true
+                    }
+                )
             )
     },
     down: async (queryInterface, Sequelize) => {
