@@ -2,7 +2,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface
-      .createTable('live_listings', {
+      .createTable('live_collections', {
         id: {
           allowNull: false,
           autoIncrement: true,
@@ -32,12 +32,12 @@ module.exports = {
         }
       })
       .then(() =>
-        queryInterface.addIndex('live_listings', ['collectionId'], {
+        queryInterface.addIndex('live_collections', ['collectionId'], {
           unique: true
         })
       )
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('live_listings')
+    await queryInterface.dropTable('live_collections')
   }
 }

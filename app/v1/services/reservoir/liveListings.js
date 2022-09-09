@@ -13,7 +13,7 @@ const getTimestampFromIsoTime = (isoTime) => {
 
 const Get = async () => {
   try {
-    const findedCollections = await sequelize.models.live_listings.findAll()
+    const findedCollections = await sequelize.models.live_collections.findAll()
 
     for (const collection in findedCollections) {
       try {
