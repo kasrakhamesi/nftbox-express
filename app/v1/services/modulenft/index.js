@@ -1,7 +1,6 @@
 module.exports.collections = require('./collections')
 module.exports.listings = require('./listings')
-module.exports.orders = require('./orders')
-module.exports.pendings = require('./pendings')
+module.exports.sales = require('./sales')
 module.exports.loader = require('./loader')
 module.exports.trending = require('./trending')
 module.exports.tokens = require('./tokens')

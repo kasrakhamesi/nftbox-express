@@ -1,7 +1,7 @@
 'use strict'
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-  class tokens extends Model {
+  class sales extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,79 +11,57 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  tokens.init(
+  sales.init(
     {
       collectionId: {
         type: DataTypes.BIGINT.UNSIGNED,
         allowNull: false
       },
-      token_id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+      tokenId: {
+        type: DataTypes.BIGINT.UNSIGNED,
         allowNull: false
       },
-      token_name: {
+      price: {
         type: DataTypes.STRING,
         allowNull: true
       },
-      token_url: {
+      amount: {
         type: DataTypes.STRING,
         allowNull: true
       },
-      token_description: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
-      color: {
+      price: {
         type: DataTypes.STRING,
         allowNull: true
       },
-
-      type: {
+      market: {
         type: DataTypes.STRING,
-        defaultValue: 'Common',
         allowNull: true
       },
-      string_traits: {
-        type: DataTypes.JSON,
-        allowNull: true
-      },
-      numeric_traits: {
-        type: DataTypes.JSON,
-        allowNull: true
-      },
-      basic_rank: {
+      token_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: true
       },
-      norm_rank: {
-        type: DataTypes.INTEGER.UNSIGNED,
+      image_url: {
+        type: DataTypes.STRING,
         allowNull: true
       },
-      weight_rank: {
-        type: DataTypes.INTEGER.UNSIGNED,
+      url_url: {
+        type: DataTypes.STRING,
         allowNull: true
       },
-      basic_score: {
-        type: DataTypes.FLOAT,
+      tx_hash: {
+        type: DataTypes.STRING,
         allowNull: true
       },
-      norm_score: {
-        type: DataTypes.FLOAT,
-        allowNull: true
-      },
-      weight_score: {
-        type: DataTypes.FLOAT,
-        allowNull: true
-      },
-      token_image: {
+      timestamp: {
         type: DataTypes.STRING,
         allowNull: true
       }
     },
     {
       sequelize,
-      modelName: 'tokens'
+      modelName: 'sales'
     }
   )
-  return tokens
+  return sales
 }

@@ -1,12 +1,12 @@
-const moduleNFT = require('../services/modulenft')
+const reservoir = require('../services/reservoir')
 
 const getListings = () => {
-    moduleNFT.listings
-        .getListingsChangePercent()
-        .then(() => {
-            setTimeout(getListings, 10000)
-        })
-        .catch(() => setTimeout(getListings, 10000))
+  reservoir.listings
+    .getListingsChangePercent()
+    .then(() => {
+      setTimeout(getListings, 10000)
+    })
+    .catch(() => setTimeout(getListings, 10000))
 }
 
 module.exports = getListings

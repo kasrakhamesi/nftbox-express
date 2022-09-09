@@ -1,2 +1,3 @@
 module.exports.listings = require('./listings')
-module.exports.orders = require('./orders')
+module.exports.sales = require('./sales')
+module.exports.buy = require('./buy')

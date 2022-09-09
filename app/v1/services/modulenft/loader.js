@@ -1,5 +1,5 @@
 const { sequelize } = require('../../models')
-const pendingCollections = require('./pendings')
+const pendingCollections = require('../collections/pendings')
 const _ = require('lodash')
 const axios = require('axios')
 require('dotenv').config()

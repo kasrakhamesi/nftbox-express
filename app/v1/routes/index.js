@@ -12,5 +12,7 @@ router.use(require('./whitelistAddresses'))
 router.use(require('./configurations'))
 router.use(require('./collections'))
 router.use(require('./tokens'))
+router.use(require('./bots'))
+router.use('/upcomings', require('./upcomings.route'))
 
 module.exports = router
