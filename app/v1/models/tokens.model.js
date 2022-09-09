@@ -14,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
   tokens.init(
     {
       collectionId: {
-        type: DataTypes.BIGINT.UNSIGNED,
+        type: DataTypes.BIGINT,
         allowNull: false
       },
       token_id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       token_name: {
@@ -42,15 +42,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true
       },
       basic_rank: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: true
       },
       norm_rank: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: true
       },
       weight_rank: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: true
       },
       basic_score: {

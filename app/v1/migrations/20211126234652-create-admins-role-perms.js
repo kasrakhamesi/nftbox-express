@@ -6,17 +6,17 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER.UNSIGNED
+        type: Sequelize.INTEGER
       },
       roleId: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         references: { model: 'admins_roles', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false
       },
       permId: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         references: { model: 'admins_permissions', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',

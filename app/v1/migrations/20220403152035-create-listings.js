@@ -7,17 +7,17 @@ module.exports = {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
-          type: Sequelize.BIGINT.UNSIGNED
+          type: Sequelize.BIGINT
         },
         collectionId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: Sequelize.BIGINT,
           references: { model: 'collections', key: 'id' },
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
           allowNull: false
         },
         tokenId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: Sequelize.BIGINT,
           references: { model: 'tokens', key: 'id' },
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
@@ -32,7 +32,7 @@ module.exports = {
           allowNull: true
         },
         token_id: {
-          type: Sequelize.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER,
           allowNull: true
         },
         image_url: {

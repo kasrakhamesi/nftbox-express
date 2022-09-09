@@ -7,17 +7,17 @@ module.exports = {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
-          type: Sequelize.BIGINT.UNSIGNED
+          type: Sequelize.BIGINT
         },
         collectionId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: Sequelize.BIGINT,
           references: { model: 'collections', key: 'id' },
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
           allowNull: false
         },
         token_id: {
-          type: Sequelize.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER,
           allowNull: false
         },
         token_name: {
@@ -41,15 +41,15 @@ module.exports = {
           allowNull: true
         },
         basic_rank: {
-          type: Sequelize.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER,
           allowNull: true
         },
         normal_rank: {
-          type: Sequelize.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER,
           allowNull: true
         },
         weight_rank: {
-          type: Sequelize.INTEGER.UNSIGNED,
+          type: Sequelize.INTEGER,
           allowNull: true
         },
         basic_score: {

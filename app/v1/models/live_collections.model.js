@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   live_collections.init(
     {
       collectionId: {
-        type: DataTypes.BIGINT.UNSIGNED,
+        type: DataTypes.BIGINT,
         allowNull: false
       },
       expire: {

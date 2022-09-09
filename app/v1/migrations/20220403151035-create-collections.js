@@ -7,7 +7,7 @@ module.exports = {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
-          type: Sequelize.BIGINT.UNSIGNED
+          type: Sequelize.BIGINT
         },
         contract_address: {
           type: Sequelize.STRING,

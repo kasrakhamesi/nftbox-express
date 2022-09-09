@@ -8,10 +8,10 @@ module.exports = {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
-          type: Sequelize.BIGINT.UNSIGNED
+          type: Sequelize.BIGINT
         },
         collectionId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: Sequelize.BIGINT,
           references: { model: 'collections', key: 'id' },
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',

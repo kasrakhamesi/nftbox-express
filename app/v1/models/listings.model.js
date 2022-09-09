@@ -14,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
   listings.init(
     {
       collectionId: {
-        type: DataTypes.BIGINT.UNSIGNED,
+        type: DataTypes.BIGINT,
         allowNull: false
       },
       tokenId: {
-        type: DataTypes.BIGINT.UNSIGNED,
+        type: DataTypes.BIGINT,
         allowNull: false
       },
       price: {
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true
       },
       token_id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: true
       },
       image_url: {

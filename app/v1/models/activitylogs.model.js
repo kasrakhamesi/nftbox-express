@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   activitylogs.init(
     {
-      adminId: DataTypes.INTEGER.UNSIGNED,
+      adminId: DataTypes.INTEGER,
       description: DataTypes.STRING,
       created_date: DataTypes.STRING
     },

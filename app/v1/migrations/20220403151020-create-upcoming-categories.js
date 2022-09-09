@@ -6,17 +6,17 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER.UNSIGNED
+        type: Sequelize.INTEGER
       },
       upcomingId: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         references: { model: 'upcomings', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false
       },
       categoryId: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         references: { model: 'categories', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',

@@ -6,10 +6,10 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER.UNSIGNED
+        type: Sequelize.INTEGER
       },
       adminId: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         references: { model: 'admins', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
