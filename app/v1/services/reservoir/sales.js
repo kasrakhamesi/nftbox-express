@@ -1,54 +1,18 @@
 const axios = require('axios')
 const { sequelize } = require('../../models')
-const theBaseUrl = 'https://api.reservoir.tools/sales/v4'
-const limit = '1000'
-
+const sdk = require('api')('@reservoirprotocol/v1.0#1fag0v1k3l7sxff82')
 const _ = require('lodash')
 const { delay, database } = require('../../utils')
 const { changePercent } = require('../../libs')
 const { pendings } = require('../collections')
 
-const getChangePercent = async () => {
+const Get = async () => {
   try {
-    const collections = await sequelize.models.collections.findAll()
-    for (let collection of collections) {
-      try {
-        await delay.wait(100)
-        await new Get(collection, false)
-      } catch (e) {
-        continue
+    const findedCollections = await sequelize.models.collections.findAll({
+      where: {
+        checked_tarits: true
       }
-    }
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-const Get = async (collection, checkContract = true) => {
-  try {
-    let contractAddress = ''
-    let collectionId = ''
-
-    if (checkContract) {
-      const findedCollection = await sequelize.models.collections.findOne({
-        where: {
-          contract_address: contractAddress
-        }
-      })
-
-      if (_.isEmpty(findedCollection)) {
-        await pendings.savePending(findedCollection?.contract_address)
-        throw new Error(
-          "We Don't Have This Collection In Our database. So , saved in pending collections to get information"
-        )
-      }
-
-      contractAddress = findedCollection.contract_address
-      collectionId = findedCollection?.id
-    } else {
-      contractAddress = collection?.contract_address
-      collectionId = collection?.id
-    }
+    })
 
     let apiKey = await sequelize.models.configurations.findOne({
       where: {
@@ -60,20 +24,17 @@ const Get = async (collection, checkContract = true) => {
       ? 'f042cd77-177d-4c91-bc1e-2fd4b5dd101a'
       : apiKey?.value
 
-    const resAxiosSales = await axios({
-      method: 'get',
-      url: `${theBaseUrl}?contract=${contractAddress}&limit=${limit}&includeTokenMetadata=true`,
-      headers: {
-        header: apiKey
-      }
-    })
+    sdk.auth(apiKey)
 
-    if (resAxiosSales.status !== 200)
-      throw new Error("Can't submit request , please try again")
+    const r = await sdk.getSalesV4({
+      contract: 'a',
+      limit: '1000',
+      accept: '*/*'
+    })
 
     let sales = []
 
-    for (const entity of resAxiosSales.data.sales) {
+    for (const entity of r.sales) {
       try {
         const data = constructSalesObject(collectionId, entity)
         sales.push(data)
@@ -125,6 +86,12 @@ const Get = async (collection, checkContract = true) => {
   }
 }
 
+const timestampStructure = (timestamp) => {
+  timestamp = String(timestamp)
+  if (timestamp.length === 10) timestamp = parseInt(timestamp) * 1000
+  return timestamp
+}
+
 const constructSalesObject = (collectionId, data) => {
   return {
     collectionId: collectionId,
@@ -135,11 +102,10 @@ const constructSalesObject = (collectionId, data) => {
     image_url: data?.token?.image,
     url: '',
     tx_hash: data?.txHash,
-    timestamp: parseInt(data?.timestamp * 1e3)
+    timestamp: timestampStructure(data?.timestamp)
   }
 }
 
 module.exports = {
-  Get,
-  getChangePercent
+  Get
 }

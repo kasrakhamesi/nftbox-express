@@ -22,8 +22,8 @@ module.exports = {
           allowNull: true
         },
 
-        collection_creation_date: {
-          type: Sequelize.STRING,
+        revealed_percentage: {
+          type: Sequelize.FLOAT,
           allowNull: true
         },
 
@@ -263,11 +263,6 @@ module.exports = {
           allowNull: true
         },
 
-        logo_url: {
-          type: Sequelize.STRING,
-          allowNull: true
-        },
-
         banner_image_url: {
           type: Sequelize.STRING,
           allowNull: true
@@ -331,6 +326,21 @@ module.exports = {
         },
 
         opensea_url: {
+          type: Sequelize.STRING,
+          allowNull: true
+        },
+
+        x2y2_url: {
+          type: Sequelize.STRING,
+          allowNull: true
+        },
+
+        looksrare_url: {
+          type: Sequelize.STRING,
+          allowNull: true
+        },
+
+        collection_creation_date: {
           type: Sequelize.STRING,
           allowNull: true
         },

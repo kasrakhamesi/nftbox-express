@@ -17,7 +17,7 @@ module.exports = {
           allowNull: false
         },
         token_id: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.BIGINT,
           allowNull: false
         },
         token_name: {
@@ -41,27 +41,27 @@ module.exports = {
           allowNull: true
         },
         basic_rank: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.BIGINT,
           allowNull: true
         },
         normal_rank: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.BIGINT,
           allowNull: true
         },
         weight_rank: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.BIGINT,
           allowNull: true
         },
         basic_score: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: true
         },
         normal_score: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: true
         },
         weight_score: {
-          type: Sequelize.FLOAT,
+          type: Sequelize.STRING,
           allowNull: true
         },
         token_image: {

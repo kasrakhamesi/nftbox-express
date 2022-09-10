@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       token_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false
       },
       token_name: {
@@ -42,27 +42,27 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true
       },
       basic_rank: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: true
       },
-      norm_rank: {
-        type: DataTypes.INTEGER,
+      normal_rank: {
+        type: DataTypes.BIGINT,
         allowNull: true
       },
       weight_rank: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: true
       },
       basic_score: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.STRING,
         allowNull: true
       },
-      norm_score: {
-        type: DataTypes.FLOAT,
+      normal_score: {
+        type: DataTypes.STRING,
         allowNull: true
       },
       weight_score: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.STRING,
         allowNull: true
       },
       token_image: {

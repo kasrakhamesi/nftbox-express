@@ -1,68 +1,76 @@
-const axios = require('axios')
 const _ = require('lodash')
 const { sequelize } = require('../../models')
 const { database } = require('../../utils')
-
-const sortBy = 'createdAt'
-const theBaseUrl = 'https://api.reservoir.tools/orders/asks/v2'
-const limit = '1000'
+const { Op } = require('sequelize')
+const sdk = require('api')('@reservoirprotocol/v1.0#1fag0v1k3l7sxff82')
 
 const getTimestampFromIsoTime = (isoTime) => {
-  return new Date(isoTime).getTime()
+  let timestamp = String(new Date(isoTime).getTime())
+  if (timestamp.length === 10) timestamp = parseInt(timestamp) * 1000
+  return timestamp
 }
 
 const Get = async () => {
   try {
-    const findedCollections = await sequelize.models.live_collections.findAll()
+    const findedCollections = await sequelize.models.live_collections.findAll({
+      where: {
+        expire: { [Op.gt]: String(Date.now()) }
+      }
+    })
 
-    for (const collection in findedCollections) {
+    let apiKey = await sequelize.models.configurations.findOne({
+      where: {
+        key: 'ReservoirApiKey'
+      }
+    })
+
+    apiKey = _.isEmpty(apiKey)
+      ? 'f042cd77-177d-4c91-bc1e-2fd4b5dd101a'
+      : apiKey?.value
+
+    for (const collection of findedCollections) {
       try {
-        let apiKey = await sequelize.models.configurations.findOne({
-          where: {
-            key: 'ReservoirApiKey'
-          }
-        })
-
         const findedCollection = await sequelize.models.collections.findByPk(
-          collection?.id
+          collection?.collectionId
         )
 
         if (_.isEmpty(findedCollection)) continue
 
         const contractAddress = findedCollection?.contract_address
 
-        apiKey = _.isEmpty(apiKey)
-          ? 'f042cd77-177d-4c91-bc1e-2fd4b5dd101a'
-          : apiKey?.value
+        sdk.auth(apiKey)
 
-        const resAxiosListings = await axios({
-          method: 'get',
-          url: `${theBaseUrl}?contracts=${contractAddress}&sortBy=${sortBy}&limit=${limit}`,
-          headers: {
-            header: apiKey
-          }
+        const r = await sdk.getOrdersAsksV3({
+          contracts: contractAddress,
+          includePrivate: 'false',
+          includeMetadata: 'true',
+          includeRawData: 'false',
+          sortBy: 'createdAt',
+          limit: '1000',
+          accept: '*/*'
         })
 
-        if (resAxiosListings.status !== 200)
-          throw new Error("Can't submit request , please try again")
-
-        for (const entity of resAxiosListings.data.orders) {
+        for (const entity of r.orders) {
           try {
             const data = constructListingObject(
               collection?.id,
-              entity.price,
+              entity.price.amount.decimal,
               entity.tokenSetId,
               entity.metadata?.data?.image || null,
+              true,
               entity.source.url,
               entity.createdAt
             )
 
             await database.upsert(
               data,
-              { collectionId: collection?.id },
+              {
+                collectionId: collection?.id,
+                token_id: extractTokenId(entity.tokenSetId)
+              },
               sequelize.models.listings
             )
-          } catch (e) {
+          } catch {
             continue
           }
         }
@@ -84,20 +92,33 @@ const extractTokenId = (token) => {
   return token.split(':')[2]
 }
 
+const extractMarket = (source) => {
+  source = String(source).toLowerCase()
+  return source.includes('opensea')
+    ? 'opensea'
+    : source.includes('x2y2')
+    ? 'x2y2'
+    : source.includes('looksrare')
+    ? 'looksrare'
+    : 'opensea'
+}
+
 const constructListingObject = (
   collectionId,
   price,
   token_id,
   image_url,
+  allowBuy,
   source,
   timestamp
 ) => {
   return {
-    collectionId: collectionId,
-    price: price,
+    collectionId,
+    price,
     token_id: extractTokenId(token_id),
-    image_url: image_url,
-    market: String(source).toLowerCase(),
+    image_url,
+    allow_buy: allowBuy,
+    market: extractMarket(source),
     timestamp: getTimestampFromIsoTime(timestamp)
   }
 }

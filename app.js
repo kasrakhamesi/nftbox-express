@@ -5,9 +5,13 @@ const app = express()
 const routes = {}
 app.use(cors())
 
+require('./app/v1/io')
+
 const cont = '0x705b9dbd0d5607beafe12e2fb74d64268d3ba35f'
 
-//const r = require('./app/v1/services/reservoir')
+const r = require('./app/v1/services')
+r.modulenft.collections.getTrendings().then(console.log).catch(console.log)
+//r.collections.save().then(console.log).catch(console.log)
 //const t = new r.listings.GetListings(cont)
 //const y = new r.sales.GetSales(cont)
 
@@ -24,8 +28,9 @@ routes.v1 = require('./app/v1/routes')
 app.use('/v1', routes.v1)
 
 const tasks = require('./app/v1/tasks')
-tasks.trending()
-tasks.tokensId()
+//tasks.run()
+//tasks.trending()
+//tasks.tokensId()
 
 //tasks.listings()
 //tasks.stats()

@@ -10,9 +10,9 @@ router.use(require('./activitylogs'))
 router.use(require('./categories'))
 router.use(require('./whitelistAddresses'))
 router.use(require('./configurations'))
-router.use(require('./collections'))
-router.use(require('./tokens'))
+router.use('/collections', require('./collections.route'))
 router.use(require('./bots'))
 router.use('/upcomings', require('./upcomings.route'))
+router.use('/trendings', require('./trendings.route'))
 
 module.exports = router

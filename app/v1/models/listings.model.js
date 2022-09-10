@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      listings.belongsTo(models.tokens, {
+        foreignKey: 'tokenId',
+        as: 'meta'
+      })
     }
   }
   listings.init(
@@ -19,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       tokenId: {
         type: DataTypes.BIGINT,
-        allowNull: false
+        allowNull: true
       },
       price: {
         type: DataTypes.STRING,
@@ -30,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true
       },
       token_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: true
       },
       image_url: {

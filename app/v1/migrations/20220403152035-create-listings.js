@@ -21,7 +21,7 @@ module.exports = {
           references: { model: 'tokens', key: 'id' },
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
-          allowNull: false
+          allowNull: true
         },
         price: {
           type: Sequelize.STRING,
@@ -32,7 +32,7 @@ module.exports = {
           allowNull: true
         },
         token_id: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.BIGINT,
           allowNull: true
         },
         image_url: {

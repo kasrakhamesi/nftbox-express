@@ -1,7 +1,11 @@
-const { config } = require('../io')
+const { Server } = require('socket.io')
+const io = new Server(process.env.SOCKET_PORT, {
+  cors: {
+    origin: '*'
+  }
+})
 const { sequelize } = require('../models')
 const _ = require('lodash')
-const io = config
 
 const conditionCreator = (collection) => {
   const condition =
@@ -24,6 +28,14 @@ const getListings = async (collection, allowBuy = true) => {
       where: {
         collectionId: findedCollection?.id,
         allow_buy: allowBuy
+      },
+      include: {
+        model: sequelize.models.tokens,
+        as: 'meta',
+        attributes: { exclude: ['id'] }
+      },
+      attributes: {
+        exclude: ['id', 'tokenId', 'collectionId']
       }
     })
     return {

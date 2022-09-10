@@ -21,7 +21,7 @@ module.exports = {
           references: { model: 'tokens', key: 'id' },
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
-          allowNull: false
+          allowNull: true
         },
         amount: {
           type: Sequelize.STRING,
@@ -35,12 +35,8 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: true
         },
-        token_rank: {
-          type: Sequelize.INTEGER,
-          allowNull: true
-        },
         token_id: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.BIGINT,
           allowNull: true
         },
         image_url: {

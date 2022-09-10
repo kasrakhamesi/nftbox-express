@@ -19,10 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       tokenId: {
         type: DataTypes.BIGINT,
-        allowNull: false
-      },
-      price: {
-        type: DataTypes.STRING,
         allowNull: true
       },
       amount: {
@@ -38,14 +34,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true
       },
       token_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: true
       },
       image_url: {
         type: DataTypes.STRING,
         allowNull: true
       },
-      url_url: {
+      url: {
         type: DataTypes.STRING,
         allowNull: true
       },
