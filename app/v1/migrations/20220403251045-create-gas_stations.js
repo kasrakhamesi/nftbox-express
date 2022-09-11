@@ -1,25 +1,23 @@
 'use strict'
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('upcoming_categories', {
+    await queryInterface.createTable('gas_stations', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.BIGINT
+        type: Sequelize.INTEGER
       },
-      upcomingId: {
-        type: Sequelize.BIGINT,
-        references: { model: 'upcomings', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-        allowNull: false
+      low: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
-      categoryId: {
-        type: Sequelize.INTEGER,
-        references: { model: 'categories', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+      average: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      high: {
+        type: Sequelize.STRING,
         allowNull: false
       },
       createdAt: {
@@ -35,6 +33,6 @@ module.exports = {
     })
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('upcoming_categories')
+    await queryInterface.dropTable('gas_stations')
   }
 }

@@ -7,7 +7,7 @@ const sdk = require('api')('@reservoirprotocol/v1.0#1fag0v1k3l7sxff82')
 const getTimestampFromIsoTime = (isoTime) => {
   let timestamp = String(new Date(isoTime).getTime())
   if (timestamp.length === 10) timestamp = parseInt(timestamp) * 1000
-  return timestamp
+  return parseInt(timestamp)
 }
 
 const Get = async () => {

@@ -48,6 +48,16 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: true
         },
+        delist_higher: {
+          type: Sequelize.BOOLEAN,
+          defaultValue: false,
+          allowNull: true
+        },
+        delist_lower: {
+          type: Sequelize.BOOLEAN,
+          defaultValue: false,
+          allowNull: true
+        },
         timestamp: {
           type: Sequelize.STRING,
           allowNull: true

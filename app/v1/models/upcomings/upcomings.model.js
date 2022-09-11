@@ -1,153 +1,150 @@
 'use strict'
-module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('upcomings', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.BIGINT
-      },
+const { Model } = require('sequelize')
+module.exports = (sequelize, DataTypes) => {
+  class upcomings extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      upcomings.belongsToMany(models.categories, {
+        through: 'upcoming_categories',
+        as: 'categories',
+        foreignKey: 'upcomingId'
+      })
+    }
+  }
+  upcomings.init(
+    {
       contract_address: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       collection_background_image: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       collection_image: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       collection_name: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: DataTypes.STRING,
+        allowNull: true
       },
       total_supply: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       presale_price: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       publicsale_price: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       presale_max_mint: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       publicsale_max_mint: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       publicsale_mint_timestamp: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       presale_mint_timestamp: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       reveal_timestamp: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       discord_link: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       discord_member: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       twitter_link: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       twitter_member: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       opensea_link: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       website_link: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       os_royalty: {
-        type: Sequelize.STRING,
-        defaultValue: '2.5 %',
+        type: DataTypes.STRING,
         allowNull: true
       },
       listing_fee: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       floor: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       nft_royalty: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       is_upcoming: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         defaultValue: true,
         allowNull: true
       },
       is_automatic_check: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         defaultValue: true,
         allowNull: true
       },
       hidden: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         defaultValue: false
       },
       sortorder: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         defaultValue: 1
       },
       access_key: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       enable_access_key: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         defaultValue: false
       },
       twitter_description: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       },
       admin_description: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
-      },
-      error_log: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      createdAt: {
-        allowNull: true,
-        type: 'TIMESTAMP',
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
-      },
-      updatedAt: {
-        allowNull: true,
-        type: 'TIMESTAMP',
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    })
-  },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('upcomings')
-  }
+    },
+    {
+      sequelize,
+      modelName: 'upcomings'
+    }
+  )
+  return upcomings
 }

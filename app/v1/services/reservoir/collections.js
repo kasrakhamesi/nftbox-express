@@ -36,7 +36,10 @@ module.exports.save = async () => {
       }
 
       const r = await sdk.getCollectionsV5(body)
-      for (const entity of r.collections) data.push({})
+      for (const entity of r.collections)
+        data.push(
+          collectionStructure(entity.id, entity.slug, entity.name, false)
+        )
 
       totalCount += 20
       console.log(totalCount)

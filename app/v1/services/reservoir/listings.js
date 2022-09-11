@@ -1,46 +1,20 @@
-const axios = require('axios')
 const { sequelize } = require('../../models')
-const theBaseUrl = 'https://api.reservoir.tools/events/orders/v1'
-const limit = '1000'
-
 const _ = require('lodash')
-const { delay, database } = require('../../utils')
-const { changePercent, floor } = require('../../libs')
-const { pendings } = require('../collections')
+const { database } = require('../../utils')
+const { changePercent, listingsChangePercents } = require('../../libs')
+const sdk = require('api')('@reservoirprotocol/v1.0#1fag0v1k3l7sxff82')
 
 const getTimestampFromIsoTime = (isoTime) => {
-  return new Date(isoTime).getTime()
+  let timestamp = new Date(isoTime).getTime()
+  timestamp = String(timestamp)
+  if (timestamp.length === 10) timestamp = parseInt(timestamp) * 1000
+  return parseInt(timestamp)
 }
 
-module.exports.getListingsChangePercent = async () => {
+const Get = async () => {
   try {
-    const collections = await sequelize.models.collections.findAll()
-    for (let collection of collections) {
-      try {
-        await delay.wait(100)
-        await new this.GetListings(collection.contract_address).save()
-      } catch (e) {
-        continue
-      }
-    }
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-module.exports.GetListings = class {
-  #collection
-  constructor(collection) {
-    this.#collection = collection
-  }
-  save = async () => {
-    try {
-      const findedCollection = await sequelize.models.collections.findOne({
-        where: {
-          contract_address: this.#collection
-        }
-      })
-      /*
+    const findedCollections = await sequelize.models.collections.findAll()
+    /*
       if (_.isEmpty(findedCollection)) {
         await pendings.savePending(this.#collection)
         throw new Error(
@@ -49,168 +23,196 @@ module.exports.GetListings = class {
       }
       */
 
-      let apiKey = await sequelize.models.configurations.findOne({
-        where: {
-          key: 'ReservoirApiKey'
-        }
-      })
+    let apiKey = await sequelize.models.configurations.findOne({
+      where: {
+        key: 'ReservoirApiKey'
+      }
+    })
 
-      apiKey = _.isEmpty(apiKey)
-        ? 'f042cd77-177d-4c91-bc1e-2fd4b5dd101a'
-        : apiKey?.value
+    apiKey = _.isEmpty(apiKey)
+      ? 'f042cd77-177d-4c91-bc1e-2fd4b5dd101a'
+      : apiKey?.value
 
-      const allListings = []
-      let isFirstRequest = true
-      let continuation = ''
-      let tryNum = 0
+    sdk.auth(apiKey)
 
-      const resAxiosListings = await axios({
-        method: 'get',
-        url: isFirstRequest
-          ? `${theBaseUrl}?contract=${
-              this.#collection
-            }&sortDirection=desc&limit=${limit}`
-          : `${theBaseUrl}?contract=${
-              this.#collection
-            }&sortDirection=desc&continuation=${continuation}&limit=${limit}`,
-        headers: {
-          header: apiKey
-        }
-      })
-
-      if (resAxiosListings.status !== 200)
-        throw new Error("Can't submit request , please try again")
-
-      /*
-      while (true) {
-        const resAxiosListings = await axios({
-          method: 'get',
-          url: isFirstRequest
-            ? `${theBaseUrl}?contract=${
-                this.#collection
-              }&sortDirection=desc&limit=${limit}`
-            : `${theBaseUrl}?contract=${
-                this.#collection
-              }&sortDirection=desc&continuation=${continuation}&limit=${limit}`,
-          headers: {
-            header: apiKey
+    for (const collection of findedCollections) {
+      try {
+        let data = []
+        let continuation = null
+        let lastOrderTimestamp
+        let _14DAY_AGO_TIMESTAMP
+        do {
+          const body = {
+            contract: collection?.contract_address,
+            sortDirection: 'desc',
+            limit: '1000',
+            accept: '*/*'
+            //continuation: '',
           }
-        })
 
-        if (resAxiosListings.status !== 200)
-          throw new Error("Can't submit request , please try again")
+          if (continuation !== null) body.continuation = continuation
 
-        isFirstRequest = false
+          const r = await sdk.getEventsOrdersV1(body)
 
-        allListings.push(resAxiosListings.data.events)
+          for (const entity of r.events) {
+            try {
+              if (
+                entity.event.kind === 'sale' &&
+                extractMarket(entity.order.source) !== 'opensea'
+              )
+                continue
 
-        if (!_.isArray(resAxiosListings.data.events)) break
+              const order = constructOrderObject(
+                collection?.id,
+                entity.event.kind,
+                entity.order.price,
+                entity.order.tokenId,
+                entity.metadata?.data?.image || null,
+                extractMarket(entity.order.source),
+                null,
+                getTimestampFromIsoTime(entity.event.createdAt)
+              )
+              if (order.kind === 'new-order') {
+                /*
+                database
+                  .upsert(
+                    order,
+                    {
+                      collectionId: order.collectionId,
+                      allow_buy: false,
+                      timestamp: order.timestamp,
+                      token_id: order.token_id
+                    },
+                    sequelize.models.listings
+                  )
+                  .then(console.log)
+                  .catch(console.log)
+                  */
+              }
+              data.push(order)
+            } catch (e) {
+              console.log(e)
+              continue
+            }
+          }
+          break
 
-        continuation = resAxiosListings.data.continuation
+          lastOrderTimestamp = getTimestampFromIsoTime(
+            r.events[r.events.length - 1].event.createdAt
+          )
 
-        const listingLength = resAxiosListings.data.events.length
-        const lastListingTimestamp = getTimestampFromIsoTime(
-          resAxiosListings.data.events[listingLength - 1].event.createdAt
+          const _14DAY = 1000 * 60 * 60 * 24 * 14
+
+          _14DAY_AGO_TIMESTAMP = parseInt(Date.now() - _14DAY)
+
+          continuation = r?.continuation || null
+        } while (
+          continuation !== null &&
+          parseInt(lastOrderTimestamp) >= _14DAY_AGO_TIMESTAMP
         )
 
-        tryNum++
-        console.log('------------' + tryNum + '---------')
-        console.log(resAxiosListings.data.events)
-        console.log('------------' + 'END' + '---------')
+        data = await Promise.all(data)
 
-        const _14DAY = 1000 * 60 * 60 * 24 * 14
+        const duplicateOrders = extractDuplicatedOrders(data)
 
-        if (lastListingTimestamp <= Date.now() - _14DAY) break
-      }
-      */
+        console.log(duplicateOrders.tokenIds)
+        console.log(duplicateOrders.orders)
 
-      let data = resAxiosListings.data.events.filter(
-        (item) => item.event.kind === 'new-order'
-      )
-
-      data = await Promise.all(data)
-
-      const listings = []
-      for (const entity of data) {
-        try {
-          const data = constructListingObject(
-            findedCollection?.id || 1,
-            entity.order.price,
-            entity.order.tokenId,
-            entity.metadata?.data?.image || null,
-            entity.order.source,
-            entity.event.createdAt
-          )
-          listings.push(data)
-
-          await database.upsert(
-            data,
-            { collectionId: findedCollection?.id },
-            sequelize.models.listings
-          )
-        } catch (e) {
-          continue
+        for (const entity of duplicateOrders.tokenIds) {
+          for (const item of duplicateOrders.orders) {
+            if (entity === item.token_id) console.log(item)
+          }
         }
-      }
 
-      //console.log(listings)
+        //console.log(duplicateOrders)
 
-      const calculatedData = await changePercent.calculate(
-        findedCollection?.id,
-        listings,
-        'listings'
-      )
-
-      console.log(calculatedData)
-
-      if (calculatedData.isSuccess) {
-        await database.upsert(
-          calculatedData.data,
-          {
-            collectionId: findedCollection.id
-          },
-          sequelize.models.percent_collections
+        /*
+        const calculatedChanges = await listingsChangePercents.calculate(
+          collection?.id,
+          data
         )
-      }
 
-      //floor.calculate(1, listings)
-
-      return {
-        status: 200,
-        content: {
-          data: null
+        if (calculatedChanges.isSuccess) {
         }
+        */
+      } catch (e) {
+        console.log(e)
+        continue
       }
-    } catch (e) {
-      console.log(e)
-      return {
-        status: 400,
-        content: {
-          message: e.message
-        }
+    }
+
+    return {
+      status: 200,
+      content: {
+        data: null
+      }
+    }
+  } catch (e) {
+    console.log(e)
+    return {
+      status: 400,
+      content: {
+        message: e.message
       }
     }
   }
 }
 
-const extractTokenId = (token) => {
-  return token.split(':')[2]
+const GetDuplicates = (data) => {
+  const keys = ['token_id']
+  const map = data.reduce((m, o) => {
+      const key = keys.map((k) => JSON.stringify(o[k])).join('|'),
+        [count = 0, array = []] = m.get(key) || []
+      return m.set(key, [count + 1, [...array, o]])
+    }, new Map()),
+    duplicates = Array.from(map.values(), ([count, array]) =>
+      count === 1 ? [] : array
+    ).flat()
+
+  return duplicates
 }
 
-const constructListingObject = (
+const extractDuplicatedOrders = (orders) => {
+  orders = GetDuplicates(orders)
+  const tokenIds = []
+  for (const order of orders) {
+    tokenIds.push(order.token_id)
+  }
+
+  return { orders, tokenIds }
+}
+
+const extractMarket = (source) => {
+  source = String(source).toLowerCase()
+  return source.includes('opensea')
+    ? 'opensea'
+    : source.includes('x2y2')
+    ? 'x2y2'
+    : source.includes('looksrare')
+    ? 'looksrare'
+    : 'opensea'
+}
+
+const constructOrderObject = (
   collectionId,
+  kind,
   price,
   token_id,
   image_url,
   source,
+  url,
   timestamp
 ) => {
   return {
     collectionId: collectionId,
+    kind,
     price: price,
     token_id: parseInt(token_id),
-    image_url: image_url,
-    market: String(source).toLowerCase(),
+    image_url,
+    market: extractMarket(source),
+    url,
     timestamp: getTimestampFromIsoTime(timestamp)
   }
 }
+
+module.exports = { Get }

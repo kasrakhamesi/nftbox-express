@@ -21,10 +21,8 @@ const TIME = {
   }
 }
 
-module.exports.calculate = async (collectionId, data, type) => {
+module.exports.calculate = async (collectionId, data) => {
   try {
-    if (type !== 'listings' && type !== 'sales') throw new Error('Invalid Type')
-
     const timeframe = {
       _1min: null,
       _2min: null,
@@ -65,14 +63,38 @@ module.exports.calculate = async (collectionId, data, type) => {
     }
 
     let changePercent = {
-      _1min: String((timeframe._1min / timeframe._2min) * 100) + ' %',
-      _5min: String((timeframe._5min / timeframe._10min) * 100) + ' %',
-      _15min: String((timeframe._15min / timeframe._30min) * 100) + ' %',
-      _1hour: String((timeframe._1hour / timeframe._2hour) * 100) + ' %',
-      _6hour: String((timeframe._6hour / timeframe._12hour) * 100) + ' %',
-      _12hour: String((timeframe._12hour / timeframe._1day) * 100) + ' %',
-      _1day: String((timeframe._1day / timeframe._2day) * 100) + ' %',
-      _7day: String((timeframe._7day / timeframe._14day) * 100) + ' %'
+      _1min:
+        String(
+          parseFloat((timeframe._1min / timeframe._2min) * 100).toFixed(3)
+        ) + ' %',
+      _5min:
+        String(
+          parseFloat((timeframe._5min / timeframe._10min) * 100).toFixed(3)
+        ) + ' %',
+      _15min:
+        String(
+          parseFloat((timeframe._15min / timeframe._30min) * 100).toFixed(3)
+        ) + ' %',
+      _1hour:
+        String(
+          parseFloat((timeframe._1hour / timeframe._2hour) * 100).toFixed(3)
+        ) + ' %',
+      _6hour:
+        String(
+          parseFloat((timeframe._6hour / timeframe._12hour) * 100).toFixed(3)
+        ) + ' %',
+      _12hour:
+        String(
+          parseFloat((timeframe._12hour / timeframe._1day) * 100).toFixed(3)
+        ) + ' %',
+      _1day:
+        String(
+          parseFloat((timeframe._1day / timeframe._2day) * 100).toFixed(3)
+        ) + ' %',
+      _7day:
+        String(
+          parseFloat((timeframe._7day / timeframe._14day) * 100).toFixed(3)
+        ) + ' %'
     }
 
     changePercent = {
@@ -123,27 +145,28 @@ module.exports.calculate = async (collectionId, data, type) => {
       isSuccess: true,
       data: {
         change: timeframe,
-        changePercent: changePercentStructure(collectionId, changePercent, type)
+        changePercent: changePercentStructure(collectionId, changePercent)
       }
     }
   } catch (e) {
     console.log(e)
     return {
-      isSuccess: false
+      isSuccess: false,
+      message: e.message
     }
   }
 }
 
-const changePercentStructure = (collectionId, changePercent, type) => {
+const changePercentStructure = (collectionId, changePercent) => {
   return {
-    collectionId: collectionId,
-    [`one_minute_${type}_change_percent`]: changePercent._1min,
-    [`five_minute_${type}_change_percent`]: changePercent._5min,
-    [`fifteen_minute_${type}_change_percent`]: changePercent._15min,
-    [`one_hour_${type}_change_percent`]: changePercent._1hour,
-    [`six_hour_${type}_change_percent`]: changePercent._6hour,
-    [`twelve_hour_${type}_change_percent`]: changePercent._12hour,
-    [`one_day_${type}_change_percent`]: changePercent._1day,
-    [`seven_day_${type}_change_percent`]: changePercent._7day
+    collectionId,
+    [`one_minute_listings_change_percent`]: changePercent._1min,
+    [`five_minute_listings_change_percent`]: changePercent._5min,
+    [`fifteen_minute_listings_change_percent`]: changePercent._15min,
+    [`one_hour_listings_change_percent`]: changePercent._1hour,
+    [`six_hour_listings_change_percent`]: changePercent._6hour,
+    [`twelve_hour_listings_change_percent`]: changePercent._12hour,
+    [`one_day_listings_change_percent`]: changePercent._1day,
+    [`seven_day_listings_change_percent`]: changePercent._7day
   }
 }

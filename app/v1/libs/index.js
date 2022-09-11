@@ -1,6 +1,6 @@
 module.exports.restful = require('./restful')
 module.exports.response = require('./response')
-module.exports.changePercent = require('./changePercent')
+module.exports.listingsChangePercents = require('./listingsChangePercents')
 module.exports.floor = require('./floor')
 module.exports.tokensRanks = require('./tokensRanks')
-module.exports.saleCount = require('./saleCount')
+module.exports.saleVolumeCounts = require('./saleVolumeCounts')

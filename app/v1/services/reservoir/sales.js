@@ -1,17 +1,17 @@
-const axios = require('axios')
 const { sequelize } = require('../../models')
 const sdk = require('api')('@reservoirprotocol/v1.0#1fag0v1k3l7sxff82')
 const _ = require('lodash')
-const { delay, database } = require('../../utils')
-const { changePercent } = require('../../libs')
-const { pendings } = require('../collections')
+const { database } = require('../../utils')
+const { saleVolumeCounts } = require('../../libs')
 
 const Get = async () => {
   try {
     const findedCollections = await sequelize.models.collections.findAll({
+      /*
       where: {
         checked_tarits: true
       }
+      */
     })
 
     let apiKey = await sequelize.models.configurations.findOne({
@@ -26,48 +26,123 @@ const Get = async () => {
 
     sdk.auth(apiKey)
 
-    const r = await sdk.getSalesV4({
-      contract: 'a',
-      limit: '1000',
-      accept: '*/*'
-    })
-
-    let sales = []
-
-    for (const entity of r.sales) {
+    for (const collection of findedCollections) {
       try {
-        const data = constructSalesObject(collectionId, entity)
-        sales.push(data)
-        await database.upsert(
-          data,
-          { collectionId: collectionId },
-          sequelize.models.sales
+        let data = []
+        let continuation = null
+        let lastSaleTimestamp
+        let _14DAY_AGO_TIMESTAMP
+        do {
+          const body = {
+            contract: collection?.contract_address,
+            includeTokenMetadata: 'true',
+            limit: '1000',
+            accept: '*/*'
+            //continuation: '',
+          }
+
+          if (continuation !== null) body.continuation = continuation
+
+          const r = await sdk.getSalesV4(body)
+
+          for (const entity of r.sales) {
+            const sale = constructSalesObject(
+              collection?.id,
+              extractMarket(entity?.orderSource),
+              entity?.price?.amount?.decimal,
+              entity?.token?.tokenId,
+              entity?.amount,
+              entity?.token?.image || null,
+              null,
+              entity?.txHash,
+              entity?.timestamp
+            )
+            data.push(sale)
+
+            database
+              .upsert(data, { tx_hash: entity?.txHash }, sequelize.models.sales)
+              .then(console.log)
+              .catch(console.log)
+          }
+
+          lastSaleTimestamp = timestampStructure(
+            r.sales[r.sales.length - 1].timestamp
+          )
+
+          const _14DAY = 1000 * 60 * 60 * 24 * 14
+
+          _14DAY_AGO_TIMESTAMP = parseInt(Date.now() - _14DAY)
+
+          continuation = r?.continuation || null
+        } while (
+          continuation !== null &&
+          parseInt(lastSaleTimestamp) >= _14DAY_AGO_TIMESTAMP
         )
+
+        data = await Promise.all(data)
+
+        const calculateCountsAndPercents = await saleVolumeCounts.calculate(
+          collection?.contract_address,
+          collection?.id,
+          data
+        )
+
+        if (calculatedData.isSuccess) {
+          database
+            .upsert(
+              calculateCountsAndPercents.data.sales.changePercent,
+              {
+                collectionId:
+                  calculateCountsAndPercents.data.sales.changePercent
+                    .collectionId
+              },
+              sequelize.models.percent_collections
+            )
+            .then(console.log)
+            .catch(console.log)
+
+          database
+            .upsert(
+              calculateCountsAndPercents.data.sales.count,
+              {
+                contract_address:
+                  calculateCountsAndPercents.data.sales.count.contract_address
+              },
+              sequelize.models.collections
+            )
+            .then(console.log)
+            .catch(console.log)
+
+          database
+            .upsert(
+              calculateCountsAndPercents.data.volume.changePercent,
+              {
+                collectionId:
+                  calculateCountsAndPercents.data.volume.changePercent
+                    .collectionId
+              },
+              sequelize.models.percent_collections
+            )
+            .then(console.log)
+            .catch(console.log)
+
+          database
+            .upsert(
+              calculateCountsAndPercents.data.volume.count,
+              {
+                contract_address:
+                  calculateCountsAndPercents.data.volume.count.contract_address
+              },
+              sequelize.models.collections
+            )
+            .then(console.log)
+            .catch(console.log)
+        }
       } catch (e) {
+        console.log(e)
         continue
       }
     }
-
-    sales = await Promise.all(sales)
-
-    const calculatedData = await changePercent.calculate(
-      collectionId,
-      sales,
-      'sales'
-    )
-    console.log(calculatedData)
-    /*
-      if (calculatedData.isSuccess) {
-        await database.upsert(
-          calculatedData.data,
-          {
-            collectionId: collectionId
-          },
-          sequelize.models.percent_collections
-        )
-      }
-*/
-    //floor.calculate(1, listings)
 
     return {
       status: 200,
@@ -86,23 +161,44 @@ const Get = async () => {
   }
 }
 
+const extractMarket = (source) => {
+  source = String(source).toLowerCase()
+  return source.includes('opensea')
+    ? 'opensea'
+    : source.includes('x2y2')
+    ? 'x2y2'
+    : source.includes('looksrare')
+    ? 'looksrare'
+    : 'opensea'
+}
+
 const timestampStructure = (timestamp) => {
   timestamp = String(timestamp)
   if (timestamp.length === 10) timestamp = parseInt(timestamp) * 1000
-  return timestamp
+  return parseInt(timestamp)
 }
 
-const constructSalesObject = (collectionId, data) => {
+const constructSalesObject = (
+  collectionId,
+  market,
+  price,
+  token_id,
+  amount,
+  image_url,
+  url,
+  tx_hash,
+  timestamp
+) => {
   return {
-    collectionId: collectionId,
-    market: String(data?.orderSource).split('.')[0],
-    price: data?.price?.amount?.decimal,
-    token_id: parseInt(data?.token?.tokenId),
-    amount: data?.amount,
-    image_url: data?.token?.image,
-    url: '',
-    tx_hash: data?.txHash,
-    timestamp: timestampStructure(data?.timestamp)
+    collectionId,
+    market,
+    price,
+    token_id: parseInt(token_id),
+    amount,
+    image_url,
+    url,
+    tx_hash,
+    timestamp: timestampStructure(timestamp)
   }
 }
 
