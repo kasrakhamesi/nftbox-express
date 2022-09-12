@@ -40,7 +40,7 @@ module.exports = {
           allowNull: true
         },
         image_url: {
-          type: Sequelize.STRING,
+          type: Sequelize.TEXT,
           allowNull: true
         },
         url: {

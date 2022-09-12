@@ -2,6 +2,21 @@ const { sequelize } = require('../../models')
 const { Op } = require('sequelize')
 const _ = require('lodash')
 
+module.exports.listings = async (req, res) => {
+  const r = await sequelize.models.listings.findAll()
+  res.send(r)
+}
+
+module.exports.sales = async (req, res) => {
+  const r = await sequelize.models.sales.findAll()
+  res.send(r)
+}
+
+module.exports.tokens = async (req, res) => {
+  const r = await sequelize.models.tokens.findAll()
+  res.send(r)
+}
+
 module.exports.findOne = async (req, res) => {
   try {
     const { collection } = req.params
@@ -18,7 +33,6 @@ module.exports.findOne = async (req, res) => {
         'collection_name',
         'revealed_percentage',
         'collection_creation_date',
-        'logo_url',
         'banner_image_url',
         'image_url',
         'verified',

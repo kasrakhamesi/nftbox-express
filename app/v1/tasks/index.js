@@ -8,14 +8,14 @@ module.exports.sales = require('./sales')
 module.exports.gasStations = require('./gasStations')
 module.exports.liveSales = require('./liveSales')
 
-module.exports.run = () => {
+module.exports.run = async () => {
   this.liveListings()
   this.trendings()
   this.traits()
   this.tokensId()
   this.listings()
   this.sales()
-  this.stats()
+  //this.stats()
   this.gasStations()
   this.liveSales()
 }

@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true
       },
       token_url: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true
       },
       token_description: {
@@ -66,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true
       },
       token_image: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true
       }
     },

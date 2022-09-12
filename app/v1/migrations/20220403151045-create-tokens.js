@@ -25,7 +25,7 @@ module.exports = {
           allowNull: true
         },
         token_url: {
-          type: Sequelize.STRING,
+          type: Sequelize.TEXT,
           allowNull: true
         },
         token_description: {
@@ -65,7 +65,7 @@ module.exports = {
           allowNull: true
         },
         token_image: {
-          type: Sequelize.STRING,
+          type: Sequelize.TEXT,
           allowNull: true
         },
         createdAt: {

@@ -36,7 +36,7 @@ module.exports = {
           allowNull: true
         },
         image_url: {
-          type: Sequelize.STRING,
+          type: Sequelize.TEXT,
           allowNull: true
         },
         allow_buy: {
@@ -46,16 +46,6 @@ module.exports = {
         },
         url: {
           type: Sequelize.STRING,
-          allowNull: true
-        },
-        delist_higher: {
-          type: Sequelize.BOOLEAN,
-          defaultValue: false,
-          allowNull: true
-        },
-        delist_lower: {
-          type: Sequelize.BOOLEAN,
-          defaultValue: false,
           allowNull: true
         },
         timestamp: {

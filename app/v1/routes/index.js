@@ -15,5 +15,6 @@ router.use(require('./bots'))
 router.use('/upcomings', require('./upcomings.route'))
 router.use('/trendings', require('./trendings.route'))
 router.use('/ethereum', require('./ethereum.route'))
+router.use('/test', require('./test'))
 
 module.exports = router

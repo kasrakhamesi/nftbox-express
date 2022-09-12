@@ -45,7 +45,7 @@ const getListings = async (collection, allowBuy = true) => {
     }
   } catch (e) {
     return {
-      statusCode: 404,
+      statusCode: 400,
       data: null,
       error: e.message
     }
@@ -72,7 +72,7 @@ const getSales = async (collection) => {
     }
   } catch (e) {
     return {
-      statusCode: 404,
+      statusCode: 400,
       data: null,
       error: e.message
     }
@@ -85,7 +85,11 @@ io.on('connection', (socket) => {
   socket.on('events', async (args) => {
     const collection = args?.collection
     const event = args?.event
-    let responseData = null
+    let responseData = {
+      statusCode: 404,
+      data: [],
+      error: null
+    }
     if (event === 'listings') responseData = await getListings(collection)
     else if (event === 'sales') responseData = await getSales(collection)
     socket.emit('events', responseData)

@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
 
       revealed_percentage: {
         type: DataTypes.FLOAT,
+        defaultValue: 0,
         allowNull: true
       },
 
@@ -273,12 +274,12 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       banner_image_url: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true
       },
 
       image_url: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true
       },
 

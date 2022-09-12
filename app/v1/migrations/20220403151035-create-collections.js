@@ -264,12 +264,12 @@ module.exports = {
         },
 
         banner_image_url: {
-          type: Sequelize.STRING,
+          type: Sequelize.TEXT,
           allowNull: true
         },
 
         image_url: {
-          type: Sequelize.STRING,
+          type: Sequelize.TEXT,
           allowNull: true
         },
 

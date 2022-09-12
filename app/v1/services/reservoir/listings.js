@@ -1,7 +1,7 @@
 const { sequelize } = require('../../models')
 const _ = require('lodash')
 const { database } = require('../../utils')
-const { changePercent, listingsChangePercents } = require('../../libs')
+const { listingsChangePercents } = require('../../libs')
 const sdk = require('api')('@reservoirprotocol/v1.0#1fag0v1k3l7sxff82')
 
 const getTimestampFromIsoTime = (isoTime) => {
@@ -70,6 +70,7 @@ const Get = async () => {
 
               const order = constructOrderObject(
                 collection?.id,
+                null,
                 entity.event.kind,
                 entity.order.price,
                 entity.order.tokenId,
@@ -78,7 +79,6 @@ const Get = async () => {
                 null,
                 getTimestampFromIsoTime(entity.event.createdAt)
               )
-              //if (order.kind === 'new-order') {
 
               database
                 .upsert(
@@ -86,15 +86,13 @@ const Get = async () => {
                   {
                     collectionId: order.collectionId,
                     allow_buy: false,
-                    timestamp: order.timestamp,
-                    token_id: order.token_id
+                    timestamp: String(order.timestamp),
+                    token_id: String(order.token_id)
                   },
                   sequelize.models.listings
                 )
                 .then(console.log)
-                .catch(console.log)
 
-              //}
               data.push(order)
             } catch (e) {
               console.log(e)
@@ -168,8 +166,8 @@ const Get = async () => {
                 data,
                 {
                   collectionId: orders[k].collectionId,
-                  token_id: orders[k].token_id,
-                  timestamp: orders[k].timestamp
+                  token_id: String(orders[k].token_id),
+                  timestamp: String(orders[k].timestamp)
                 },
                 sequelize.models.relists
               )
@@ -279,6 +277,7 @@ const extractMarket = (source) => {
 
 const constructOrderObject = (
   collectionId,
+  tokenId,
   kind,
   price,
   token_id,
@@ -289,6 +288,7 @@ const constructOrderObject = (
 ) => {
   return {
     collectionId: collectionId,
+    tokenId,
     kind,
     price: price,
     token_id: parseInt(token_id),

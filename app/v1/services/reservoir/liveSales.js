@@ -42,7 +42,7 @@ const Get = async () => {
         const r = await sdk.getSalesV4(body)
 
         for (const entity of r.sales) {
-          const sale = constructSalesObject(
+          const data = constructSalesObject(
             collection?.id,
             extractMarket(entity?.orderSource),
             entity?.price?.amount?.decimal,

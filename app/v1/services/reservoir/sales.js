@@ -7,11 +7,9 @@ const { saleVolumeCounts } = require('../../libs')
 const Get = async () => {
   try {
     const findedCollections = await sequelize.models.collections.findAll({
-      /*
       where: {
         checked_tarits: true
       }
-      */
     })
 
     let apiKey = await sequelize.models.configurations.findOne({
@@ -57,18 +55,18 @@ const Get = async () => {
               entity?.txHash,
               entity?.timestamp
             )
-            data.push(sale)
 
             database
-              .upsert(data, { tx_hash: entity?.txHash }, sequelize.models.sales)
+              .upsert(sale, { tx_hash: entity?.txHash }, sequelize.models.sales)
               .then(console.log)
               .catch(console.log)
+
+            data.push(sale)
           }
 
           lastSaleTimestamp = timestampStructure(
             r.sales[r.sales.length - 1].timestamp
           )
-
           const _14DAY = 1000 * 60 * 60 * 24 * 14
 
           _14DAY_AGO_TIMESTAMP = parseInt(Date.now() - _14DAY)
@@ -87,7 +85,7 @@ const Get = async () => {
           data
         )
 
-        if (calculatedData.isSuccess) {
+        if (calculateCountsAndPercents.isSuccess) {
           database
             .upsert(
               calculateCountsAndPercents.data.sales.changePercent,
