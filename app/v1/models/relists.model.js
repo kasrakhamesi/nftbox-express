@@ -1,7 +1,7 @@
 'use strict'
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-  class listings extends Model {
+  class relists extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,13 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      listings.belongsTo(models.tokens, {
+      relists.belongsTo(models.tokens, {
         foreignKey: 'tokenId',
         as: 'meta'
       })
     }
   }
-  listings.init(
+  relists.init(
     {
       collectionId: {
         type: DataTypes.BIGINT,
@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       tokenId: {
         type: DataTypes.BIGINT,
         allowNull: true
+      },
+      type: {
+        type: DataTypes.ENUM('higher', 'lower'),
+        allowNull: false
       },
       price: {
         type: DataTypes.STRING,
@@ -41,11 +45,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true
       },
-      allow_buy: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-        allowNull: false
-      },
       url: {
         type: DataTypes.STRING,
         allowNull: true
@@ -57,8 +56,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'listings'
+      modelName: 'relists'
     }
   )
-  return listings
+  return relists
 }

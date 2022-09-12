@@ -144,16 +144,29 @@ module.exports.calculate = async (collectionId, data) => {
     return {
       isSuccess: true,
       data: {
-        change: timeframe,
+        change: changeStructure(collectionId, timeframe),
         changePercent: changePercentStructure(collectionId, changePercent)
       }
     }
   } catch (e) {
-    console.log(e)
     return {
       isSuccess: false,
       message: e.message
     }
+  }
+}
+
+const changeStructure = (collectionId, change) => {
+  return {
+    collectionId,
+    [`one_minute_listings`]: change._1min,
+    [`five_minute_listings`]: change._5min,
+    [`fifteen_minute_listings`]: change._15min,
+    [`one_hour_listings`]: change._1hour,
+    [`six_hour_listings`]: change._6hour,
+    [`twelve_hour_listings`]: change._12hour,
+    [`one_day_listings`]: change._1day,
+    [`seven_day_listings`]: change._7day
   }
 }
 

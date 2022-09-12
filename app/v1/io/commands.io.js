@@ -82,14 +82,12 @@ const getSales = async (collection) => {
 io.on('connection', (socket) => {
   io.emit('ping', 'pong')
 
-  socket.on('listings', async (args) => {
+  socket.on('events', async (args) => {
     const collection = args?.collection
-    const listings = await getListings(collection)
-    socket.emit('listings', listings)
-  })
-  socket.on('sales', async (args) => {
-    const collection = args?.collection
-    const sales = await getSales(collection)
-    socket.emit('sales', sales)
+    const event = args?.event
+    let responseData = null
+    if (event === 'listings') responseData = await getListings(collection)
+    else if (event === 'sales') responseData = await getSales(collection)
+    socket.emit('events', responseData)
   })
 })

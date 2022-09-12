@@ -2,7 +2,7 @@ const reservoir = require('../services/reservoir')
 
 const getSales = () => {
   reservoir.sales
-    .getSalesChangePercent()
+    .Get()
     .then(() => {
       setTimeout(getSales, 10000)
     })

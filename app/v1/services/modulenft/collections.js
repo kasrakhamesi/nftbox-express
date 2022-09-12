@@ -160,6 +160,100 @@ const getCollectionInfo = async (collection) => {
   }
 }
 
+const getTraits = async (collection) => {
+  try {
+    let apiKey = await sequelize.models.configurations.findOne({
+      where: {
+        key: 'ModuleNftApiKey'
+      }
+    })
+
+    apiKey = _.isEmpty(apiKey) ? null : apiKey?.value
+
+    if (!_.isEmpty(collection)) {
+      const r = await axios({
+        method: 'get',
+        url: `${process.env.MODULE_NFT_BASEURL}/opensea/collection/traits?type=${collection}`,
+        headers: {
+          'X-API-KEY': apiKey
+        }
+      })
+
+      if (r.status !== 200) throw new Error("Can't get traits")
+
+      if (r.data.error !== null) throw new Error("Can't get traits")
+
+      const traits =
+        r.data.info?.numericTraits.length === 0
+          ? {
+              string_traits: r.data.info.stringTraits,
+              numeric_traits: null
+            }
+          : {
+              string_traits: r.data.info.stringTraits,
+              numeric_traits: r.data.info.numeric_traits
+            }
+
+      return {
+        isSuccess: true,
+        data: traits
+      }
+    }
+
+    const findedCollections = await sequelize.models.collections.findAll({
+      where: {
+        [Op.and]: [
+          { string_traits: null },
+          { numeric_traits: null },
+          { checked_tarits: false }
+        ]
+      }
+    })
+
+    for (const entity of findedCollections) {
+      try {
+        const r = await axios({
+          method: 'get',
+          url: `${process.env.MODULE_NFT_BASEURL}/opensea/collection/traits?type=${entity.contract_address}`,
+          headers: {
+            'X-API-KEY': apiKey
+          }
+        })
+
+        if (r.status !== 200) continue
+
+        if (r.data.error !== null) continue
+
+        const body =
+          r.data.info?.numericTraits.length === 0
+            ? {
+                string_traits: r.data.info.stringTraits,
+                checked_tarits: true
+              }
+            : {
+                string_traits: r.data.info.stringTraits,
+                numeric_traits: r.data.info.numeric_traits,
+                checked_tarits: true
+              }
+
+        await sequelize.models.collections.update(body, {
+          where: {
+            contract_address: entity.contract_address
+          }
+        })
+      } catch {
+        continue
+      }
+    }
+  } catch (e) {
+    console.log(e)
+    return {
+      isSuccess: false,
+      message: e.message
+    }
+  }
+}
+
 const getTrendings = async () => {
   try {
     let apiKey = await sequelize.models.configurations.findOne({
@@ -296,100 +390,6 @@ const getTrendings = async () => {
       }
   } catch (e) {
     console.log(e)
-  }
-}
-
-const getTraits = async (collection) => {
-  try {
-    let apiKey = await sequelize.models.configurations.findOne({
-      where: {
-        key: 'ModuleNftApiKey'
-      }
-    })
-
-    apiKey = _.isEmpty(apiKey) ? null : apiKey?.value
-
-    if (!_.isEmpty(collection)) {
-      const r = await axios({
-        method: 'get',
-        url: `${process.env.MODULE_NFT_BASEURL}/opensea/collection/traits?type=${collection}`,
-        headers: {
-          'X-API-KEY': apiKey
-        }
-      })
-
-      if (r.status !== 200) throw new Error("Can't get traits")
-
-      if (r.data.error !== null) throw new Error("Can't get traits")
-
-      const traits =
-        r.data.info?.numericTraits.length === 0
-          ? {
-              string_traits: r.data.info.stringTraits,
-              numeric_traits: null
-            }
-          : {
-              string_traits: r.data.info.stringTraits,
-              numeric_traits: r.data.info.numeric_traits
-            }
-
-      return {
-        isSuccess: true,
-        data: traits
-      }
-    }
-
-    const findedCollections = await sequelize.models.collections.findAll({
-      where: {
-        [Op.and]: [
-          { string_traits: null },
-          { numeric_traits: null },
-          { checked_tarits: false }
-        ]
-      }
-    })
-
-    for (const entity of findedCollections) {
-      try {
-        const r = await axios({
-          method: 'get',
-          url: `${process.env.MODULE_NFT_BASEURL}/opensea/collection/traits?type=${entity.contract_address}`,
-          headers: {
-            'X-API-KEY': apiKey
-          }
-        })
-
-        if (r.status !== 200) continue
-
-        if (r.data.error !== null) continue
-
-        const body =
-          r.data.info?.numericTraits.length === 0
-            ? {
-                string_traits: r.data.info.stringTraits,
-                checked_tarits: true
-              }
-            : {
-                string_traits: r.data.info.stringTraits,
-                numeric_traits: r.data.info.numeric_traits,
-                checked_tarits: true
-              }
-
-        await sequelize.models.collections.update(body, {
-          where: {
-            contract_address: entity.contract_address
-          }
-        })
-      } catch {
-        continue
-      }
-    }
-  } catch (e) {
-    console.log(e)
-    return {
-      isSuccess: false,
-      message: e.message
-    }
   }
 }
 

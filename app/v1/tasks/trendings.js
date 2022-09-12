@@ -1,7 +1,8 @@
 const { modulenft } = require('../services')
 
 const trendingCollections = () => {
-  modulenft.collections.getTrendings
+  modulenft.collections
+    .getTrendings()
     .then(() => {
       setTimeout(trendingCollections, 1500)
     })

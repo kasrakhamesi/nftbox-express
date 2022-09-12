@@ -37,6 +37,12 @@ const Get = async () => {
 
     for (const collection of findedCollections) {
       try {
+        const collectionTokens = await sequelize.models.tokens.findAll({
+          where: {
+            collectionId: collection?.id
+          }
+        })
+
         let data = []
         let continuation = null
         let lastOrderTimestamp
@@ -57,7 +63,7 @@ const Get = async () => {
           for (const entity of r.events) {
             try {
               if (
-                entity.event.kind === 'sale' &&
+                entity.event.kind !== 'new-order' ||
                 extractMarket(entity.order.source) !== 'opensea'
               )
                 continue
@@ -72,30 +78,29 @@ const Get = async () => {
                 null,
                 getTimestampFromIsoTime(entity.event.createdAt)
               )
-              if (order.kind === 'new-order') {
-                /*
-                database
-                  .upsert(
-                    order,
-                    {
-                      collectionId: order.collectionId,
-                      allow_buy: false,
-                      timestamp: order.timestamp,
-                      token_id: order.token_id
-                    },
-                    sequelize.models.listings
-                  )
-                  .then(console.log)
-                  .catch(console.log)
-                  */
-              }
+              //if (order.kind === 'new-order') {
+
+              database
+                .upsert(
+                  order,
+                  {
+                    collectionId: order.collectionId,
+                    allow_buy: false,
+                    timestamp: order.timestamp,
+                    token_id: order.token_id
+                  },
+                  sequelize.models.listings
+                )
+                .then(console.log)
+                .catch(console.log)
+
+              //}
               data.push(order)
             } catch (e) {
               console.log(e)
               continue
             }
           }
-          break
 
           lastOrderTimestamp = getTimestampFromIsoTime(
             r.events[r.events.length - 1].event.createdAt
@@ -113,28 +118,65 @@ const Get = async () => {
 
         data = await Promise.all(data)
 
-        const duplicateOrders = extractDuplicatedOrders(data)
-
-        console.log(duplicateOrders.tokenIds)
-        console.log(duplicateOrders.orders)
-
-        for (const entity of duplicateOrders.tokenIds) {
-          for (const item of duplicateOrders.orders) {
-            if (entity === item.token_id) console.log(item)
-          }
-        }
-
-        //console.log(duplicateOrders)
-
-        /*
-        const calculatedChanges = await listingsChangePercents.calculate(
+        const calculateListings = await listingsChangePercents.calculate(
           collection?.id,
           data
         )
 
-        if (calculatedChanges.isSuccess) {
+        if (calculateListings.isSuccess) {
+          database
+            .upsert(
+              calculateListings.data.changePercent,
+              {
+                collectionId: calculateListings.data.changePercent.collectionId
+              },
+              sequelize.models.percent_collections
+            )
+            .then(console.log)
+            .catch(console.log)
+
+          database
+            .upsert(
+              calculateListings.data.change,
+              {
+                collectionId: calculateListings.data.change.collectionId
+              },
+              sequelize.models.collections
+            )
+            .then(console.log)
+            .catch(console.log)
         }
-        */
+
+        const duplicateOrders = extractDuplicatedOrders(data)
+
+        for (const key of duplicateOrders.tokenIds) {
+          const orders = duplicateOrders.data[key]
+          for (let k = 1; k < orders.length; k++) {
+            const data = relistStructure(
+              orders[k].collectionId,
+              orders[k].tokenId || null,
+              HigherOrLower(orders[k], orders[k - 1]),
+              orders[k].price,
+              orders[k].market,
+              orders[k].token_id,
+              orders[k].image_url,
+              orders[k].url,
+              orders[k].timestamp
+            )
+            database
+              .upsert(
+                data,
+                {
+                  collectionId: orders[k].collectionId,
+                  token_id: orders[k].token_id,
+                  timestamp: orders[k].timestamp
+                },
+                sequelize.models.relists
+              )
+              .then(console.log)
+              .catch(console.log)
+          }
+        }
       } catch (e) {
         console.log(e)
         continue
@@ -155,6 +197,35 @@ const Get = async () => {
         message: e.message
       }
     }
+  }
+}
+
+const HigherOrLower = (a, b) => {
+  if (a.price >= b.price) return 'heigher'
+  return 'lower'
+}
+
+const relistStructure = (
+  collectionId,
+  tokenId,
+  type,
+  price,
+  market,
+  token_id,
+  image_url,
+  url,
+  timestamp
+) => {
+  return {
+    collectionId,
+    tokenId,
+    type,
+    price,
+    market,
+    token_id,
+    image_url,
+    url,
+    timestamp
   }
 }
 
@@ -179,7 +250,20 @@ const extractDuplicatedOrders = (orders) => {
     tokenIds.push(order.token_id)
   }
 
-  return { orders, tokenIds }
+  const newTokenIds = []
+  const data = {}
+
+  for (const entity of tokenIds) {
+    for (const item of orders) {
+      if (entity === item.token_id) {
+        if (newTokenIds.indexOf(item.token_id) === -1) newTokenIds.push(entity)
+        if (_.isEmpty(data[entity])) data[entity] = [item]
+        else data[entity].push(item)
+      }
+    }
+  }
+
+  return { data, tokenIds: newTokenIds }
 }
 
 const extractMarket = (source) => {
