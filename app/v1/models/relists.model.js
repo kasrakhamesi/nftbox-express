@@ -9,10 +9,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      /*
       relists.belongsTo(models.tokens, {
         foreignKey: 'tokenId',
         as: 'meta'
       })
+      */
+      /*
+      relists.belongsToMany(models.collections, {
+        as: 'collection',
+        foreignKey: 'collectionId'
+      })
+      */
     }
   }
   relists.init(

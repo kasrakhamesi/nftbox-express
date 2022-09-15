@@ -19,7 +19,7 @@ module.exports.findOne = async (req, res) => {
     const findedToken = await sequelize.models.tokens.findOne({
       where: { collectionId: findedCollection.id, token_id: tokenId },
       attributes: {
-        exclude: ['collectionId', 'createdAt', 'updatedAt']
+        exclude: ['id', 'collectionId', 'createdAt', 'updatedAt']
       }
     })
 

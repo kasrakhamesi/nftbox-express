@@ -1,5 +1,11 @@
 const { sequelize } = require('../../models')
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
 module.exports.findAll = async (req, res) => {
   try {
     const { ticker } = req.params
@@ -23,21 +29,21 @@ module.exports.findAll = async (req, res) => {
       data.push({
         contract_address: entity.contract_address,
         collection_name: entity.collection_name,
-        collection_slug: entity.collection_name,
+        collection_slug: entity.collection_slug,
         revealed_percentage: entity.revealed_percentage,
         image_url: entity.image_url,
         collection_creation_date: entity.collection_creation_date,
         verified: entity.verified,
-        floor_price: entity[`${newTicker}_floor_price`],
-        floor_price_change_percent: null,
-        volume: entity[`${newTicker}_volume`],
-        volume_change_percent: null,
-        listings: entity[`${newTicker}_listings`],
-        listings_change_percent: null,
-        sales: entity[`${newTicker}_sales`],
-        sales_change_percent: null,
-        market_cap: entity[`${newTicker}_market_cap`],
-        market_cap_change_percent: null // entity[`${newTicker}.volume`],
+        floor_price: getRandomInt(0, 100), // entity[`${newTicker}_floor_price`],
+        floor_price_change_percent: '-' + getRandomInt(0, 100) + ' %', //null,
+        volume: getRandomInt(0, 100), //entity[`${newTicker}_volume`],
+        volume_change_percent: '-' + getRandomInt(0, 100) + ' %', //null,
+        listings: getRandomInt(0, 100), //entity[`${newTicker}_listings`],
+        listings_change_percent: getRandomInt(0, 100) + ' %', //null,
+        sales: getRandomInt(0, 100), //entity[`${newTicker}_sales`],
+        sales_change_percent: getRandomInt(0, 100) + ' %', //null,
+        market_cap: getRandomInt(0, 100), //entity[`${newTicker}_market_cap`],
+        market_cap_change_percent: getRandomInt(0, 100) + ' %' //null // entity[`${newTicker}.volume`],
       })
 
     res.status(200).send({

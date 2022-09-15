@@ -34,7 +34,7 @@ const Get = async () => {
       : apiKey?.value
 
     sdk.auth(apiKey)
-
+    let iNum = 0
     for (const collection of findedCollections) {
       try {
         const collectionTokens = await sequelize.models.tokens.findAll({
@@ -100,6 +100,8 @@ const Get = async () => {
             }
           }
 
+          iNum++
+          if (iNum > 2) break
           lastOrderTimestamp = getTimestampFromIsoTime(
             r.events[r.events.length - 1].event.createdAt
           )
@@ -146,14 +148,19 @@ const Get = async () => {
         }
 
         const duplicateOrders = extractDuplicatedOrders(data)
-
         for (const key of duplicateOrders.tokenIds) {
-          const orders = duplicateOrders.data[key]
-          for (let k = 1; k < orders.length; k++) {
+          const orders = removeDuplicates(
+            duplicateOrders.data[key].sort((a, b) => b.timestamp - a.timestamp),
+            'timestamp'
+          )
+
+          for (let k = 0; k < orders.length; k++) {
+            const forwardEntity = k + 1 === orders.length ? k : k + 1
+
             const data = relistStructure(
-              orders[k].collectionId,
+              orders[k]?.collectionId,
               orders[k].tokenId || null,
-              HigherOrLower(orders[k], orders[k - 1]),
+              HigherOrLower(orders[k], orders[forwardEntity]),
               orders[k].price,
               orders[k].market,
               orders[k].token_id,
@@ -161,6 +168,9 @@ const Get = async () => {
               orders[k].url,
               orders[k].timestamp
             )
+
+            if (k + 1 === orders.length) continue
+
             database
               .upsert(
                 data,
@@ -198,8 +208,22 @@ const Get = async () => {
   }
 }
 
+const removeDuplicates = (originalArray, prop) => {
+  let newArray = []
+  let lookupObject = {}
+
+  for (let i in originalArray) {
+    lookupObject[originalArray[i][prop]] = originalArray[i]
+  }
+
+  for (i in lookupObject) {
+    newArray.push(lookupObject[i])
+  }
+  return newArray
+}
+
 const HigherOrLower = (a, b) => {
-  if (a.price >= b.price) return 'heigher'
+  if (parseFloat(a.price) >= parseFloat(b.price)) return 'higher'
   return 'lower'
 }
 

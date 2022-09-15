@@ -2,8 +2,25 @@ const { sequelize } = require('../../models')
 const { Op } = require('sequelize')
 const _ = require('lodash')
 
+const include = [
+  {
+    model: sequelize.models.collections,
+    as: 'collection',
+    include: {
+      attributes: [['contract_address', 'collection_slug']]
+    }
+  }
+]
+
 module.exports.listings = async (req, res) => {
-  const r = await sequelize.models.listings.findAll()
+  const r = await sequelize.models.listings.findAll({
+    order: [['timestamp', 'desc']],
+    include: {
+      model: sequelize.models.collections,
+      as: 'collection',
+      attributes: [['collection_slug', 'contract_address']]
+    }
+  })
   res.send(r)
 }
 
