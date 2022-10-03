@@ -11,7 +11,7 @@ module.exports.checkScamToken = async (contractAddress) => {
     })
 
     apiKey = _.isEmpty(apiKey)
-      ? 'c8XCRD_56zo2QvYijbbPfaw6AgZ9X-e0 '
+      ? 'c8XCRD_56zo2QvYijbbPfaw6AgZ9X-e0'
       : apiKey?.value
 
     const baseURL = `https://eth-mainnet.alchemyapi.io/nft/v2/${apiKey}/isSpamContract`

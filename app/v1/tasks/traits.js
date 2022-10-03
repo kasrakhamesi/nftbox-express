@@ -1,8 +1,7 @@
-const { modulenft } = require('../services')
+const { opensea } = require('../services')
 
 const getTraits = () => {
-  modulenft.collections
-    .getTraits()
+  opensea.collections.getCollectionsTraits
     .then(() => {
       setTimeout(getTraits, 6000)
     })

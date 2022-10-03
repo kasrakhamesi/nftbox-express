@@ -79,6 +79,33 @@ const getSales = async (collection) => {
   }
 }
 
+const getRelists = async (collection) => {
+  try {
+    const condition = conditionCreator(collection)
+    const findedCollection = await sequelize.models.collections.findOne({
+      where: condition
+    })
+    if (_.isEmpty(findedCollection)) throw new Error("Can't find Collection")
+
+    const relists = await sequelize.models.relists.findAll({
+      where: {
+        collectionId: findedCollection?.id
+      }
+    })
+    return {
+      statusCode: 200,
+      data: relists,
+      error: null
+    }
+  } catch (e) {
+    return {
+      statusCode: 400,
+      data: null,
+      error: e.message
+    }
+  }
+}
+
 io.on('connection', (socket) => {
   io.emit('ping', 'pong')
 
@@ -92,6 +119,7 @@ io.on('connection', (socket) => {
     }
     if (event === 'listings') responseData = await getListings(collection)
     else if (event === 'sales') responseData = await getSales(collection)
+    else if (event === 'relists') responseData = await getRelists(collection)
     socket.emit('events', responseData)
   })
 })

@@ -1,1 +1,1 @@
-module.exports.stats = require('./stats')
+module.exports.collections = require('./collections')

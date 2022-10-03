@@ -2,9 +2,8 @@ const axios = require('axios')
 const { sequelize } = require('../../models')
 const _ = require('lodash')
 const { Op } = require('sequelize')
-const { delay } = require('../../utils')
 
-module.exports.getTokensId = async () => {
+const getTokensId = async () => {
   try {
     let apiKey = await sequelize.models.configurations.findOne({
       where: {
@@ -16,7 +15,7 @@ module.exports.getTokensId = async () => {
       ? 'c8XCRD_56zo2QvYijbbPfaw6AgZ9X-e0'
       : apiKey?.value
 
-    const resAllCollections = await sequelize.models.collections.findAll({
+    const collections = await sequelize.models.collections.findAll({
       where: {
         [Op.or]: [
           { string_traits: { [Op.ne]: null } },
@@ -26,17 +25,24 @@ module.exports.getTokensId = async () => {
       }
     })
 
-    for (let k = 0; k < resAllCollections.length; k++) {
+    for (const collection of collections) {
       try {
-        if (
-          resAllCollections[k].total_supply < resAllCollections[k].owners_count
-        )
-          continue
+        if (collection.total_supply < collection.owners_count) continue
+
+        const tokens = await sequelize.models.tokens.findAll({
+          where: {
+            collectionId: collection?.id
+          },
+          order: [['token_id', 'desc']]
+        })
+
+        if (tokens.length === collection.total_supply) continue
 
         await getAll(
-          resAllCollections[k].contract_address,
-          resAllCollections[k].id,
-          apiKey
+          collection.contract_address,
+          collection.id,
+          apiKey,
+          tokens?.token_id || ''
         )
       } catch (e) {
         console.log(e)
@@ -48,8 +54,7 @@ module.exports.getTokensId = async () => {
   }
 }
 
-const getAll = async (contractAddress, contractId, apiKey) => {
-  let startToken = ''
+const getAll = async (contractAddress, contractId, apiKey, startToken = '') => {
   let hasNextPage = true
   totalNftsFound = 0
   while (hasNextPage) {
@@ -60,7 +65,6 @@ const getAll = async (contractAddress, contractId, apiKey) => {
       apiKey
     )
     if (!nextToken) {
-      // When nextToken is not present, then there are no more NFTs to fetch.
       hasNextPage = false
     }
     startToken = nextToken
@@ -68,10 +72,52 @@ const getAll = async (contractAddress, contractId, apiKey) => {
   }
 }
 
+const calculateBasicScore = async (string_traits, numeric_traits) => {
+  try {
+    let score = 0
+
+    for (const trait of string_traits) {
+      const calculatedValue = parseFloat((1 / trait?.value_percent) * 100)
+      score += parseFloat(calculatedValue)
+    }
+    for (const trait of numeric_traits) {
+      const calculatedValue = parseFloat((1 / trait?.value_percent) * 100)
+      score += parseFloat(calculatedValue)
+    }
+
+    return score
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
+const calculateNormalScore = async (string_traits, numeric_traits) => {
+  try {
+    let score = 0
+
+    for (const trait of string_traits) {
+      const calculatedValue = parseFloat((1 / trait?.value_percent) * 100)
+      const valueWithTraitCount = calculatedValue / trait.trait_count
+      score += parseFloat(valueWithTraitCount)
+    }
+    for (const trait of numeric_traits) {
+      const calculatedValue = parseFloat((1 / trait?.value_percent) * 100)
+      const valueWithTraitCount = calculatedValue / trait.trait_count
+      score += parseFloat(valueWithTraitCount)
+    }
+
+    return score
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
 const callGetNFTsForCollectionOnce = async (
   startToken = '',
   contractAddress,
-  contractId,
+  collectionId,
   apiKey
 ) => {
   try {
@@ -81,50 +127,86 @@ const callGetNFTsForCollectionOnce = async (
     if (response.status !== 200)
       throw new Error(response?.response.message || 'error')
 
-    const nfts = response?.data?.nfts
-    for (let k = 0; k < nfts.length; k++) {
-      try {
-        const tokenId = parseInt(nfts[k]?.id?.tokenId, 16)
-        const name = nfts[k]?.metadata?.name
-        const description = nfts[k]?.metadata?.description
-        const image = nfts[k]?.metadata?.image
-        const tokenUrl = nfts[k]?.tokenUri?.raw
+    const findedCollection = await sequelize.models.collection.findOne({
+      where: {
+        null: null
+      },
+      attribute: [['string_traits', 'numeric_traits', 'total_supply']]
+    })
 
+    const tokens = response?.data?.nfts
+    for (const token of tokens) {
+      try {
+        const tokenId = parseInt(token?.id?.tokenId, 16)
+        const name = token?.metadata?.name
+        const description = token?.metadata?.description
+        const image = token?.metadata?.image
+        const tokenUrl = token?.tokenUri?.raw
         const numericTraits = []
         const stringTraits = []
 
-        const attributes = nfts[k]?.metadata?.attributes
-        for (let n = 0; n < attributes.length; n++) {
+        const attributes = token?.metadata?.attributes
+        for (const attribute of attributes) {
           try {
-            if (
-              attributes[n].hasOwnProperty('max_value') &&
-              typeof attributes[n]?.max_value === 'number'
-            )
+            if (typeof attribute?.value === 'number') {
+              const trait = findedCollection?.numeric_traits.find(
+                (item) =>
+                  item?.key.toLowerCase() ===
+                  attribute?.trait_type.toLowerCase()
+              )
+
+              const valuePercent = parseFloat(
+                (trait?.count * 100) / findedCollection.total_supply
+              )
+
               numericTraits.push({
-                trait_type: attributes[n].trait_type,
-                value: attributes[n].value,
-                max_value: attributes[n].max_value
+                trait_count: trait?.count,
+                trait_type: attribute?.trait_type,
+                value_percent: valuePercent > 100 ? 100 : valuePercent,
+                value: attribute?.value
               })
-            else
+            } else {
+              const trait = findedCollection.string_traits.find(
+                (item) =>
+                  item.key.toLowerCase() === attribute?.trait_type.toLowerCase()
+              )
+
+              const traitValue = trait.attributes.find(
+                (item) =>
+                  item.value.toLowerCase() === attribute?.value.toLowerCase()
+              )
+
+              const valuePercent = parseFloat(
+                (traitValue.count * 100) / findedCollection.total_supply
+              )
+
               stringTraits.push({
-                trait_type: attributes[n].trait_type,
-                value: attributes[n].value
+                trait_count: trait?.count,
+                trait_type: attribute?.trait_type,
+                value_percent: valuePercent > 100 ? 100 : valuePercent,
+                value: attribute?.value
               })
+            }
           } catch (e) {
             console.log(e)
             continue
           }
         }
+
         await sequelize.models.tokens.create({
-          collectionId: contractId,
+          collectionId,
           token_id: parseInt(tokenId),
           string_traits: _.isEmpty(stringTraits) ? null : stringTraits,
+          basic_score: calculateBasicScore(stringTraits, numericTraits),
+          normal_score: calculateNormalScore(stringTraits, numericTraits),
           numeric_traits: _.isEmpty(numericTraits) ? null : numericTraits,
           token_image: image,
           token_description: description,
           token_name: name,
           token_url: tokenUrl
         })
+
+        await calculateBasicAndNormalRank(collectionId)
       } catch (e) {
         console.log(e)
         continue
@@ -135,3 +217,56 @@ const callGetNFTsForCollectionOnce = async (
     console.log(e)
   }
 }
+
+const calculateBasicAndNormalRank = async (collectionId) => {
+  const tokens = await sequelize.models.tokens.findAll({
+    where: {
+      collectionId
+    }
+  })
+  let basicRankNumber = 1
+  const sortedFromBasicScoreTokens = tokens.sort(
+    (a, b) => b.basic_score - a.basic_score
+  )
+  for (const token of sortedFromBasicScoreTokens) {
+    sequelize.models.tokens
+      .update(
+        {
+          basic_rank: basicRankNumber
+        },
+        {
+          where: {
+            collectionId,
+            token_id: token.token_id
+          }
+        }
+      )
+      .then(() => null)
+      .catch((e) => console.log(e))
+    basicRankNumber++
+  }
+
+  const sortedFromNormalScoreTokens = tokens.sort(
+    (a, b) => b.normal_score - a.normal_score
+  )
+  let normalRankNumber = 1
+  for (const token of sortedFromNormalScoreTokens) {
+    sequelize.models.tokens
+      .update(
+        {
+          normal_rank: normalRankNumber
+        },
+        {
+          where: {
+            collectionId,
+            token_id: token.token_id
+          }
+        }
+      )
+      .then(() => null)
+      .catch((e) => console.log(e))
+    normalRankNumber++
+  }
+}
+
+module.exports = { getTokensId }

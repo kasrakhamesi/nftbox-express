@@ -8,10 +8,10 @@ const { delay, database } = require('../../utils')
 const BATCH_INFO_BASE_URL = `${process.env.MODULE_NFT_BASEURL}/opensea/collection/batchInfo?`
 
 const generateTwitterUrl = (twitterUsername) =>
-  `https://twitter.com/${twitterUsername}`
+  twitterUsername ? `https://twitter.com/${twitterUsername}` : null
 
 const generateInstagramUrl = (instagramUsername) =>
-  `https://instagram.com/${instagramUsername}`
+  instagramUsername ? `https://instagram.com/${instagramUsername}` : null
 
 const getTimestampFromIsoTime = (isoTime) => {
   let timestamp = String(new Date(isoTime).getTime())
