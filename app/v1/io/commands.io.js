@@ -63,6 +63,9 @@ const getSales = async (collection) => {
     const sales = await sequelize.models.sales.findAll({
       where: {
         collectionId: findedCollection?.id
+      },
+      attributes: {
+        exclude: ['id', 'tokenId', 'collectionId']
       }
     })
     return {
@@ -90,6 +93,9 @@ const getRelists = async (collection) => {
     const relists = await sequelize.models.relists.findAll({
       where: {
         collectionId: findedCollection?.id
+      },
+      attributes: {
+        exclude: ['id', 'tokenId', 'collectionId']
       }
     })
     return {

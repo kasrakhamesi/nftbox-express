@@ -72,7 +72,7 @@ const getAll = async (contractAddress, contractId, apiKey, startToken = '') => {
   }
 }
 
-const calculateBasicScore = async (string_traits, numeric_traits) => {
+const calculateBasicScore = (string_traits, numeric_traits) => {
   try {
     let score = 0
 
@@ -85,14 +85,14 @@ const calculateBasicScore = async (string_traits, numeric_traits) => {
       score += parseFloat(calculatedValue)
     }
 
-    return score
+    return String(score.toFixed(3))
   } catch (e) {
     console.log(e)
     return null
   }
 }
 
-const calculateNormalScore = async (string_traits, numeric_traits) => {
+const calculateNormalScore = (string_traits, numeric_traits) => {
   try {
     let score = 0
 
@@ -107,7 +107,7 @@ const calculateNormalScore = async (string_traits, numeric_traits) => {
       score += parseFloat(valueWithTraitCount)
     }
 
-    return score
+    return String(score.toFixed(3))
   } catch (e) {
     console.log(e)
     return null
@@ -127,9 +127,9 @@ const callGetNFTsForCollectionOnce = async (
     if (response.status !== 200)
       throw new Error(response?.response.message || 'error')
 
-    const findedCollection = await sequelize.models.collection.findOne({
+    const findedCollection = await sequelize.models.collections.findOne({
       where: {
-        null: null
+        contract_address: contractAddress
       },
       attribute: [['string_traits', 'numeric_traits', 'total_supply']]
     })
@@ -138,7 +138,9 @@ const callGetNFTsForCollectionOnce = async (
     for (const token of tokens) {
       try {
         const tokenId = parseInt(token?.id?.tokenId, 16)
-        const name = token?.metadata?.name
+        const name =
+          token?.metadata?.name ||
+          token?.contractMetadata?.name + ' #' + tokenId
         const description = token?.metadata?.description
         const image = token?.metadata?.image
         const tokenUrl = token?.tokenUri?.raw
@@ -157,7 +159,7 @@ const callGetNFTsForCollectionOnce = async (
 
               const valuePercent = parseFloat(
                 (trait?.count * 100) / findedCollection.total_supply
-              )
+              ).toFixed(3)
 
               numericTraits.push({
                 trait_count: trait?.count,
@@ -178,7 +180,7 @@ const callGetNFTsForCollectionOnce = async (
 
               const valuePercent = parseFloat(
                 (traitValue.count * 100) / findedCollection.total_supply
-              )
+              ).toFixed(3)
 
               stringTraits.push({
                 trait_count: trait?.count,

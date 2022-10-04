@@ -9,6 +9,8 @@ routes.v1 = require('./app/v1/routes')
 app.use('/v1', routes.v1)
 
 const tasks = require('./app/v1/tasks')
+tasks.tokensId()
+tasks.traits()
 //tasks.listings()
 //tasks.run()
 

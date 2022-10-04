@@ -1,7 +1,8 @@
 const { opensea } = require('../services')
 
 const getTraits = () => {
-  opensea.collections.getCollectionsTraits
+  opensea.collections
+    .getCollectionsTraits()
     .then(() => {
       setTimeout(getTraits, 6000)
     })

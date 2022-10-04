@@ -34,6 +34,42 @@ module.exports.tokens = async (req, res) => {
   res.send(r)
 }
 
+module.exports.c = async (req, res) => {
+  const r = await sequelize.models.collections.findAll({
+    attributes: [
+      'contract_address',
+      'collection_slug',
+      'collection_name',
+      'revealed_percentage',
+      'collection_creation_date',
+      'banner_image_url',
+      'image_url',
+      'verified',
+      'instagram_url',
+      'twitter_url',
+      'discord_url',
+      'website_url',
+      'telegram_url',
+      'description',
+      'nft_royalty',
+      'sales_volume',
+      'volume_traded',
+      'floor_price',
+      'percent_owner',
+      'checked_tarits',
+      'owners_count',
+      'total_supply',
+      'average_price',
+      'numeric_traits',
+      'string_traits',
+      'opensea_url',
+      'x2y2_url',
+      'looksrare_url'
+    ]
+  })
+  res.send(r)
+}
+
 module.exports.findOne = async (req, res) => {
   try {
     const { collection } = req.params

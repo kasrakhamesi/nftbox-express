@@ -16,7 +16,7 @@ const getCollectionsTraits = async () => {
 
   for (const collection of findedCollections) {
     getTraits(collection?.collection_slug)
-      .then(() => null)
+      .then(console.log)
       .catch((e) => console.log(e))
   }
 }
@@ -88,7 +88,21 @@ const getTraits = async (collectionSlug) => {
       seven_day_sales: String(stats.seven_day_sales)
     }
 
-    saveStats(extractedStats)
+    saveStats(extractedStats, collectionSlug)
+
+    sequelize.models.collections
+      .update(
+        {
+          string_traits: newStringTraits,
+          numeric_traits: newNumericTraits,
+          checked_tarits: true
+        },
+        {
+          where: { collection_slug: collectionSlug }
+        }
+      )
+      .then(console.log)
+      .catch(console.log)
 
     return {
       numeric_traits: newNumericTraits,
@@ -99,11 +113,11 @@ const getTraits = async (collectionSlug) => {
   }
 }
 
-const saveStats = (extractedStats) => {
+const saveStats = (extractedStats, collectionSlug) => {
   sequelize.models.collections
     .update(extractedStats, {
       where: {
-        collection_slug: resCollections[k].collection_slug
+        collection_slug: collectionSlug
       }
     })
     .then(() => null)
