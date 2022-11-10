@@ -11,6 +11,7 @@ router.get('/traits', collections.traits.Users.findAll)
 router.get('/:collection', collections.info.findOne)
 router.get('/:collection/orders', collections.orders.findAll)
 router.get('/:collection/listings', collections.listings.findAll)
+router.get('/:collection/sales', collections.listings.findAll)
 router.get('/:collection/token/:tokenId', collections.tokens.findOne)
 router.get('/:collection/search', collections.info.search)
 

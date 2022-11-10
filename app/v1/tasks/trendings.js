@@ -1,8 +1,8 @@
-const { modulenft } = require('../services')
+const { reservoir } = require('../services')
 
 const trendingCollections = () => {
-  modulenft.collections
-    .getTrendings()
+  reservoir.collections
+    .save()
     .then(() => {
       setTimeout(trendingCollections, 1500)
     })

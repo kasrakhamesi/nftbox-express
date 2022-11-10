@@ -33,7 +33,11 @@ module.exports.findOne = async (req, res) => {
 
     res.status(200).send({
       statusCode: 200,
-      data: findedToken,
+      data: {
+        ...findedToken.dataValues,
+        listingInOpensea: true,
+        listingInLooksrare: false
+      },
       error: null
     })
   } catch (e) {

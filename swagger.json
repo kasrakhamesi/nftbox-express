@@ -1,0 +1,1500 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "CyberDash API",
+    "description": "CyberDash Backend Restful-API",
+    "version": "1.0"
+  },
+  "host": "209.159.153.94:3050",
+  "basePath": "/v1",
+  "schemes": ["http", "https"],
+  "paths": {
+    "/collections/{collection}/token/{token}": {
+      "get": {
+        "tags": ["Collections && Tokens"],
+        "summary": "Get Get Token of Collection",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "collection",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "statusCode": 200,
+                "data": {
+                  "token_id": "8",
+                  "token_name": "Pixel Minds #8",
+                  "token_url": "ipfs://QmQca2D9j1zHNPMywMFdpekZhqCtLcZS53R4e3xTafcGag/8.json",
+                  "token_description": "do you have a mind of your own?",
+                  "string_traits": [
+                    {
+                      "trait_count": 10,
+                      "trait_type": "background",
+                      "value_percent": "4.640",
+                      "value": "bubblegum"
+                    },
+                    {
+                      "trait_count": 13,
+                      "trait_type": "type",
+                      "value_percent": "7.300",
+                      "value": "orange"
+                    },
+                    {
+                      "trait_count": 18,
+                      "trait_type": "eyes",
+                      "value_percent": "4.020",
+                      "value": "detective"
+                    },
+                    {
+                      "trait_count": 20,
+                      "trait_type": "head",
+                      "value_percent": "4.240",
+                      "value": "bluehat"
+                    },
+                    {
+                      "trait_count": 18,
+                      "trait_type": "mouth",
+                      "value_percent": "5.160",
+                      "value": "stitches"
+                    },
+                    {
+                      "trait_count": 4,
+                      "trait_type": "earrings",
+                      "value_percent": "20.140",
+                      "value": "gold"
+                    }
+                  ],
+                  "numeric_traits": null,
+                  "basic_rank": "509",
+                  "normal_rank": "349",
+                  "weight_rank": null,
+                  "basic_score": "108.056",
+                  "normal_score": "8.088",
+                  "weight_score": null,
+                  "token_image": "ipfs://QmPezEzQNUVGChz9JcBBsPtnH4jfP2CDtu4cuXibiU1KBk/8.png"
+                },
+                "error": null
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "examples": {
+              "application/json": {
+                "statusCode": 400,
+                "data": null,
+                "error": "Can't find this collection"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trendings/ticker/{ticker}": {
+      "get": {
+        "tags": ["Trending Table"],
+        "summary": "Get Trending Collections Data",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "enum": ["1m", "5m", "15m", "1h", "6h", "12h", "1d", "7d"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "statusCode": 200,
+                "data": [
+                  {
+                    "contract_address": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+                    "collection_name": "ENS: Ethereum Name Service",
+                    "collection_slug": "ens",
+                    "revealed_percentage": 99,
+                    "image_url": "https://lh3.googleusercontent.com/0cOqWoYA7xL9CkUjGlxsjreSYBdrUBE0c6EO1COG4XE8UeP-Z30ckqUNiL872zHQHQU5MUNMNhfDpyXIP17hRSC5HQ=s60",
+                    "collection_creation_date": "1557352776282",
+                    "verified": true,
+                    "floor_price": "244",
+                    "floor_price_change_percent": "-266 %",
+                    "volume": "79",
+                    "volume_change_percent": "-266 %",
+                    "listings": "25",
+                    "listings_change_percent": "111 %",
+                    "sales": "56",
+                    "sales_change_percent": "194 %",
+                    "market_cap": "3",
+                    "market_cap_change_percent": "195 %"
+                  },
+                  {
+                    "contract_address": "0x9f648eef45b73e1a32ce7b624a44266226a85d88",
+                    "collection_name": "Doge Club(DOGC)",
+                    "collection_slug": "dogeclub-dogc",
+                    "revealed_percentage": 10,
+                    "image_url": "https://openseauserdata.com/files/dd5e8baa0fa1c0e706dcd1fb871295ee.png",
+                    "collection_creation_date": "1662789144473",
+                    "verified": false,
+                    "floor_price": "183",
+                    "floor_price_change_percent": "-26 %",
+                    "volume": "134",
+                    "volume_change_percent": "-59 %",
+                    "listings": "11",
+                    "listings_change_percent": "137 %",
+                    "sales": "58",
+                    "sales_change_percent": "34 %",
+                    "market_cap": "72",
+                    "market_cap_change_percent": "109 %"
+                  },
+                  {
+                    "contract_address": "0xfef25cebadadc6e30469a5a356e8b9971b9c1f6e",
+                    "collection_name": "Pumping Parrots",
+                    "collection_slug": "pumpp",
+                    "revealed_percentage": 32,
+                    "image_url": "https://openseauserdata.com/files/3c3be1213cf459ade3c624a5a16110ce.png",
+                    "collection_creation_date": "1662849870504",
+                    "verified": false,
+                    "floor_price": "120",
+                    "floor_price_change_percent": "-140 %",
+                    "volume": "13",
+                    "volume_change_percent": "-246 %",
+                    "listings": "11",
+                    "listings_change_percent": "155 %",
+                    "sales": "272",
+                    "sales_change_percent": "269 %",
+                    "market_cap": "84",
+                    "market_cap_change_percent": "31 %"
+                  },
+                  {
+                    "contract_address": "0x57a204aa1042f6e66dd7730813f4024114d74f37",
+                    "collection_name": "CyberKongz (Babies)",
+                    "collection_slug": "cyberkongz-babies",
+                    "revealed_percentage": 14,
+                    "image_url": "https://lh3.googleusercontent.com/iGVQ_0I1nj4paQ1GJemfCwNqTm64XRMU3CO7y0bi-C-im7edte2YWf1hgNuShpRXC70xBoUVGFQCjTsyXkMD2tPX17VOJBn1wjQZ=s120",
+                    "collection_creation_date": "1650998674570",
+                    "verified": true,
+                    "floor_price": "101",
+                    "floor_price_change_percent": "-129 %",
+                    "volume": "39",
+                    "volume_change_percent": "-117 %",
+                    "listings": "166",
+                    "listings_change_percent": "213 %",
+                    "sales": "33",
+                    "sales_change_percent": "275 %",
+                    "market_cap": "195",
+                    "market_cap_change_percent": "160 %"
+                  },
+                  {
+                    "contract_address": "0xbd6053ee89f2a9bb063d6a7bf1f4648054de9f13",
+                    "collection_name": "Truffle Pass",
+                    "collection_slug": "truffle-pass",
+                    "revealed_percentage": 93,
+                    "image_url": "https://openseauserdata.com/files/3bf14f8ae84536238a072e5f027ea192.png",
+                    "collection_creation_date": "1662873963596",
+                    "verified": false,
+                    "floor_price": "248",
+                    "floor_price_change_percent": "-253 %",
+                    "volume": "7",
+                    "volume_change_percent": "-300 %",
+                    "listings": "10",
+                    "listings_change_percent": "297 %",
+                    "sales": "174",
+                    "sales_change_percent": "176 %",
+                    "market_cap": "26",
+                    "market_cap_change_percent": "281 %"
+                  },
+                  {
+                    "contract_address": "0x13bd972b0bfaefc9538a43c1fda11d71c720cd47",
+                    "collection_name": "BoxcatPlanet Official",
+                    "collection_slug": "boxcatplanet-official",
+                    "revealed_percentage": 38,
+                    "image_url": "https://openseauserdata.com/files/b839843c273057b4eac6533a1da9d443.gif",
+                    "collection_creation_date": "1662351900838",
+                    "verified": false,
+                    "floor_price": "283",
+                    "floor_price_change_percent": "-131 %",
+                    "volume": "212",
+                    "volume_change_percent": "-201 %",
+                    "listings": "129",
+                    "listings_change_percent": "232 %",
+                    "sales": "175",
+                    "sales_change_percent": "126 %",
+                    "market_cap": "240",
+                    "market_cap_change_percent": "18 %"
+                  },
+                  {
+                    "contract_address": "0x092bbc993042a69811d23feb0e64e3bfa0920c6a",
+                    "collection_name": "Gutter Juice",
+                    "collection_slug": "gutter-juice",
+                    "revealed_percentage": 89,
+                    "image_url": "https://lh3.googleusercontent.com/xsApnCm19QrZDa8uPuZ8GBoNxRbKW5aPZQsUedWh3giAEM5Oo7dEDDjAQcEdVHDvbDlHfmOOv2mqyv5owaGHWvmDfc4zZ8Nq-gRxbw=s120",
+                    "collection_creation_date": "1646773720869",
+                    "verified": true,
+                    "floor_price": "170",
+                    "floor_price_change_percent": "-43 %",
+                    "volume": "250",
+                    "volume_change_percent": "-27 %",
+                    "listings": "44",
+                    "listings_change_percent": "191 %",
+                    "sales": "1",
+                    "sales_change_percent": "109 %",
+                    "market_cap": "249",
+                    "market_cap_change_percent": "68 %"
+                  },
+                  {
+                    "contract_address": "0xbce3781ae7ca1a5e050bd9c4c77369867ebc307e",
+                    "collection_name": "goblintown.wtf",
+                    "collection_slug": "goblintownwtf",
+                    "revealed_percentage": 77,
+                    "image_url": "https://lh3.googleusercontent.com/cb_wdEAmvry_noTfeuQzhqKpghhZWQ_sEhuGS9swM03UM8QMEVJrndu0ZRdLFgGVqEPeCUzOHGTUllxug9U3xdvt0bES6VFdkRCKPqg=s120",
+                    "collection_creation_date": "1652978208568",
+                    "verified": true,
+                    "floor_price": "110",
+                    "floor_price_change_percent": "-97 %",
+                    "volume": "89",
+                    "volume_change_percent": "-39 %",
+                    "listings": "128",
+                    "listings_change_percent": "40 %",
+                    "sales": "72",
+                    "sales_change_percent": "207 %",
+                    "market_cap": "235",
+                    "market_cap_change_percent": "166 %"
+                  },
+                  {
+                    "contract_address": "0xccf3baa603dfddd7c41619fdb8dd0306b11571fe",
+                    "collection_name": "YOLO Bunny",
+                    "collection_slug": "yolo-bunny",
+                    "revealed_percentage": 81,
+                    "image_url": "https://openseauserdata.com/files/dd4dd38c32af4a9f474630cd108dc518.jpg",
+                    "collection_creation_date": "1657809532341",
+                    "verified": false,
+                    "floor_price": "193",
+                    "floor_price_change_percent": "-146 %",
+                    "volume": "122",
+                    "volume_change_percent": "-155 %",
+                    "listings": "131",
+                    "listings_change_percent": "233 %",
+                    "sales": "35",
+                    "sales_change_percent": "55 %",
+                    "market_cap": "119",
+                    "market_cap_change_percent": "122 %"
+                  },
+                  {
+                    "contract_address": "0xba30e5f9bb24caa003e9f2f0497ad287fdf95623",
+                    "collection_name": "Bored Ape Kennel Club",
+                    "collection_slug": "bored-ape-kennel-club",
+                    "revealed_percentage": 30,
+                    "image_url": "https://lh3.googleusercontent.com/l1wZXP2hHFUQ3turU5VQ9PpgVVasyQ79-ChvCgjoU5xKkBA50OGoJqKZeMOR-qLrzqwIfd1HpYmiv23JWm0EZ14owiPYaufqzmj1=s120",
+                    "collection_creation_date": "1624051945355",
+                    "verified": true,
+                    "floor_price": "128",
+                    "floor_price_change_percent": "-12 %",
+                    "volume": "6",
+                    "volume_change_percent": "-0 %",
+                    "listings": "126",
+                    "listings_change_percent": "105 %",
+                    "sales": "126",
+                    "sales_change_percent": "159 %",
+                    "market_cap": "294",
+                    "market_cap_change_percent": "259 %"
+                  },
+                  {
+                    "contract_address": "0x524cab2ec69124574082676e6f654a18df49a048",
+                    "collection_name": "Lil Pudgys",
+                    "collection_slug": "lilpudgys",
+                    "revealed_percentage": 86,
+                    "image_url": "https://lh3.googleusercontent.com/s4Td3KYsUlCblO6lQKAGAWdKwsCuumcxYpebM_YL-Pex-BP886JYAWjKBLeB5StNopAAD6kVx3QHqWm9AmudXyCaCZszHbt8SdteEQ=s120",
+                    "collection_creation_date": "1639934358712",
+                    "verified": true,
+                    "floor_price": "138",
+                    "floor_price_change_percent": "-100 %",
+                    "volume": "274",
+                    "volume_change_percent": "-17 %",
+                    "listings": "81",
+                    "listings_change_percent": "159 %",
+                    "sales": "222",
+                    "sales_change_percent": "8 %",
+                    "market_cap": "33",
+                    "market_cap_change_percent": "269 %"
+                  },
+                  {
+                    "contract_address": "0x41f20599e9e049004c4d169046eb7023117a6244",
+                    "collection_name": "Gutter Clones",
+                    "collection_slug": "gutter-clones",
+                    "revealed_percentage": 52,
+                    "image_url": "https://lh3.googleusercontent.com/Y2xDAT7RUoCOUk1u-wsU430M7T4DnYbPKo63-0bQJJeVCIk6zAWJhVCobdTUr4VTMvhkH5aJbYBz8HcIQECJEL_vpUE4cB1Wz7vT=s120",
+                    "collection_creation_date": "1648765993536",
+                    "verified": true,
+                    "floor_price": "77",
+                    "floor_price_change_percent": "-51 %",
+                    "volume": "70",
+                    "volume_change_percent": "-234 %",
+                    "listings": "116",
+                    "listings_change_percent": "165 %",
+                    "sales": "268",
+                    "sales_change_percent": "198 %",
+                    "market_cap": "159",
+                    "market_cap_change_percent": "27 %"
+                  },
+                  {
+                    "contract_address": "0xa48eda4b2c63928cac2a1fd631493ac038dafa5d",
+                    "collection_name": "The 187 by Truth Labs",
+                    "collection_slug": "the187",
+                    "revealed_percentage": 81,
+                    "image_url": "https://lh3.googleusercontent.com/6OZ8fXS5TGv6WdIdNU6P4RKkNueS2gAi87FNEjlPDSukk0dXbQy4Sd3u2Gz9uskJ3TQM8vutEIXUmDLp_1lMUoEDzgAupfBd4OsbttY=s120",
+                    "collection_creation_date": "1638807903071",
+                    "verified": true,
+                    "floor_price": "82",
+                    "floor_price_change_percent": "-271 %",
+                    "volume": "246",
+                    "volume_change_percent": "-272 %",
+                    "listings": "232",
+                    "listings_change_percent": "220 %",
+                    "sales": "141",
+                    "sales_change_percent": "259 %",
+                    "market_cap": "241",
+                    "market_cap_change_percent": "20 %"
+                  },
+                  {
+                    "contract_address": "0x94d8e532b7e990e356210b4b2d7158b3a8a138bc",
+                    "collection_name": "DasPepe",
+                    "collection_slug": "daspepe",
+                    "revealed_percentage": 15,
+                    "image_url": "https://openseauserdata.com/files/586b95a83e74e9d1aa592ecbd25bec8b.gif",
+                    "collection_creation_date": "1662932884441",
+                    "verified": false,
+                    "floor_price": "31",
+                    "floor_price_change_percent": "-206 %",
+                    "volume": "213",
+                    "volume_change_percent": "-36 %",
+                    "listings": "31",
+                    "listings_change_percent": "102 %",
+                    "sales": "82",
+                    "sales_change_percent": "77 %",
+                    "market_cap": "147",
+                    "market_cap_change_percent": "71 %"
+                  },
+                  {
+                    "contract_address": "0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0",
+                    "collection_name": "SuperRare",
+                    "collection_slug": "superrare",
+                    "revealed_percentage": 45,
+                    "image_url": "https://lh3.googleusercontent.com/-1VbTF_qOdwTUTxW8KzJbFcMX0-mDF-BJM-gmmRl8ihvoo53PF_1z1m1snLXxwcxVFyJH7wk_kouq-KVyB55N9U=s60",
+                    "collection_creation_date": "1556316803645",
+                    "verified": true,
+                    "floor_price": "4",
+                    "floor_price_change_percent": "-95 %",
+                    "volume": "32",
+                    "volume_change_percent": "-215 %",
+                    "listings": "191",
+                    "listings_change_percent": "5 %",
+                    "sales": "121",
+                    "sales_change_percent": "33 %",
+                    "market_cap": "216",
+                    "market_cap_change_percent": "55 %"
+                  },
+                  {
+                    "contract_address": "0x7daec605e9e2a1717326eedfd660601e2753a057",
+                    "collection_name": "10KTF Stockroom",
+                    "collection_slug": "10ktf-stockroom",
+                    "revealed_percentage": 8,
+                    "image_url": "https://lh3.googleusercontent.com/8Psw091U98gxhuI5MH0GDpjEebrlZ3XxzqDbP8eD35j0IyyFapeFu-zKYu_z1jn7PiduRxkXPgSc2wp-PgDpr3Ji70mD9yu1ksb3eQ=s120",
+                    "collection_creation_date": "1633667606847",
+                    "verified": true,
+                    "floor_price": "102",
+                    "floor_price_change_percent": "-72 %",
+                    "volume": "21",
+                    "volume_change_percent": "-153 %",
+                    "listings": "220",
+                    "listings_change_percent": "191 %",
+                    "sales": "173",
+                    "sales_change_percent": "139 %",
+                    "market_cap": "263",
+                    "market_cap_change_percent": "232 %"
+                  },
+                  {
+                    "contract_address": "0x394e3d3044fc89fcdd966d3cb35ac0b32b0cda91",
+                    "collection_name": "RENGA",
+                    "collection_slug": "renga",
+                    "revealed_percentage": 80,
+                    "image_url": "https://openseauserdata.com/files/f3b11e36be14a5d31c75b19d03996fed.gif",
+                    "collection_creation_date": "1662076461714",
+                    "verified": false,
+                    "floor_price": "276",
+                    "floor_price_change_percent": "-159 %",
+                    "volume": "284",
+                    "volume_change_percent": "-73 %",
+                    "listings": "61",
+                    "listings_change_percent": "170 %",
+                    "sales": "43",
+                    "sales_change_percent": "288 %",
+                    "market_cap": "197",
+                    "market_cap_change_percent": "132 %"
+                  },
+                  {
+                    "contract_address": "0xa7d8d9ef8d8ce8992df33d8b8cf4aebabd5bd270",
+                    "collection_name": "Art Blocks Factory",
+                    "collection_slug": "art-blocks-factory",
+                    "revealed_percentage": 78,
+                    "image_url": "https://lh3.googleusercontent.com/GwnosrkaneKGEkWySxvTSzZ5bEUjWkRuQzLSNfrpgy2-gxYjoR3m5PohLT9Fzy0p1tohajZ1g-LFfF_ZLnS1GqlPNHPUaKUbDhbf=s120",
+                    "collection_creation_date": "1614183160389",
+                    "verified": true,
+                    "floor_price": "258",
+                    "floor_price_change_percent": "-46 %",
+                    "volume": "188",
+                    "volume_change_percent": "-178 %",
+                    "listings": "273",
+                    "listings_change_percent": "171 %",
+                    "sales": "156",
+                    "sales_change_percent": "17 %",
+                    "market_cap": "174",
+                    "market_cap_change_percent": "241 %"
+                  },
+                  {
+                    "contract_address": "0x76be3b62873462d2142405439777e971754e8e77",
+                    "collection_name": "Parallel Alpha",
+                    "collection_slug": "parallelalpha",
+                    "revealed_percentage": 24,
+                    "image_url": "https://lh3.googleusercontent.com/Nnp8Pdo6EidK7eBduGnAn_JBvFsYGhNGMJ_fHJ_mzGMN_2Khu5snL5zmiUMcSsIqtANh19KqxXDs0iNq_aYbKC5smO3hiCSw9PlL=s120",
+                    "collection_creation_date": "1616540856998",
+                    "verified": true,
+                    "floor_price": "124",
+                    "floor_price_change_percent": "-156 %",
+                    "volume": "1",
+                    "volume_change_percent": "-46 %",
+                    "listings": "0",
+                    "listings_change_percent": "160 %",
+                    "sales": "120",
+                    "sales_change_percent": "51 %",
+                    "market_cap": "255",
+                    "market_cap_change_percent": "297 %"
+                  },
+                  {
+                    "contract_address": "0x705b9dbd0d5607beafe12e2fb74d64268d3ba35f",
+                    "collection_name": "y00ts Yacht Club",
+                    "collection_slug": "y00ts-yacht-club",
+                    "revealed_percentage": 15,
+                    "image_url": "https://openseauserdata.com/files/61a40a1bd7292af01eb31e56d1f38235.png",
+                    "collection_creation_date": "1662395539313",
+                    "verified": false,
+                    "floor_price": "283",
+                    "floor_price_change_percent": "-225 %",
+                    "volume": "123",
+                    "volume_change_percent": "-156 %",
+                    "listings": "144",
+                    "listings_change_percent": "274 %",
+                    "sales": "24",
+                    "sales_change_percent": "280 %",
+                    "market_cap": "136",
+                    "market_cap_change_percent": "75 %"
+                  },
+                  {
+                    "contract_address": "0x059edd72cd353df5106d2b9cc5ab83a52287ac3a",
+                    "collection_name": "Chromie Squiggle by Snowfro",
+                    "collection_slug": "chromie-squiggle-by-snowfro",
+                    "revealed_percentage": 23,
+                    "image_url": "https://lh3.googleusercontent.com/0qG8Y78s198F2GZHhURw8_TEfxFlpS2XYnuLV_OW6TJin5AV1G2WOSpcLGnEmv5g2gZ6R6Pxjd4v1DP2p0bxptckM6ZJ3cMIvQmrgDM=s120",
+                    "collection_creation_date": "1634349630363",
+                    "verified": true,
+                    "floor_price": "137",
+                    "floor_price_change_percent": "-47 %",
+                    "volume": "129",
+                    "volume_change_percent": "-147 %",
+                    "listings": "10",
+                    "listings_change_percent": "19 %",
+                    "sales": "18",
+                    "sales_change_percent": "142 %",
+                    "market_cap": "36",
+                    "market_cap_change_percent": "105 %"
+                  },
+                  {
+                    "contract_address": "0x845a007d9f283614f403a24e3eb3455f720559ca",
+                    "collection_name": "CryptoNinja Partners",
+                    "collection_slug": "cryptoninjapartners",
+                    "revealed_percentage": 80,
+                    "image_url": "https://openseauserdata.com/files/2a612d58a37abecd1458330b47e678e6.gif",
+                    "collection_creation_date": "1652376255267",
+                    "verified": true,
+                    "floor_price": "219",
+                    "floor_price_change_percent": "-160 %",
+                    "volume": "225",
+                    "volume_change_percent": "-189 %",
+                    "listings": "157",
+                    "listings_change_percent": "152 %",
+                    "sales": "24",
+                    "sales_change_percent": "230 %",
+                    "market_cap": "167",
+                    "market_cap_change_percent": "249 %"
+                  },
+                  {
+                    "contract_address": "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+                    "collection_name": "Moonbirds",
+                    "collection_slug": "proof-moonbirds",
+                    "revealed_percentage": 6,
+                    "image_url": "https://lh3.googleusercontent.com/H-eyNE1MwL5ohL-tCfn_Xa1Sl9M9B4612tLYeUlQubzt4ewhr4huJIR5OLuyO3Z5PpJFSwdm7rq-TikAh7f5eUw338A2cy6HRH75=s120",
+                    "collection_creation_date": "1650043647561",
+                    "verified": true,
+                    "floor_price": "129",
+                    "floor_price_change_percent": "-97 %",
+                    "volume": "41",
+                    "volume_change_percent": "-266 %",
+                    "listings": "74",
+                    "listings_change_percent": "169 %",
+                    "sales": "144",
+                    "sales_change_percent": "40 %",
+                    "market_cap": "297",
+                    "market_cap_change_percent": "281 %"
+                  },
+                  {
+                    "contract_address": "0xaad35c2dadbe77f97301617d82e661776c891fa9",
+                    "collection_name": "Akutars",
+                    "collection_slug": "akutars",
+                    "revealed_percentage": 42,
+                    "image_url": "https://lh3.googleusercontent.com/lU7HLkzbdUB07EpfR2wvLkLi8Msc5JyE5d7iDNmgVn3EdnNnNM-2c-027IHP0W8T1t2wH5Hl2gtv90tzF_LdUC6Q-UBYwXpBfMaOCA=s120",
+                    "collection_creation_date": "1650842606778",
+                    "verified": true,
+                    "floor_price": "178",
+                    "floor_price_change_percent": "-223 %",
+                    "volume": "139",
+                    "volume_change_percent": "-111 %",
+                    "listings": "178",
+                    "listings_change_percent": "193 %",
+                    "sales": "53",
+                    "sales_change_percent": "205 %",
+                    "market_cap": "293",
+                    "market_cap_change_percent": "69 %"
+                  },
+                  {
+                    "contract_address": "0x8728fb57b46eb2353d66ea86e335451e8c5edcc9",
+                    "collection_name": "PixelMinds",
+                    "collection_slug": "pixel-minds-official",
+                    "revealed_percentage": 13,
+                    "image_url": "https://openseauserdata.com/files/7fcb7fab9c714d0fbf90d36a3f4acd78.gif",
+                    "collection_creation_date": "1662957218179",
+                    "verified": false,
+                    "floor_price": "157",
+                    "floor_price_change_percent": "-205 %",
+                    "volume": "34",
+                    "volume_change_percent": "-30 %",
+                    "listings": "75",
+                    "listings_change_percent": "12 %",
+                    "sales": "114",
+                    "sales_change_percent": "214 %",
+                    "market_cap": "234",
+                    "market_cap_change_percent": "147 %"
+                  },
+                  {
+                    "contract_address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+                    "collection_name": "KikiVerse - Official",
+                    "collection_slug": "kikiverseofficial",
+                    "revealed_percentage": 48,
+                    "image_url": "https://lh3.googleusercontent.com/pLadK078cBCYZrP977G-esEg_YXuJ7AXjr1BEVrKSDnoQ4s-odl5j_wwR09gw1iYt3uEqW60CDZAlxvGZ0_9dNnj5-3-q_W6WUy_",
+                    "collection_creation_date": "1658428082404",
+                    "verified": false,
+                    "floor_price": "133",
+                    "floor_price_change_percent": "-178 %",
+                    "volume": "18",
+                    "volume_change_percent": "-132 %",
+                    "listings": "117",
+                    "listings_change_percent": "244 %",
+                    "sales": "30",
+                    "sales_change_percent": "84 %",
+                    "market_cap": "169",
+                    "market_cap_change_percent": "25 %"
+                  },
+                  {
+                    "contract_address": "0xeca6349907535d1b0b8dd3d58b5914e0316d34b7",
+                    "collection_name": "your mom nft",
+                    "collection_slug": "yourmomnft",
+                    "revealed_percentage": 67,
+                    "image_url": "https://openseauserdata.com/files/bd88bdec6d14034c542bf4a5b9c7654f.gif",
+                    "collection_creation_date": "1662820774313",
+                    "verified": false,
+                    "floor_price": "29",
+                    "floor_price_change_percent": "-53 %",
+                    "volume": "150",
+                    "volume_change_percent": "-81 %",
+                    "listings": "279",
+                    "listings_change_percent": "77 %",
+                    "sales": "134",
+                    "sales_change_percent": "125 %",
+                    "market_cap": "137",
+                    "market_cap_change_percent": "176 %"
+                  },
+                  {
+                    "contract_address": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+                    "collection_name": "Bored Ape Yacht Club",
+                    "collection_slug": "boredapeyachtclub",
+                    "revealed_percentage": 22,
+                    "image_url": "https://lh3.googleusercontent.com/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB=s120",
+                    "collection_creation_date": "1619133243967",
+                    "verified": true,
+                    "floor_price": "288",
+                    "floor_price_change_percent": "-172 %",
+                    "volume": "152",
+                    "volume_change_percent": "-139 %",
+                    "listings": "257",
+                    "listings_change_percent": "173 %",
+                    "sales": "167",
+                    "sales_change_percent": "268 %",
+                    "market_cap": "237",
+                    "market_cap_change_percent": "63 %"
+                  },
+                  {
+                    "contract_address": "0x1b1bff222999bcd6fd07b64d7880e6a95d54acaa",
+                    "collection_name": "LAYC",
+                    "collection_slug": "official-layc",
+                    "revealed_percentage": 62,
+                    "image_url": "https://openseauserdata.com/files/3d1f199e672d68a33f442a53153b7377.jpg",
+                    "collection_creation_date": "1660882163406",
+                    "verified": false,
+                    "floor_price": "74",
+                    "floor_price_change_percent": "-231 %",
+                    "volume": "24",
+                    "volume_change_percent": "-285 %",
+                    "listings": "19",
+                    "listings_change_percent": "296 %",
+                    "sales": "211",
+                    "sales_change_percent": "286 %",
+                    "market_cap": "239",
+                    "market_cap_change_percent": "111 %"
+                  },
+                  {
+                    "contract_address": "0x82c7a8f707110f5fbb16184a5933e9f78a34c6ab",
+                    "collection_name": "Emblem Vault [Ethereum]",
+                    "collection_slug": "emblem-vault",
+                    "revealed_percentage": 48,
+                    "image_url": "https://lh3.googleusercontent.com/VkSY4QiLanH0h2oS37cjRAENLDLBqLKUX3YC4ZvdEW60zI9OXoRl4E9uR1x3d8hU8ekFai4Ruwq4FObZ0VH2NpU=s120",
+                    "collection_creation_date": "1599616842938",
+                    "verified": false,
+                    "floor_price": "65",
+                    "floor_price_change_percent": "-40 %",
+                    "volume": "220",
+                    "volume_change_percent": "-102 %",
+                    "listings": "156",
+                    "listings_change_percent": "151 %",
+                    "sales": "300",
+                    "sales_change_percent": "115 %",
+                    "market_cap": "6",
+                    "market_cap_change_percent": "30 %"
+                  }
+                ],
+                "error": null
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "examples": {
+              "application/json": {
+                "statusCode": 400,
+                "data": null,
+                "error": "Invalid Collection or can't find this collection"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/collections/{collection}": {
+      "get": {
+        "tags": ["Collections && Tokens"],
+        "summary": "Get Single Collection Data",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "collection",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "statusCode": 200,
+                "data": {
+                  "contract_address": "0x9f648eef45b73e1a32ce7b624a44266226a85d88",
+                  "collection_slug": "dogeclub-dogc",
+                  "collection_name": "Doge Club(DOGC)",
+                  "revealed_percentage": 0,
+                  "collection_creation_date": "1662789144473",
+                  "banner_image_url": "https://openseauserdata.com/files/fa79df18f4bff35c5333f4b4663ceef9.png",
+                  "image_url": "https://openseauserdata.com/files/dd5e8baa0fa1c0e706dcd1fb871295ee.png",
+                  "verified": false,
+                  "instagram_url": "https://instagram.com/null",
+                  "twitter_url": "https://twitter.com/null",
+                  "discord_url": "https://discord.gg/GGyTwDweXu",
+                  "website_url": "https://www.dogc.xyz",
+                  "telegram_url": "https://t.me/joindogeclub",
+                  "description": "10,000 Doge Club (DOGC) voyagers are wandering in space travel. The four-legged friends are always the best companions and helpers for apes. You'll get more than just avatars. Doge Club will grant you access to future benefits exclusively for members only. Let’s build the top meme brand in NFT world.",
+                  "nft_royalty": null,
+                  "sales_volume": "12776",
+                  "volume_traded": "176.629932945320803128",
+                  "floor_price": "0.0295",
+                  "percent_owner": "22",
+                  "owners_count": "2238",
+                  "total_supply": "9895",
+                  "average_price": "0.04365078801171136",
+                  "numeric_traits": [],
+                  "string_traits": [
+                    {
+                      "key": "Mouth",
+                      "count": 33,
+                      "attributes": [
+                        {
+                          "value": "bored unshaven cigarette",
+                          "count": 438
+                        },
+                        {
+                          "value": "bored",
+                          "count": 2272
+                        },
+                        {
+                          "value": "rage",
+                          "count": 266
+                        },
+                        {
+                          "value": "jovial",
+                          "count": 296
+                        },
+                        {
+                          "value": "bored cigarette",
+                          "count": 710
+                        },
+                        {
+                          "value": "phoneme wah",
+                          "count": 163
+                        },
+                        {
+                          "value": "phoneme  ooo",
+                          "count": 255
+                        },
+                        {
+                          "value": "bored unshaven",
+                          "count": 1551
+                        },
+                        {
+                          "value": "dumbfounded",
+                          "count": 505
+                        },
+                        {
+                          "value": "discomfort",
+                          "count": 208
+                        },
+                        {
+                          "value": "grin",
+                          "count": 713
+                        },
+                        {
+                          "value": "phoneme vuh",
+                          "count": 333
+                        },
+                        {
+                          "value": "phoneme l",
+                          "count": 241
+                        },
+                        {
+                          "value": "bored dagger",
+                          "count": 49
+                        },
+                        {
+                          "value": "bored kazoo",
+                          "count": 74
+                        },
+                        {
+                          "value": "small grin",
+                          "count": 272
+                        },
+                        {
+                          "value": "bored cigar",
+                          "count": 121
+                        },
+                        {
+                          "value": "bored unshaven kazoo",
+                          "count": 61
+                        },
+                        {
+                          "value": "tongue out",
+                          "count": 202
+                        },
+                        {
+                          "value": "bored party horn",
+                          "count": 88
+                        },
+                        {
+                          "value": "bored pipe",
+                          "count": 132
+                        },
+                        {
+                          "value": "bored pizza",
+                          "count": 50
+                        },
+                        {
+                          "value": "phoneme oh",
+                          "count": 237
+                        },
+                        {
+                          "value": "bored unshaven cigar",
+                          "count": 94
+                        },
+                        {
+                          "value": "grin multicolored",
+                          "count": 116
+                        },
+                        {
+                          "value": "bored bubblegum",
+                          "count": 119
+                        },
+                        {
+                          "value": "bored unshaven pizza",
+                          "count": 26
+                        },
+                        {
+                          "value": "bored unshaven pipe",
+                          "count": 101
+                        },
+                        {
+                          "value": "grin gold grill",
+                          "count": 91
+                        },
+                        {
+                          "value": "bored unshaven bubblegum",
+                          "count": 65
+                        },
+                        {
+                          "value": "bored unshaven dagger",
+                          "count": 28
+                        },
+                        {
+                          "value": "grin diamond grill",
+                          "count": 78
+                        },
+                        {
+                          "value": "bored unshaven party horn",
+                          "count": 45
+                        }
+                      ]
+                    },
+                    {
+                      "key": "Clothes",
+                      "count": 43,
+                      "attributes": [
+                        {
+                          "value": "bone tee",
+                          "count": 230
+                        },
+                        {
+                          "value": "cowboy shirt",
+                          "count": 119
+                        },
+                        {
+                          "value": "work vest",
+                          "count": 188
+                        },
+                        {
+                          "value": "navy striped tee",
+                          "count": 334
+                        },
+                        {
+                          "value": "vietnam jacket",
+                          "count": 224
+                        },
+                        {
+                          "value": "guayabera",
+                          "count": 232
+                        },
+                        {
+                          "value": "lumberjack shirt",
+                          "count": 213
+                        },
+                        {
+                          "value": "black holes t",
+                          "count": 205
+                        },
+                        {
+                          "value": "bayc t black",
+                          "count": 215
+                        },
+                        {
+                          "value": "bone necklace",
+                          "count": 203
+                        },
+                        {
+                          "value": "leather jacket",
+                          "count": 206
+                        },
+                        {
+                          "value": "bayc t red",
+                          "count": 140
+                        },
+                        {
+                          "value": "black t",
+                          "count": 334
+                        },
+                        {
+                          "value": "blue dress",
+                          "count": 95
+                        },
+                        {
+                          "value": "prison jumpsuit",
+                          "count": 235
+                        },
+                        {
+                          "value": "wool turtleneck",
+                          "count": 240
+                        },
+                        {
+                          "value": "stunt jacket",
+                          "count": 178
+                        },
+                        {
+                          "value": "toga",
+                          "count": 202
+                        },
+                        {
+                          "value": "lab coat",
+                          "count": 144
+                        },
+                        {
+                          "value": "service",
+                          "count": 142
+                        },
+                        {
+                          "value": "striped tee",
+                          "count": 412
+                        },
+                        {
+                          "value": "bandolier",
+                          "count": 163
+                        },
+                        {
+                          "value": "tuxedo tee",
+                          "count": 235
+                        },
+                        {
+                          "value": "sailor shirt",
+                          "count": 284
+                        },
+                        {
+                          "value": "tanktop",
+                          "count": 235
+                        },
+                        {
+                          "value": "tweed suit",
+                          "count": 141
+                        },
+                        {
+                          "value": "hawaiian",
+                          "count": 283
+                        },
+                        {
+                          "value": "leather punk jacket",
+                          "count": 153
+                        },
+                        {
+                          "value": "admirals coat",
+                          "count": 64
+                        },
+                        {
+                          "value": "space suit",
+                          "count": 105
+                        },
+                        {
+                          "value": "pimp coat",
+                          "count": 80
+                        },
+                        {
+                          "value": "sleeveless t",
+                          "count": 252
+                        },
+                        {
+                          "value": "sleeveless logo t",
+                          "count": 144
+                        },
+                        {
+                          "value": "puffy vest",
+                          "count": 227
+                        },
+                        {
+                          "value": "prom dress",
+                          "count": 103
+                        },
+                        {
+                          "value": "hip hop",
+                          "count": 128
+                        },
+                        {
+                          "value": "smoking jacket",
+                          "count": 221
+                        },
+                        {
+                          "value": "biker vest",
+                          "count": 253
+                        },
+                        {
+                          "value": "caveman pelt",
+                          "count": 163
+                        },
+                        {
+                          "value": "tie dye",
+                          "count": 144
+                        },
+                        {
+                          "value": "rainbow suspenders",
+                          "count": 135
+                        },
+                        {
+                          "value": "kings robe",
+                          "count": 68
+                        },
+                        {
+                          "value": "black suit",
+                          "count": 42
+                        }
+                      ]
+                    },
+                    {
+                      "key": "Fur",
+                      "count": 19,
+                      "attributes": [
+                        {
+                          "value": "blue",
+                          "count": 490
+                        },
+                        {
+                          "value": "dark brown",
+                          "count": 1352
+                        },
+                        {
+                          "value": "solid gold",
+                          "count": 46
+                        },
+                        {
+                          "value": "death bot",
+                          "count": 175
+                        },
+                        {
+                          "value": "robot",
+                          "count": 265
+                        },
+                        {
+                          "value": "black",
+                          "count": 1229
+                        },
+                        {
+                          "value": "brown",
+                          "count": 1370
+                        },
+                        {
+                          "value": "zombie",
+                          "count": 302
+                        },
+                        {
+                          "value": "tan",
+                          "count": 626
+                        },
+                        {
+                          "value": "pink",
+                          "count": 511
+                        },
+                        {
+                          "value": "dmt",
+                          "count": 215
+                        },
+                        {
+                          "value": "red",
+                          "count": 474
+                        },
+                        {
+                          "value": "cheetah",
+                          "count": 406
+                        },
+                        {
+                          "value": "cream",
+                          "count": 636
+                        },
+                        {
+                          "value": "gray",
+                          "count": 496
+                        },
+                        {
+                          "value": "golden brown",
+                          "count": 778
+                        },
+                        {
+                          "value": "white",
+                          "count": 397
+                        },
+                        {
+                          "value": "noise",
+                          "count": 155
+                        },
+                        {
+                          "value": "trippy",
+                          "count": 77
+                        }
+                      ]
+                    },
+                    {
+                      "key": "Eyes",
+                      "count": 23,
+                      "attributes": [
+                        {
+                          "value": "blindfold",
+                          "count": 264
+                        },
+                        {
+                          "value": "bored",
+                          "count": 1714
+                        },
+                        {
+                          "value": "sad",
+                          "count": 551
+                        },
+                        {
+                          "value": "3d",
+                          "count": 487
+                        },
+                        {
+                          "value": "cyborg",
+                          "count": 108
+                        },
+                        {
+                          "value": "closed",
+                          "count": 710
+                        },
+                        {
+                          "value": "eyepatch",
+                          "count": 333
+                        },
+                        {
+                          "value": "robot",
+                          "count": 350
+                        },
+                        {
+                          "value": "sleepy",
+                          "count": 751
+                        },
+                        {
+                          "value": "angry",
+                          "count": 432
+                        },
+                        {
+                          "value": "x eyes",
+                          "count": 243
+                        },
+                        {
+                          "value": "bloodshot",
+                          "count": 846
+                        },
+                        {
+                          "value": "scumbag",
+                          "count": 233
+                        },
+                        {
+                          "value": "coins",
+                          "count": 479
+                        },
+                        {
+                          "value": "sunglasses",
+                          "count": 352
+                        },
+                        {
+                          "value": "blue beams",
+                          "count": 49
+                        },
+                        {
+                          "value": "heart",
+                          "count": 394
+                        },
+                        {
+                          "value": "crazy",
+                          "count": 407
+                        },
+                        {
+                          "value": "wide eyed",
+                          "count": 549
+                        },
+                        {
+                          "value": "hypnotized",
+                          "count": 220
+                        },
+                        {
+                          "value": "zombie",
+                          "count": 308
+                        },
+                        {
+                          "value": "laser eyes",
+                          "count": 69
+                        },
+                        {
+                          "value": "holographic",
+                          "count": 151
+                        }
+                      ]
+                    },
+                    {
+                      "key": "Background",
+                      "count": 8,
+                      "attributes": [
+                        {
+                          "value": "gray",
+                          "count": 1170
+                        },
+                        {
+                          "value": "army green",
+                          "count": 1243
+                        },
+                        {
+                          "value": "blue",
+                          "count": 1242
+                        },
+                        {
+                          "value": "purple",
+                          "count": 1291
+                        },
+                        {
+                          "value": "orange",
+                          "count": 1273
+                        },
+                        {
+                          "value": "new punk blue",
+                          "count": 1232
+                        },
+                        {
+                          "value": "aquamarine",
+                          "count": 1266
+                        },
+                        {
+                          "value": "yellow",
+                          "count": 1283
+                        }
+                      ]
+                    },
+                    {
+                      "key": "Hat",
+                      "count": 36,
+                      "attributes": [
+                        {
+                          "value": "seaman's hat",
+                          "count": 420
+                        },
+                        {
+                          "value": "sushi chef headband",
+                          "count": 187
+                        },
+                        {
+                          "value": "bandana blue",
+                          "count": 89
+                        },
+                        {
+                          "value": "beanie",
+                          "count": 578
+                        },
+                        {
+                          "value": "commie hat",
+                          "count": 304
+                        },
+                        {
+                          "value": "horns",
+                          "count": 252
+                        },
+                        {
+                          "value": "sea captain's hat",
+                          "count": 304
+                        },
+                        {
+                          "value": "bayc flipped brim",
+                          "count": 231
+                        },
+                        {
+                          "value": "bayc hat red",
+                          "count": 119
+                        },
+                        {
+                          "value": "ww2 pilot helm",
+                          "count": 110
+                        },
+                        {
+                          "value": "bowler",
+                          "count": 262
+                        },
+                        {
+                          "value": "fez",
+                          "count": 377
+                        },
+                        {
+                          "value": "spinner hat",
+                          "count": 181
+                        },
+                        {
+                          "value": "party hat 2",
+                          "count": 107
+                        },
+                        {
+                          "value": "girl's hair short",
+                          "count": 150
+                        },
+                        {
+                          "value": "s&m hat",
+                          "count": 235
+                        },
+                        {
+                          "value": "bunny ears",
+                          "count": 195
+                        },
+                        {
+                          "value": "short mohawk",
+                          "count": 318
+                        },
+                        {
+                          "value": "baby's bonnet",
+                          "count": 158
+                        },
+                        {
+                          "value": "cowboy hat",
+                          "count": 354
+                        },
+                        {
+                          "value": "halo",
+                          "count": 324
+                        },
+                        {
+                          "value": "girl's hair pink",
+                          "count": 105
+                        },
+                        {
+                          "value": "fisherman's hat",
+                          "count": 345
+                        },
+                        {
+                          "value": "stuntman helmet",
+                          "count": 157
+                        },
+                        {
+                          "value": "prussian helmet",
+                          "count": 130
+                        },
+                        {
+                          "value": "trippy captain's hat",
+                          "count": 65
+                        },
+                        {
+                          "value": "vietnam era helmet",
+                          "count": 223
+                        },
+                        {
+                          "value": "faux hawk",
+                          "count": 136
+                        },
+                        {
+                          "value": "irish boho",
+                          "count": 225
+                        },
+                        {
+                          "value": "safari",
+                          "count": 182
+                        },
+                        {
+                          "value": "army hat",
+                          "count": 294
+                        },
+                        {
+                          "value": "king's crown",
+                          "count": 77
+                        },
+                        {
+                          "value": "laurel wreath",
+                          "count": 72
+                        },
+                        {
+                          "value": "police motorcycle helmet",
+                          "count": 130
+                        },
+                        {
+                          "value": "bayc hat black",
+                          "count": 228
+                        },
+                        {
+                          "value": "party hat 1",
+                          "count": 120
+                        }
+                      ]
+                    },
+                    {
+                      "key": "Earring",
+                      "count": 6,
+                      "attributes": [
+                        {
+                          "value": "gold stud",
+                          "count": 439
+                        },
+                        {
+                          "value": "cross",
+                          "count": 149
+                        },
+                        {
+                          "value": "silver stud",
+                          "count": 823
+                        },
+                        {
+                          "value": "silver hoop",
+                          "count": 882
+                        },
+                        {
+                          "value": "diamond stud",
+                          "count": 222
+                        },
+                        {
+                          "value": "gold hoop",
+                          "count": 462
+                        }
+                      ]
+                    }
+                  ],
+                  "opensea_url": null,
+                  "x2y2_url": null,
+                  "looksrare_url": null,
+                  "etherscan_url": "https://etherscan.io/token/0x9f648eef45b73e1a32ce7b624a44266226a85d88"
+                },
+                "error": null
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "examples": {
+              "application/json": {
+                "statusCode": 400,
+                "data": null,
+                "error": "Invalid Collection or can't find this collection"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

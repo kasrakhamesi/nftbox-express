@@ -6,11 +6,9 @@ require('dotenv').config()
 const getCollectionsTraits = async () => {
   const findedCollections = await sequelize.models.collections.findAll({
     where: {
-      [Op.and]: [
-        { string_traits: null },
-        { numeric_traits: null },
-        { checked_tarits: false }
-      ]
+      string_traits: null,
+      numeric_traits: null,
+      checked_tarits: false
     }
   })
 

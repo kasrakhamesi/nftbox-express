@@ -2,8 +2,16 @@ const { sequelize } = require('../../models')
 const pendingCollections = require('../collections/pendings')
 const _ = require('lodash')
 const axios = require('axios')
+const { database } = require('../../utils')
 require('dotenv').config()
-const sdk = require('api')('@reservoirprotocol/v1.0#1fag0v1k3l7sxff82')
+const sdk = require('api')('@reservoirprotocol/v1.0#cpy2fla8spifn')
+
+const isoToTimestamp = (isoTime) => {
+  String(new Date(isoTime).getTime())
+}
+
+const generateTwitterUrl = (twitterUsername) =>
+  twitterUsername ? `https://twitter.com/${twitterUsername}` : null
 
 module.exports.save = async () => {
   try {
@@ -19,7 +27,6 @@ module.exports.save = async () => {
 
     sdk.auth(apiKey)
 
-    const data = []
     let continuation = null
     let totalCount = 0
     do {
@@ -36,19 +43,44 @@ module.exports.save = async () => {
       }
 
       const r = await sdk.getCollectionsV5(body)
-      for (const entity of r.collections)
-        data.push(
-          collectionStructure(entity.id, entity.slug, entity.name, false)
+      for (const entity of r.collections) {
+        const body = collectionStructure(
+          entity?.id,
+          entity?.slug,
+          entity?.name,
+          isoToTimestamp(entity?.createdAt),
+          entity?.openseaVerificationStatus === 'verified' ? true : false,
+          entity?.floorAsk?.amount?.decimal,
+          entity?.onSaleCount,
+          entity?.tokenCount,
+          entity?.volume['1day'] || 0,
+          entity?.volume['7day'] || 0,
+          entity?.volume?.allTime || 0,
+          entity?.banner,
+          entity?.description,
+          entity?.image,
+          generateTwitterUrl(entity?.twitterUsername),
+          entity?.discordUrl,
+          entity?.externalUrl,
+          null,
+          null
         )
+        database
+          .upsert(
+            body,
+            {
+              contract_address: entity?.id
+            },
+            sequelize.models.collections
+          )
+          .then(console.log)
+          .catch(console.log)
+      }
 
       totalCount += 20
       console.log(totalCount)
       continuation = r?.continuation || null
     } while (continuation !== null && totalCount < 50)
-
-    console.log(data)
-
-    console.log('--')
   } catch (e) {
     console.log(e)
   }
@@ -58,6 +90,7 @@ const collectionStructure = (
   contract_address,
   collection_slug,
   collection_name,
+  collection_creation_date,
   verified,
   floor_price,
   owners_count,
@@ -78,6 +111,7 @@ const collectionStructure = (
     contract_address,
     collection_slug,
     collection_name,
+    collection_creation_date,
     verified,
     floor_price,
     owners_count,

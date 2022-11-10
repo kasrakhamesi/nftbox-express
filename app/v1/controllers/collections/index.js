@@ -1,6 +1,6 @@
 module.exports.traits = require('./traits')
 module.exports.info = require('./info.controller')
-module.exports.orders = require('./sales')
+module.exports.sales = require('./sales')
 module.exports.listings = require('./listings')
 module.exports.live = require('./live.controller')
 module.exports.tokens = require('./tokens.controller')
