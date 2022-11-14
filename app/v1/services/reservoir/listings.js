@@ -251,7 +251,7 @@ const relistStructure = (
   }
 }
 
-const GetDuplicates = (data) => {
+const getDuplicates = (data) => {
   const keys = ['token_id']
   const map = data.reduce((m, o) => {
       const key = keys.map((k) => JSON.stringify(o[k])).join('|'),
@@ -266,7 +266,7 @@ const GetDuplicates = (data) => {
 }
 
 const extractDuplicatedOrders = (orders) => {
-  orders = GetDuplicates(orders)
+  orders = getDuplicates(orders)
   const tokenIds = []
   for (const order of orders) {
     tokenIds.push(order.token_id)

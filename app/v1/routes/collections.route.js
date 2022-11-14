@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(bodyParser.json())
 
-router.post('/live', collections.live.create)
+router.post('/:collection/live', collections.live.create)
 router.get('/traits/id/:id', collections.traits.Users.findOne)
 router.get('/traits', collections.traits.Users.findAll)
 router.get('/:collection', collections.info.findOne)

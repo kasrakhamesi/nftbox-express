@@ -5,14 +5,55 @@
     "description": "CyberDash Backend Restful-API",
     "version": "1.0"
   },
-  "host": "209.159.153.94:3050",
+  "host": "82.115.20.31:3050",
   "basePath": "/v1",
   "schemes": ["http", "https"],
   "paths": {
+    "/collections/{collection}/live": {
+      "get": {
+        "tags": ["Start Live collection"],
+        "summary": "Set Collection to live",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "collection",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "statusCode": 200,
+                "data": {
+                  "isSuccess": true,
+                  "message": "Start Listing to this contract"
+                },
+                "error": null
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "examples": {
+              "application/json": {
+                "statusCode": 400,
+                "data": null,
+                "error": "Can't find this collection"
+              }
+            }
+          }
+        }
+      }
+    },
     "/collections/{collection}/token/{token}": {
       "get": {
         "tags": ["Collections && Tokens"],
-        "summary": "Get Get Token of Collection",
+        "summary": "Get Token of Collection",
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [

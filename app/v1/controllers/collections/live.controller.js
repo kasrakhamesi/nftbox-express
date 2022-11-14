@@ -4,7 +4,7 @@ const _ = require('lodash')
 
 module.exports.create = async (req, res) => {
   try {
-    const { collection } = req.body
+    const { collection } = req.params
     const condition =
       collection.substring(0, 2) !== '0x'
         ? { collection_slug: collection }

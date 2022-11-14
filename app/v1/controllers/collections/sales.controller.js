@@ -22,31 +22,40 @@ module.exports.findAll = async (req, res) => {
 
     //TODO DELETE RELATION
 
-    const listings = await sequelize.models.listings.findAll({
+    const sales = await sequelize.models.sales.findAll({
       where: {
         collectionId: findedCollection?.id
         // allow_buy: allowBuy : false
       },
-      limit: 30,
+      limit: 300,
       attributes: {
-        exclude: [
-          'id',
-          'tokenId',
-          'collectionId',
-          'allow_buy',
-          'createdAt',
-          'updatedAt'
-        ]
+        exclude: ['id', 'tokenId', 'collectionId', 'createdAt', 'updatedAt']
       }
     })
 
     const newData = []
 
-    for (const listing of listings) {
+    const mockData = {
+      token_id: null,
+      token_name: null,
+      token_url: null,
+      token_description: null,
+      string_traits: null,
+      numeric_traits: null,
+      basic_rank: null,
+      normal_rank: null,
+      weight_rank: null,
+      token_image: null,
+      weight_property: null,
+      normal_property: null,
+      basic_property: null
+    }
+
+    for (const sale of sales) {
       const token = await sequelize.models.tokens.findOne({
         where: {
           collectionId: findedCollection?.id,
-          token_id: listing.token_id
+          token_id: sale.token_id
         },
         attributes: {
           exclude: [
@@ -61,12 +70,12 @@ module.exports.findAll = async (req, res) => {
         }
       })
       newData.push({
-        ...listing.dataValues,
+        ...sale.dataValues,
+        market_url: 'https://opensea.io',
         meta: {
-          ...token.dataValues,
-          basic_property: 'common',
-          normal_property: 'common',
-          weight_property: 'legendry'
+          ...(token.dataValues || mockData),
+          normal_property,
+          basic_property: 'common'
         }
       })
     }
