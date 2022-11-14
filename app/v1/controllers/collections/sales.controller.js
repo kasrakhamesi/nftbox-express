@@ -75,7 +75,9 @@ module.exports.findAll = async (req, res) => {
         meta: {
           ...(token.dataValues || mockData),
           normal_property,
-          basic_property: 'common'
+          basic_property: 'common',
+          normal_property: 'common',
+          weight_property: 'legendary'
         }
       })
     }
