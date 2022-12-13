@@ -2,10 +2,10 @@
   "name": "cyberdash-master",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "start": "node app.js"
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",

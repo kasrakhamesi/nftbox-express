@@ -12,6 +12,89 @@ const include = [
   }
 ]
 
+module.exports.relists = async (req, res) => {
+  try {
+    const r = await sequelize.models.relists.findAll()
+    res.send(r)
+  } catch (e) {
+    res.send(e)
+  }
+}
+
+module.exports.getRelists = async (req, res) => {
+  try {
+    const { collection } = req.params
+    const where =
+      collection.substring(0, 2) !== '0x'
+        ? { collection_slug: collection } //checked_tarits: true }
+        : { contract_address: collection } //checked_tarits: true }
+
+    const findedCollection = await sequelize.models.collections.findOne({
+      where
+    })
+
+    if (!findedCollection) throw new Error('Collection Not Found')
+
+    const relists = await sequelize.models.relists.findAll({
+      where: {
+        collectionId: findedCollection?.id
+      },
+      attributes: [
+        'type',
+        'price',
+        'market',
+        'token_id',
+        'image_url',
+        'url',
+        'timestamp'
+      ]
+    })
+
+    res.status(200).send({
+      statusCode: 200,
+      data: relists,
+      error: null
+    })
+  } catch (e) {
+    res.status(400).send({
+      statusCode: 400,
+      data: null,
+      error: e?.message || String(e)
+    })
+  }
+}
+
+module.exports.floorPrices = async (req, res) => {
+  try {
+    const { collection } = req.params
+    const where =
+      collection.substring(0, 2) !== '0x'
+        ? { collection_slug: collection } //checked_tarits: true }
+        : { contract_address: collection } //checked_tarits: true }
+
+    const findedCollection = await sequelize.models.collections.findOne({
+      where
+    })
+
+    if (!findedCollection) throw new Error('Collection Not Found')
+
+    const r = await sequelize.models.floor_prices.findAll({
+      collectionId: findedCollection?.id
+    })
+    res.status(200).send({
+      statusCode: 200,
+      data: r,
+      error: null
+    })
+  } catch (e) {
+    return res.status(400).send({
+      statusCode: 400,
+      data: null,
+      error: e?.message || String(e)
+    })
+  }
+}
+
 module.exports.listings = async (req, res) => {
   const r = await sequelize.models.listings.findAll({
     order: [['timestamp', 'desc']],
@@ -37,6 +120,7 @@ module.exports.tokens = async (req, res) => {
 module.exports.c = async (req, res) => {
   const r = await sequelize.models.collections.findAll({
     attributes: [
+      'id',
       'contract_address',
       'collection_slug',
       'collection_name',

@@ -4,8 +4,7 @@ const { pendings } = require('../collections')
 const { Op } = require('sequelize')
 const _ = require('lodash')
 require('dotenv').config()
-const { delay, database } = require('../../utils')
-const BATCH_INFO_BASE_URL = `${process.env.MODULE_NFT_BASEURL}/opensea/collection/batchInfo?`
+const { database } = require('../../utils')
 
 const generateTwitterUrl = (twitterUsername) =>
   twitterUsername ? `https://twitter.com/${twitterUsername}` : null
@@ -266,128 +265,49 @@ const getTrendings = async () => {
 
     const r = await axios({
       method: 'get',
-      url: `${process.env.MODULE_NFT_BASEURL}/opensea/collection/rankings?sort_by=ONE_DAY_VOLUME&count=100`,
+      url: `${process.env.MODULE_NFT_BASEURL}/eth/nft/ranks?orderBy=volume&timeRange=day&count=100&offset=0&marketplace=Opensea`,
       headers: {
         'X-API-KEY': apiKey
       }
     })
 
-    if (_.isEmpty(r?.data?.rankings))
+    if (_.isEmpty(r?.data?.data))
       throw new Error("Can't find trending collections")
 
-    const data = []
-    for (const entity of r.data.rankings)
-      data.push(
-        collectionStructure(
-          entity?.collection_address || null,
-          entity?.collection_slug,
-          entity?.collection_name,
-          getTimestampFromIsoTime(entity?.collection_creation_date),
-          entity?.verified,
-          entity?.statistics.floor,
-          entity?.statistics.ownersCount,
-          entity?.statistics.totalSupply,
-          entity?.statistics.oneDayVolume,
-          entity?.statistics.sevenDayVolume,
-          null,
-          null,
-          null,
-          entity?.logo_url,
-          null,
-          null,
-          null,
-          null,
-          null
-        )
+    for (const entity of r?.data?.data) {
+      const data = collectionStructure(
+        entity?.contractAddress || null,
+        entity?.slug,
+        entity?.data?.name,
+        getTimestampFromIsoTime(entity?.created_date),
+        entity?.safelist_request_status === 'verified' ? true : false,
+        null, // FLOOR PRICE
+        entity?.data?.owner,
+        entity?.totalSupply,
+        entity?.dailyVolume,
+        entity?.WeeklyVolume,
+        entity?.allTimeVolume,
+        entity?.data?.banner_image_url,
+        entity?.data?.description,
+        entity?.image_url,
+        generateTwitterUrl(entity?.data?.twitter_username),
+        entity?.data?.discord_url,
+        entity?.data?.external_url,
+        entity?.data?.telegram_url,
+        generateInstagramUrl(entity?.data?.instagram_username)
       )
 
-    let numberOfContracts = 0
-    let contracts = 'type='
-    let batchCollection = []
-    let requestNumber = 0
-    for (const entity of data) {
-      if (data.length < 26) {
-        contracts += `${entity.collection_slug}&type=`
-        numberOfContracts++
-        if (numberOfContracts === data.length) {
-          const resAxios = await axios({
-            method: 'get',
-            url: BATCH_INFO_BASE_URL + contracts,
-            headers: {
-              'X-API-KEY': apiKey
-            }
-          })
-          batchCollection.push(resAxios)
-        }
-      } else {
-        contracts += `${entity.collection_slug}&type=`
-        numberOfContracts++
-        if (numberOfContracts > 25) {
-          if (requestNumber > 2) {
-            await delay.wait(2500)
-            requestNumber = 0
-          }
-          requestNumber += 1
-          contracts = contracts.substring(0, contracts.length - 6)
-          numberOfContracts = 0
-          const resAxios = axios({
-            method: 'get',
-            url: BATCH_INFO_BASE_URL + contracts,
-            headers: {
-              'X-API-KEY': apiKey
-            }
-          })
-          contracts = 'type='
-          batchCollection.push(resAxios)
-        }
-      }
-    }
-
-    batchCollection = await Promise.all(batchCollection)
-
-    let newData = []
-
-    for (const entity of batchCollection) {
-      newData.push(...entity.data)
-    }
-
-    for (const collection of newData)
-      for (const entity of data) {
-        if (collection?.info?.slug !== entity.collection_slug) continue
-        if (collection?.error !== null) continue
-
-        const body = collectionStructure(
-          collection.info.contractAddress,
-          entity.collection_slug,
-          entity.collection_name,
-          entity.collection_creation_date,
-          entity.verified,
-          entity.floor_price,
-          entity.owners_count,
-          entity.total_supply,
-          entity.one_day_volume,
-          entity.seven_day_volume,
-          collection?.info?.statistics?.totalVolume?.unit,
-          collection?.info?.bannerImageUrl,
-          collection?.info?.description,
-          entity?.image_url,
-          generateTwitterUrl(collection?.info?.twitterUsername),
-          collection?.info?.discordUrl,
-          collection?.info?.externalUrl,
-          collection?.info?.telegramUrl,
-          generateInstagramUrl(collection?.info?.instagramUsername)
+      database
+        .upsert(
+          data,
+          {
+            contract_address: entity?.contractAddress
+          },
+          sequelize.models.collections
         )
-        database
-          .upsert(
-            body,
-            {
-              contract_address: collection.info.contractAddress
-            },
-            sequelize.models.collections
-          )
-          .then(console.log)
-          .catch(console.log)
-      }
+        .then(console.log)
+        .catch(console.log)
+    }
   } catch (e) {
     console.log(e)
   }

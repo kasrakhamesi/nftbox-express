@@ -1,8 +1,8 @@
 const { sequelize } = require('../../models')
-const _ = require('lodash')
-const { database } = require('../../utils')
+const { database, delay } = require('../../utils')
 const { listingsChangePercents } = require('../../libs')
 const sdk = require('api')('@reservoirprotocol/v1.0#1fag0v1k3l7sxff82')
+const _ = require('lodash')
 
 const getTimestampFromIsoTime = (isoTime) => {
   let timestamp = new Date(isoTime).getTime()
@@ -48,6 +48,7 @@ const Get = async () => {
         let lastOrderTimestamp
         let _14DAY_AGO_TIMESTAMP
         do {
+          await delay.wait(1500)
           const body = {
             contract: collection?.contract_address,
             sortDirection: 'desc',
@@ -59,6 +60,8 @@ const Get = async () => {
           if (continuation !== null) body.continuation = continuation
 
           const r = await sdk.getEventsOrdersV1(body)
+
+          console.log(r)
 
           for (const entity of r.events) {
             try {

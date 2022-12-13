@@ -13,9 +13,46 @@ const getCollectionsTraits = async () => {
   })
 
   for (const collection of findedCollections) {
-    getTraits(collection?.collection_slug)
-      .then(console.log)
-      .catch((e) => console.log(e))
+    try {
+      await getTraits(collection?.collection_slug)
+    } catch {
+      continue
+    }
+  }
+}
+
+const getCollectionFloorPrice = async () => {
+  const findedCollections = await sequelize.models.collections.findAll({
+    attributes: ['id', 'collection_slug']
+  })
+
+  for (const collection of findedCollections) {
+    try {
+      await getFloorPrice(collection?.collection_slug, collection?.id)
+    } catch {
+      continue
+    }
+  }
+}
+
+const getFloorPrice = async (collectionSlug, collectionId) => {
+  try {
+    const r = await axios.get(
+      `${process.env.OPENSEA_BASEURL}/collection/${collectionSlug}`
+    )
+    await delay.wait(3000)
+    const data = r.data
+    const stats = data?.collection?.stats
+
+    sequelize.models.floor_prices
+      .create({
+        price: stats?.floor_price,
+        collectionId
+      })
+      .then(() => null)
+      .catch(console.log)
+  } catch (e) {
+    console.log(e)
   }
 }
 
@@ -24,10 +61,26 @@ const getTraits = async (collectionSlug) => {
     const r = await axios.get(
       `${process.env.OPENSEA_BASEURL}/collection/${collectionSlug}`
     )
-    await delay.wait(1000)
+    await delay.wait(3000)
     const data = r.data
+
     const traits = data?.collection?.traits
     const stats = data?.collection?.stats
+
+    const findedCollections = await sequelize.models.collections.findOne({
+      where: {
+        collection_slug: collectionSlug
+      }
+    })
+
+    sequelize.models.floor_prices
+      .create({
+        price: stats?.floor_price,
+        collectionId: findedCollections?.id
+      })
+      .then(() => null)
+      .catch(console.log)
+
     const stringTraits = {}
     const numericTraits = {}
     const newNumericTraits = []
@@ -122,4 +175,4 @@ const saveStats = (extractedStats, collectionSlug) => {
     .catch((e) => console.log(e))
 }
 
-module.exports = { getTraits, getCollectionsTraits }
+module.exports = { getTraits, getCollectionsTraits, getCollectionFloorPrice }
