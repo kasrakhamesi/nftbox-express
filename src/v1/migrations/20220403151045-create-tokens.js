@@ -68,6 +68,9 @@ module.exports = {
           type: Sequelize.TEXT,
           allowNull: true
         },
+        weight_property: { type: Sequelize.STRING, allowNull: true },
+        normal_property: { type: Sequelize.STRING, allowNull: true },
+        basic_property: { type: Sequelize.STRING, allowNull: true },
         createdAt: {
           allowNull: true,
           type: 'TIMESTAMP',

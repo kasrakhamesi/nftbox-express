@@ -68,7 +68,10 @@ module.exports = (sequelize, DataTypes) => {
       token_image: {
         type: DataTypes.TEXT,
         allowNull: true
-      }
+      },
+      weight_property: { type: DataTypes.STRING, allowNull: true },
+      normal_property: { type: DataTypes.STRING, allowNull: true },
+      basic_property: { type: DataTypes.STRING, allowNull: true }
     },
     {
       sequelize,

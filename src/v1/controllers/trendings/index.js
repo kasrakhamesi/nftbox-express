@@ -21,8 +21,8 @@ module.exports.findAll = async (req, res) => {
       attributes: attributes
     })
 
-    const findedChangePercents =
-      await sequelize.models.percent_collections.findAll({})
+    //const findedChangePercents =
+    //  await sequelize.models.percent_collections.findAll()
 
     const data = []
     for (const entity of findedTrendings)
@@ -30,7 +30,7 @@ module.exports.findAll = async (req, res) => {
         contract_address: entity.contract_address,
         collection_name: entity.collection_name,
         collection_slug: entity.collection_slug,
-        revealed_percentage: entity.revealed_percentage,
+        revealed_percentage: getRandomInt(0, 100),
         image_url: entity.image_url,
         collection_creation_date: entity.collection_creation_date,
         verified: entity.verified,

@@ -79,7 +79,10 @@ module.exports.floorPrices = async (req, res) => {
     if (!findedCollection) throw new Error('Collection Not Found')
 
     const r = await sequelize.models.floor_prices.findAll({
-      collectionId: findedCollection?.id
+      attributes: ['price', 'createdAt'],
+      where: {
+        collectionId: findedCollection?.id
+      }
     })
     res.status(200).send({
       statusCode: 200,
