@@ -21,21 +21,21 @@ const getCollectionsTraits = async () => {
   }
 }
 
-const getCollectionFloorPrice = async () => {
+const getCollectionStats = async () => {
   const findedCollections = await sequelize.models.collections.findAll({
     attributes: ['id', 'collection_slug']
   })
 
   for (const collection of findedCollections) {
     try {
-      await getFloorPrice(collection?.collection_slug, collection?.id)
+      await saveCollectionStats(collection?.collection_slug, collection?.id)
     } catch {
       continue
     }
   }
 }
 
-const getFloorPrice = async (collectionSlug, collectionId) => {
+const saveCollectionStats = async (collectionSlug, collectionId) => {
   try {
     const r = await axios.get(
       `${process.env.OPENSEA_BASEURL}/collection/${collectionSlug}`
@@ -43,6 +43,73 @@ const getFloorPrice = async (collectionSlug, collectionId) => {
     await delay.wait(3000)
     const data = r.data
     const stats = data?.collection?.stats
+
+    sequelize.models.collections
+      .update(
+        {
+          average_price: stats?.average_price,
+          floor_price: stats?.floor_price,
+          one_hour_sales: stats?.one_hour_sales,
+          six_hour_sales: stats?.six_hour_sales,
+          one_day_sales: stats?.one_day_sales,
+          seven_day_sales: stats?.seven_day_sales,
+          one_hour_volume: stats?.one_hour_volume,
+          six_hour_volume: stats?.six_hour_volume,
+          one_day_volume: stats?.one_day_volume,
+          seven_day_volume: stats?.seven_day_volume
+        },
+        {
+          where: {
+            id: collectionId
+          }
+        }
+      )
+      .then(() => null)
+      .catch(console.log)
+
+    sequelize.models.percent_collection
+      .update(
+        {
+          six_hour_sales_change: stats?.six_hour_sales_change,
+          one_hour_sales_change: stats?.one_hour_sales_change,
+          one_day_sales_change: stats?.one_day_sales_change,
+          seven_day_sales_change: stats?.seven_day_sales_change,
+          one_hour_volume_change: stats?.one_hour_volume_change,
+          six_hour_volume_change: stats?.six_hour_volume_change,
+          one_day_volume_change: stats?.one_day_volume_change,
+          seven_day_volume_change: stats?.seven_day_volume_change
+        },
+        {
+          where: {
+            collectionId
+          }
+        }
+      )
+      .then(() => null)
+      .catch((e) => console.log(e))
+
+    sequelize.models.collections
+      .update(
+        {
+          average_price: stats?.average_price,
+          floor_price: stats?.floor_price,
+          one_hour_sales: stats?.one_hour_sales,
+          six_hour_sales: stats?.six_hour_sales,
+          one_day_sales: stats?.one_day_sales,
+          seven_day_sales: stats?.seven_day_sales,
+          one_hour_volume: stats?.one_hour_volume,
+          six_hour_volume: stats?.six_hour_volume,
+          one_day_volume: stats?.one_day_volume,
+          seven_day_volume: stats?.seven_day_volume
+        },
+        {
+          where: {
+            id: collectionId
+          }
+        }
+      )
+      .then(() => null)
+      .catch(console.log)
 
     sequelize.models.floor_prices
       .create({
@@ -175,4 +242,4 @@ const saveStats = (extractedStats, collectionSlug) => {
     .catch((e) => console.log(e))
 }
 
-module.exports = { getTraits, getCollectionsTraits, getCollectionFloorPrice }
+module.exports = { getTraits, getCollectionsTraits, getCollectionStats }

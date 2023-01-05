@@ -195,6 +195,11 @@ const callGetNFTsForCollectionOnce = async (
           }
         }
 
+        console.log(
+          calculateBasicScore(stringTraits, numericTraits),
+          calculateNormalScore(stringTraits, numericTraits)
+        )
+
         await sequelize.models.tokens.create({
           collectionId,
           token_id: parseInt(tokenId),

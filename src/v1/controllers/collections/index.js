@@ -1,4 +1,3 @@
-module.exports.traits = require('./traits.controller')
 module.exports.info = require('./info.controller')
 module.exports.sales = require('./sales.controller')
 module.exports.listings = require('./listings.controller')

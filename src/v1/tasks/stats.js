@@ -2,11 +2,11 @@ const { opensea } = require('../services')
 
 const getCollectionsStats = () => {
   opensea.collections
-    .getCollectionFloorPrice()
+    .getCollectionStats()
     .then(() => {
-      setTimeout(getCollectionsStats, 1500)
+      setTimeout(getCollectionsStats, 2000)
     })
-    .catch(() => setTimeout(getCollectionsStats, 1500))
+    .catch(() => setTimeout(getCollectionsStats, 2000))
 }
 
 module.exports = getCollectionsStats

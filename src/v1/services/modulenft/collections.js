@@ -1,10 +1,9 @@
 const axios = require('axios')
 const { sequelize } = require('../../models')
-const { pendings } = require('../collections')
 const { Op } = require('sequelize')
 const _ = require('lodash')
-require('dotenv').config()
 const { database } = require('../../utils')
+require('dotenv').config()
 
 const generateTwitterUrl = (twitterUsername) =>
   twitterUsername ? `https://twitter.com/${twitterUsername}` : null
@@ -37,7 +36,10 @@ const collectionStructure = (
   discord_url,
   website_url,
   telegram_url,
-  instagram_url
+  instagram_url,
+  one_day_sales,
+  seven_day_sales,
+  collection_type
 ) => {
   return {
     contract_address,
@@ -60,14 +62,16 @@ const collectionStructure = (
     website_url,
     telegram_url,
     instagram_url,
+    one_day_sales,
+    seven_day_sales,
+    collection_type,
     percent_owner:
       total_supply < owners_count
         ? 'N/A'
         : String(
             parseInt((parseInt(owners_count) * 100) / parseInt(total_supply))
           ),
-    is_trending: true,
-    collection_type: total_supply < owners_count ? 'erc1155' : 'erc721'
+    is_trending: true
   }
 }
 
@@ -89,10 +93,15 @@ const getTrendings = async () => {
       }
     })
 
+    const trendingCollections = []
+
     if (_.isEmpty(r?.data?.data))
       throw new Error("Can't find trending collections")
 
     for (const entity of r?.data?.data) {
+      trendingCollections.push({
+        contract_address: entity?.contractAddress
+      })
       const data = collectionStructure(
         entity?.contractAddress || null,
         entity?.slug,
@@ -112,7 +121,10 @@ const getTrendings = async () => {
         entity?.data?.discord_url,
         entity?.data?.external_url,
         entity?.data?.telegram_url,
-        generateInstagramUrl(entity?.data?.instagram_username)
+        generateInstagramUrl(entity?.data?.instagram_username),
+        entity?.dailySalesCount,
+        entity?.weeklySalesCount,
+        String(entity?.data?.schema_name).toLowerCase()
       )
 
       database
@@ -126,6 +138,14 @@ const getTrendings = async () => {
         .then(console.log)
         .catch(console.log)
     }
+    await sequelize.models.collections.update(
+      { is_trending: false },
+      {
+        where: {
+          [Op.not]: trendingCollections
+        }
+      }
+    )
   } catch (e) {
     console.log(e)
   }
